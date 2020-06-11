@@ -39,10 +39,14 @@ class LoginVC: UIViewController {
         Gradients.myGradients(on: self, view: backgroundView)
         emailTxt.text = ""
         passwordTxt.text = ""
-        setupBackground(forView: emailTxt)
-        setupBackground(forView: passwordTxt)
-        setupBackground(forView: loginBtn)
-        setupBackground(forView: createUserBtn)
+        SetupUIElement.shared.setupUIElement(element: emailTxt)
+        SetupUIElement.shared.setupUIElement(element: passwordTxt)
+        SetupUIElement.shared.setupUIElement(element: loginBtn)
+        SetupUIElement.shared.setupUIElement(element: createUserBtn)
+//        setupBackground(forView: emailTxt)
+//        setupBackground(forView: passwordTxt)
+//        setupBackground(forView: loginBtn)
+//        setupBackground(forView: createUserBtn)
     }
     
     

@@ -29,11 +29,12 @@ class CreateUserVC: UIViewController {
         
         Gradients.myGradients(on: self, view: backgroundView)
         
-        setupBackground(forView: usernameTxt)
-        setupBackground(forView: mailTxt)
-        setupBackground(forView: passwordTxt)
-        setupBackground(forView: createBtn)
-        setupBackground(forView: cancelBtn)
+        SetupUIElement.shared.setupUIElement(element: usernameTxt)
+        SetupUIElement.shared.setupUIElement(element: mailTxt)
+        SetupUIElement.shared.setupUIElement(element: passwordTxt)
+        SetupUIElement.shared.setupUIElement(element: createBtn)
+        SetupUIElement.shared.setupUIElement(element: cancelBtn)
+
         // Do any additional setup after loading the view.
     }
     
