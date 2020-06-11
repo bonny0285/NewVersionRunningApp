@@ -66,8 +66,11 @@ class CreateUserVC: UIViewController {
         
         guard let email = mailTxt.text, let password = passwordTxt.text, let username = usernameTxt.text else { return }
         
-        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
-            if let error = error{debugPrint("Error creating user: \(error.localizedDescription)")
+        
+        FirebaseDataSource.shared.createNewUser(withEmail: email, password: password, username: username) { (user, error) in
+            
+            if let error = error {
+                print(error.localizedDescription)
             } else {
                 
                 let changeProfile = user?.user.createProfileChangeRequest()
@@ -97,6 +100,7 @@ class CreateUserVC: UIViewController {
                 })
             }
         }
+
     }
     
     @IBAction func cancelBtnWasPressed(_ sender: Any) {
