@@ -43,15 +43,12 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         print(#function,"registro")
         tableView.delegate = self
-        //tableView.dataSource = self
         mapView.delegate = self
         runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
         
         
         setListener()
-//        dataSource = RegistroDataSource(running: runs)
-//        tableView.dataSource = dataSource
-//        tableView.reloadData()
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -123,28 +120,8 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
 
 
 
-extension RegistroVC : UITableViewDelegate,UITableViewDataSource{
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return runs.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath) as? TableViewCell else { return UITableViewCell()}
-        
-        datiDaPassare = nil
-        
-        cell.setCell(forCorsa: runs[indexPath.row])
-        datiDaPassare = runs[indexPath.row]
-        
-        //cell.delegate = self
-        //cell.delegateAlert = self
-        return cell
-    }
-    
-    
-    
+extension RegistroVC : UITableViewDelegate{
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         center(latitudine: runs[indexPath.row].latitude, longitudine: runs[indexPath.row].longitude, arrayUltimaCorsa: runs[indexPath.row].arrayPercorso)
     }
@@ -159,6 +136,7 @@ extension RegistroVC : UITableViewDelegate,UITableViewDataSource{
 
 
 extension RegistroVC: RegistroDataSourceProtocol {
+    
     func passAlert() {
         RunningAlert.errorLikes(on: self)
     }
@@ -200,7 +178,7 @@ extension RegistroVC : CLLocationManagerDelegate{
     
     
     func center(latitudine : Double, longitudine : Double, arrayUltimaCorsa : [GeoPoint]){
-        var geo = [GeoPoint]()
+        //var geo = [GeoPoint]()
         var geoLoc = [CLLocationCoordinate2D]()
         geoLoc.removeAll()
         let overlays = mapView.overlays
@@ -221,14 +199,3 @@ extension RegistroVC : CLLocationManagerDelegate{
     
         
 }
-
-    
-//extension RegistroVC : AlertDelegate{
-//    func likeTwice() {
-//        print("LIKE TWICE")
-//        RunningAlert.errorLikes(on: self)
-//    }
-//
-//
-//}
-
