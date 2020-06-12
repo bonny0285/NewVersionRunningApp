@@ -272,7 +272,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
             self.pauseResumeBtn.isHidden = true
             self.newBtn.isHidden = false
             self.blackView.isHidden = false
-            self.saveOnDB()
+           // self.saveOnDB()
             self.locationManager.stopUpdatingLocation()
             self.polylineLocation.removeAll()
         }))
