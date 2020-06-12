@@ -12,7 +12,9 @@ import CoreLocation
 import Firebase
 
 
-
+protocol PassStartEndButotnTitle: class {
+    func passtitle (title: String)
+}
 
 class MainVC: UIViewController, MKMapViewDelegate{
     
@@ -59,11 +61,22 @@ class MainVC: UIViewController, MKMapViewDelegate{
     fileprivate var run : Running!
     
     
+    var mapDataSource: MapDataSource!
+
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        mapDataSource = MapDataSource(mapView: mapView)
+        mapDataSource?.addDelegationOnMap()
+        mapDataSource?.checkLocationServices()
+        mapDataSource?.delegate = self
+        
          print(#function,"main")
-        mapView.delegate = self
-        checkLocationServices()
+        //mapView.delegate = self
+        //checkLocationServices()
         pauseResumeBtn.isHidden = true
         newBtn.isHidden = true
         blackView.isHidden = true
@@ -76,7 +89,13 @@ class MainVC: UIViewController, MKMapViewDelegate{
 
     override func viewWillAppear(_ animated: Bool) {
          print(#function,"main")
-        centerViewOnUserLocation()
+        
+        mapDataSource?.centerViewOnUserLocation()
+        //centerViewOnUserLocation()
+        
+        
+        
+        
 //        handle = Auth.auth().addStateDidChangeListener({ (auth, user) in
 //            if user == nil {
 //                let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -132,10 +151,16 @@ class MainVC: UIViewController, MKMapViewDelegate{
     
     @IBAction func newBtnWasPressed(_ sender: Any) {
         newRide()
-        centerViewOnUserLocation()
-        let overlays = mapView.overlays
-        mapView.removeOverlays(overlays)
-        polylineLocation.removeAll()
+        
+        mapDataSource?.centerViewOnUserLocation()
+        let overlays = mapDataSource?.map.overlays
+        mapDataSource?.map.removeOverlays(overlays!)
+        mapDataSource?.polylineLocation.removeAll()
+        
+//        centerViewOnUserLocation()
+//        let overlays = mapView.overlays
+//        mapView.removeOverlays(overlays)
+        //polylineLocation.removeAll()
     }
     
     
@@ -145,6 +170,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
     
     @IBAction func startEndBtnPressed(_ sender: Any) {
         if startEndBtn.titleLabel?.text == "Start running"{
+            mapDataSource.isEndRun = false
             startRun()
             
         } else {
@@ -157,10 +183,13 @@ class MainVC: UIViewController, MKMapViewDelegate{
     @IBAction func pauseResumeBtnPressed(_ sender: Any) {
         
         if startEndBtn.titleLabel?.text == "End Run" && time.isValid{
+            mapDataSource.isEndRun = true
             pauseRun()
         } else if startEndBtn.titleLabel?.text == "Start running" && time.isValid == false{
+            mapDataSource.isEndRun = false
             print("nulla da fare")
         } else {
+            mapDataSource.isEndRun = false
             startRun()
         }
     }
@@ -193,23 +222,28 @@ class MainVC: UIViewController, MKMapViewDelegate{
     func startRun(){
         myBool = true
         oraInizio = getCurrentTime()
-        locationManager.startUpdatingLocation()
+        
+        mapDataSource?.locationManager.startUpdatingLocation()
+        //locationManager.startUpdatingLocation()
+        
+        
         startTimer()
         pauseResumeBtn.isHidden = false
         pauseResumeBtn.setImage(#imageLiteral(resourceName: "pauseButton"), for: .normal)
         startEndBtn.setTitle("End Run", for: .normal)
-        
-        arrayGeo.removeAll()
+        mapDataSource.isEndRun = true
+        mapDataSource?.arrayGeo.removeAll()
+        //arrayGeo.removeAll()
     }
     
     func startTimer(){
-        timerRunLbl.text = counter.formatTimeDurationToString()
+        timerRunLbl.text = mapDataSource?.counter.formatTimeDurationToString()
         time = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
     }
     
     @objc func updateCounter(){
-        counter += 1
-        timerRunLbl.text = counter.formatTimeDurationToString()
+        mapDataSource?.counter += 1
+        timerRunLbl.text = mapDataSource?.counter.formatTimeDurationToString()
     }
     
     
@@ -224,35 +258,56 @@ class MainVC: UIViewController, MKMapViewDelegate{
     }
     
     func pauseRun(){
-        startLocation = nil
-        lastLocation = nil
+        
+        mapDataSource?.startLocation = nil
+        //startLocation = nil
+        mapDataSource?.lastLocation = nil
+        //lastLocation = nil
         time.invalidate()
-        locationManager.stopUpdatingLocation()
+        
+        
+        mapDataSource?.locationManager.stopUpdatingLocation()
+        //locationManager.stopUpdatingLocation()
+        
+        
+        
         pauseResumeBtn.setImage(UIImage(named: "resumeButton"), for: .normal)
     }
     
     func endRun(){
         myBool = false
-        locationManager.stopUpdatingLocation()
-        startLocation = nil
-        lastLocation = nil
+        
+        mapDataSource?.locationManager.stopUpdatingLocation()
+        //locationManager.stopUpdatingLocation()
+        
+        mapDataSource?.startLocation = nil
+        //startLocation = nil
+        mapDataSource?.lastLocation = nil
+        //lastLocation = nil
         // add our object to Realm
         pauseRun()
         alertExit()
-        polylineLocation.removeAll()
+        
+        mapDataSource?.polylineLocation.removeAll()
+        //polylineLocation.removeAll()
        
     }
     
     func newRide(){
         newBtn.isHidden = true
         blackView.isHidden = true
-        counter = 0
+        
+        mapDataSource?.counter = 0
+        //counter = 0
+        
         time.invalidate()
         avarageSpeedLbl.text = "\(00.0)"
         totalKmLbl.text = "\(00.0)"
         timerRunLbl.text = "00:00"
         startEndBtn.setTitle("Start running", for: .normal)
-        polylineLocation.removeAll()
+        mapDataSource.isEndRun = false
+        mapDataSource?.polylineLocation.removeAll()
+        //polylineLocation.removeAll()
       
     }
     
@@ -273,8 +328,12 @@ class MainVC: UIViewController, MKMapViewDelegate{
             self.newBtn.isHidden = false
             self.blackView.isHidden = false
            // self.saveOnDB()
-            self.locationManager.stopUpdatingLocation()
-            self.polylineLocation.removeAll()
+            
+            self.mapDataSource?.locationManager.stopUpdatingLocation()
+            self.mapDataSource?.polylineLocation.removeAll()
+            
+//            self.locationManager.stopUpdatingLocation()
+//            self.polylineLocation.removeAll()
         }))
         
         self.present(alert,animated: true, completion: {
@@ -300,51 +359,51 @@ class MainVC: UIViewController, MKMapViewDelegate{
         return data
     }
     
-    func checkLocationServices(){
-        if CLLocationManager.locationServicesEnabled(){
-            setupLocationManager()
-            checkLocationAuthorizzation()
-        } else {
-            // show alert letting the user know they have to turn this on
-        }
-    }
+//    func checkLocationServices(){
+//        if CLLocationManager.locationServicesEnabled(){
+//            setupLocationManager()
+//            checkLocationAuthorizzation()
+//        } else {
+//            // show alert letting the user know they have to turn this on
+//        }
+//    }
     
-    func setupLocationManager(){
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    }
+//    func setupLocationManager(){
+//        locationManager.delegate = self
+//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//    }
+//
+//    func checkLocationAuthorizzation(){
+//        switch CLLocationManager.authorizationStatus() {
+//        case .authorizedWhenInUse:
+//            mapView.showsUserLocation = true
+//            centerViewOnUserLocation()
+//            locationManager.startUpdatingLocation()
+//            break
+//        case .notDetermined:
+//            locationManager.requestWhenInUseAuthorization()
+//        case .restricted:
+//            // show alert not allowed
+//            break
+//        case .authorizedAlways:
+//            mapView.showsUserLocation = true
+//            centerViewOnUserLocation()
+//            locationManager.startUpdatingLocation()
+//            break
+//        case .denied:
+//            // show alert instruction them how to turn on permission
+//            break
+//        }
+//    }
     
-    func checkLocationAuthorizzation(){
-        switch CLLocationManager.authorizationStatus() {
-        case .authorizedWhenInUse:
-            mapView.showsUserLocation = true
-            centerViewOnUserLocation()
-            locationManager.startUpdatingLocation()
-            break
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        case .restricted:
-            // show alert not allowed
-            break
-        case .authorizedAlways:
-            mapView.showsUserLocation = true
-            centerViewOnUserLocation()
-            locationManager.startUpdatingLocation()
-            break
-        case .denied:
-            // show alert instruction them how to turn on permission
-            break
-        }
-    }
     
     
-    
-    func centerViewOnUserLocation(){
-        if let location = locationManager.location?.coordinate {
-            let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionMeter, longitudinalMeters: regionMeter)
-            mapView.setRegion(region, animated: true)
-        }
-    }
+//    func centerViewOnUserLocation(){
+//        if let location = locationManager.location?.coordinate {
+//            let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionMeter, longitudinalMeters: regionMeter)
+//            mapView.setRegion(region, animated: true)
+//        }
+//    }
     
     func checkNumCommenti (){
          Firestore.firestore().collection(RUN_REFERENCE).document(run.documentID).collection(COMMENTS_REF).getDocuments { (snapshot, error) in
@@ -396,83 +455,99 @@ class MainVC: UIViewController, MKMapViewDelegate{
 }
 
 
-
-
-extension MainVC : CLLocationManagerDelegate{
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        guard let locationFirst = locations.first else { return }
-        
-        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        let region = MKCoordinateRegion(center: center, latitudinalMeters: regionMeter, longitudinalMeters: regionMeter)
-        mapView.setRegion(region, animated: true)
-        
-        
-        
-        if startEndBtn.titleLabel?.text == "End Run"{
-            
-            latitudine = locationFirst.coordinate.latitude
-            longitude = locationFirst.coordinate.longitude
-            
-            let inizio = CLLocationCoordinate2D(latitude: locationFirst.coordinate.latitude, longitude: locationFirst.coordinate.longitude)
-            let fine = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-            
-            drawLine(startCoordinate: inizio,endingRun: fine)
-            
-            if startLocation == nil {
-                startLocation = locations.first
-            } else if let locations = locations.last {
-                runDistance += lastLocation.distance(from: locations)
-                
-                
-                totalKmLbl.text = "\(runDistance.metersToMiles(places: 3))"
-                if counter > 0 && runDistance > 0 {
-                    arrayKM.append(lastLocation.speed)
-                    avarageSpeedLbl.text = "\((lastLocation.speed * 3.6).twoDecimalNumbers(place: 1)) Km/h"
-                    
-                    speedMax = calcolaMediaKM(km: arrayKM)
-                    
-                }
-            }
-            lastLocation = locations.last
-        } else {
-            // check this function
-            
-        }
-    }
-    
-    
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        checkLocationAuthorizzation()
-    }
-    
-    
-    
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        
-        if (overlay is MKPolyline){
-            let polylineRender = MKPolylineRenderer(overlay: overlay)
-            polylineRender.strokeColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
-            polylineRender.lineWidth = 3
-            return polylineRender
-        }
-        return MKOverlayRenderer()
-    }
-    
-    
-    
-    
-    func drawLine(startCoordinate : CLLocationCoordinate2D, endingRun : CLLocationCoordinate2D){
-        
-        polylineLocation.append(startCoordinate)
-        arrayGeo.append(GeoPoint(latitude: startCoordinate.latitude, longitude: startCoordinate.longitude))
-        let aPolyline = MKPolyline(coordinates: polylineLocation, count: polylineLocation.count)
-        self.mapView.addOverlay(aPolyline)
+extension MainVC: MapDataSourceProtocol{
+    func addTitleOnStartEndButton(title: String) {
         
     }
     
+    func addTotalKm(km: String) {
+        totalKmLbl.text = km
+    }
+    
+    func addAvarageSpeed(speed: String) {
+        avarageSpeedLbl.text = speed
+    }
     
     
 }
+
+
+
+//extension MainVC : CLLocationManagerDelegate{
+//
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        guard let location = locations.last else { return }
+//        guard let locationFirst = locations.first else { return }
+//
+//        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+//        let region = MKCoordinateRegion(center: center, latitudinalMeters: regionMeter, longitudinalMeters: regionMeter)
+//        mapView.setRegion(region, animated: true)
+//
+//
+//
+//        if startEndBtn.titleLabel?.text == "End Run"{
+//
+//            latitudine = locationFirst.coordinate.latitude
+//            longitude = locationFirst.coordinate.longitude
+//
+//            let inizio = CLLocationCoordinate2D(latitude: locationFirst.coordinate.latitude, longitude: locationFirst.coordinate.longitude)
+//            let fine = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+//
+//            drawLine(startCoordinate: inizio,endingRun: fine)
+//
+//            if startLocation == nil {
+//                startLocation = locations.first
+//            } else if let locations = locations.last {
+//                runDistance += lastLocation.distance(from: locations)
+//
+//
+//                totalKmLbl.text = "\(runDistance.metersToMiles(places: 3))"
+//                if counter > 0 && runDistance > 0 {
+//                    arrayKM.append(lastLocation.speed)
+//                    avarageSpeedLbl.text = "\((lastLocation.speed * 3.6).twoDecimalNumbers(place: 1)) Km/h"
+//
+//                    speedMax = calcolaMediaKM(km: arrayKM)
+//
+//                }
+//            }
+//            lastLocation = locations.last
+//        } else {
+//            // check this function
+//
+//        }
+//    }
+//
+//
+//
+////    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+////        checkLocationAuthorizzation()
+////    }
+//
+//
+//
+//    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+//
+//        if (overlay is MKPolyline){
+//            let polylineRender = MKPolylineRenderer(overlay: overlay)
+//            polylineRender.strokeColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
+//            polylineRender.lineWidth = 3
+//            return polylineRender
+//        }
+//        return MKOverlayRenderer()
+//    }
+//
+//
+//
+//
+//    func drawLine(startCoordinate : CLLocationCoordinate2D, endingRun : CLLocationCoordinate2D){
+//
+//        polylineLocation.append(startCoordinate)
+//        arrayGeo.append(GeoPoint(latitude: startCoordinate.latitude, longitude: startCoordinate.longitude))
+//        let aPolyline = MKPolyline(coordinates: polylineLocation, count: polylineLocation.count)
+//        self.mapView.addOverlay(aPolyline)
+//
+//    }
+//
+//
+//
+//}

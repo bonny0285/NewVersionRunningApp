@@ -185,7 +185,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="_email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="l4G-tA-cXq">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="bonnyiphone@gmail.com" borderStyle="roundedRect" placeholder="_email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="l4G-tA-cXq">
                                 <rect key="frame" x="15" y="74" width="384" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="xis-kd-oeO"/>
@@ -193,7 +193,7 @@
                                 <fontDescription key="fontDescription" name="Baskerville" family="Baskerville" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" textContentType="username"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="_password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dNJ-0O-P8X">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="17021985" borderStyle="roundedRect" placeholder="_password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dNJ-0O-P8X">
                                 <rect key="frame" x="15" y="154" width="384" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="YUC-g8-Uhx"/>
