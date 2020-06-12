@@ -34,7 +34,7 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     private var handle : AuthStateDidChangeListenerHandle?
     private let regionMeter : Double = 1000
     private let locationManager = CLLocationManager()
-
+    private var dataSource: RegistroDataSource!
     
     
     
@@ -43,21 +43,30 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         print(#function,"registro")
         tableView.delegate = self
-        tableView.dataSource = self
+        //tableView.dataSource = self
         mapView.delegate = self
         runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
+        
+        
         setListener()
-        tableView.reloadData()
+//        dataSource = RegistroDataSource(running: runs)
+//        tableView.dataSource = dataSource
+//        tableView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
            super.viewDidLayoutSubviews()
             print(#function,"registro")
+        dataSource = RegistroDataSource(running: runs)
+        tableView.dataSource = dataSource
+        tableView.reloadData()
        }
     
     override func viewDidAppear(_ animated: Bool) {
         print(#function,"registro")
         setListener()
+        
+        
         tableView.reloadData()
     }
     
@@ -97,6 +106,10 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
                 } else{
                     self.runs.removeAll()
                     self.runs = Running.parseData(snapshot: snapshot)
+                    
+                    self.dataSource = RegistroDataSource(running: self.runs)
+                    self.tableView.dataSource = self.dataSource
+                    self.dataSource.delegate = self
                     self.tableView.reloadData()
                 }
         }
@@ -125,8 +138,8 @@ extension RegistroVC : UITableViewDelegate,UITableViewDataSource{
         cell.setCell(forCorsa: runs[indexPath.row])
         datiDaPassare = runs[indexPath.row]
         
-        cell.delegate = self
-        cell.delegateAlert = self
+        //cell.delegate = self
+        //cell.delegateAlert = self
         return cell
     }
     
@@ -145,12 +158,15 @@ extension RegistroVC : UITableViewDelegate,UITableViewDataSource{
 /*-----------------------------------------------------------------------------------------*/
 
 
-extension RegistroVC: MyButtonDelegate{
+extension RegistroVC: RegistroDataSourceProtocol {
+    func passAlert() {
+        RunningAlert.errorLikes(on: self)
+    }
     
-    
-    func opneCommentVC(for run: Running) {
+    func dataForPrepareSegue(run: Running) {
         performSegue(withIdentifier: "segueToCommentVC", sender: run)
     }
+    
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -207,12 +223,12 @@ extension RegistroVC : CLLocationManagerDelegate{
 }
 
     
-extension RegistroVC : AlertDelegate{
-    func likeTwice() {
-        print("LIKE TWICE")
-        RunningAlert.errorLikes(on: self)
-    }
-    
-    
-}
+//extension RegistroVC : AlertDelegate{
+//    func likeTwice() {
+//        print("LIKE TWICE")
+//        RunningAlert.errorLikes(on: self)
+//    }
+//
+//
+//}
 

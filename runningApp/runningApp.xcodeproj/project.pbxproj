@@ -12,6 +12,8 @@
 		70352A652492594D0053A9ED /* SetupUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70352A642492594D0053A9ED /* SetupUI.swift */; };
 		70DE83D72493908B009ED4D7 /* MapDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE83D62493908A009ED4D7 /* MapDataSource.swift */; };
 		70DE83D92493C52C009ED4D7 /* AutoLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE83D82493C52C009ED4D7 /* AutoLogin.swift */; };
+		70DE83DC2493D2A3009ED4D7 /* RegistroDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE83DB2493D2A2009ED4D7 /* RegistroDataSource.swift */; };
+		70DE83DF2493D418009ED4D7 /* CommentDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE83DE2493D418009ED4D7 /* CommentDelegate.swift */; };
 		A98BFC0E81BD7C426C128DC8 /* Pods_runningAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 818A44AE35044D5F3D2A3E2A /* Pods_runningAppTests.framework */; };
 		B4109C3822E78A8A0032DC0D /* KeyboardBoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4109C3722E78A8A0032DC0D /* KeyboardBoundView.swift */; };
 		B4109C3A22E78FEC0032DC0D /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4109C3922E78FEC0032DC0D /* Comment.swift */; };
@@ -29,7 +31,6 @@
 		B4A4C8CC22D2503F00B6F22B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4A4C8CB22D2503F00B6F22B /* Assets.xcassets */; };
 		B4A4C8CF22D2503F00B6F22B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4A4C8CD22D2503F00B6F22B /* LaunchScreen.storyboard */; };
 		B4A4C8DA22D2503F00B6F22B /* runningAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A4C8D922D2503F00B6F22B /* runningAppTests.swift */; };
-		B4A4C8EB22D2529E00B6F22B /* RecordsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A4C8EA22D2529E00B6F22B /* RecordsCollectionCell.swift */; };
 		B4A4C8ED22D252ED00B6F22B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A4C8EC22D252ED00B6F22B /* Constants.swift */; };
 		B4A4C8F122D2845F00B6F22B /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A4C8F022D2845E00B6F22B /* Run.swift */; };
 		B4A4C8F422D2889500B6F22B /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A4C8F322D2889500B6F22B /* MainVC.swift */; };
@@ -54,6 +55,8 @@
 		70352A642492594D0053A9ED /* SetupUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUI.swift; sourceTree = "<group>"; };
 		70DE83D62493908A009ED4D7 /* MapDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataSource.swift; sourceTree = "<group>"; };
 		70DE83D82493C52C009ED4D7 /* AutoLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLogin.swift; sourceTree = "<group>"; };
+		70DE83DB2493D2A2009ED4D7 /* RegistroDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RegistroDataSource.swift; path = /Users/massimilianobonafede/Desktop/RuningApp/runningApp/runningApp/View/RegistroDataSource.swift; sourceTree = "<absolute>"; };
+		70DE83DE2493D418009ED4D7 /* CommentDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDelegate.swift; sourceTree = "<group>"; };
 		818A44AE35044D5F3D2A3E2A /* Pods_runningAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_runningAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A235742CB818C3CD7D3D9F5D /* Pods-runningAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-runningAppTests.release.xcconfig"; path = "Target Support Files/Pods-runningAppTests/Pods-runningAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		B4109C3722E78A8A0032DC0D /* KeyboardBoundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardBoundView.swift; sourceTree = "<group>"; };
@@ -76,7 +79,6 @@
 		B4A4C8D522D2503F00B6F22B /* runningAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = runningAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4A4C8D922D2503F00B6F22B /* runningAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = runningAppTests.swift; sourceTree = "<group>"; };
 		B4A4C8DB22D2503F00B6F22B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B4A4C8EA22D2529E00B6F22B /* RecordsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsCollectionCell.swift; sourceTree = "<group>"; };
 		B4A4C8EC22D252ED00B6F22B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B4A4C8F022D2845E00B6F22B /* Run.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Run.swift; sourceTree = "<group>"; };
 		B4A4C8F322D2889500B6F22B /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -104,6 +106,53 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		70DE83DA2493D1F1009ED4D7 /* Registro */ = {
+			isa = PBXGroup;
+			children = (
+				B4A4C8C622D2503C00B6F22B /* RegistroVC.swift */,
+				70DE83DB2493D2A2009ED4D7 /* RegistroDataSource.swift */,
+				B4369005235908D10065269A /* TableViewCell.swift */,
+			);
+			path = Registro;
+			sourceTree = "<group>";
+		};
+		70DE83DD2493D3EA009ED4D7 /* Commenti */ = {
+			isa = PBXGroup;
+			children = (
+				B4109C3922E78FEC0032DC0D /* Comment.swift */,
+				B431755D22DE51D7008FC835 /* CommentsVC.swift */,
+				B431755F22DE5C11008FC835 /* CommentsCell.swift */,
+				70DE83DE2493D418009ED4D7 /* CommentDelegate.swift */,
+			);
+			path = Commenti;
+			sourceTree = "<group>";
+		};
+		70DE83E02493D45E009ED4D7 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				B43D077722EA31F30051ECF5 /* LoginVC.swift */,
+				B43D077922EA32050051ECF5 /* CreateUserVC.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		70DE83E12493D47D009ED4D7 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				B4A4C8F322D2889500B6F22B /* MainVC.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		70DE83E22493D49F009ED4D7 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				B4109C3722E78A8A0032DC0D /* KeyboardBoundView.swift */,
+				70352A642492594D0053A9ED /* SetupUI.swift */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
 		B4A4C8B822D2503B00B6F22B = {
 			isa = PBXGroup;
 			children = (
@@ -129,7 +178,6 @@
 			children = (
 				B4A4C8E722D2507E00B6F22B /* Utilities */,
 				B4A4C8E422D2506100B6F22B /* Model */,
-				B4A4C8E522D2506E00B6F22B /* View */,
 				B4A4C8E622D2507600B6F22B /* Controller */,
 				B4A4C8C422D2503C00B6F22B /* AppDelegate.swift */,
 				B4A4C8C822D2503C00B6F22B /* Main.storyboard */,
@@ -154,7 +202,6 @@
 			isa = PBXGroup;
 			children = (
 				B462A3CD237DE26800B4508B /* MyGradients.swift */,
-				B4109C3922E78FEC0032DC0D /* Comment.swift */,
 				B4A4C8F022D2845E00B6F22B /* Run.swift */,
 				B462A3A3237CA87100B4508B /* Alert.swift */,
 				702980542492083400C401D7 /* FirebaseDataSource.swift */,
@@ -164,24 +211,13 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		B4A4C8E522D2506E00B6F22B /* View */ = {
-			isa = PBXGroup;
-			children = (
-				B4A4C8EA22D2529E00B6F22B /* RecordsCollectionCell.swift */,
-				B431755F22DE5C11008FC835 /* CommentsCell.swift */,
-				B4369005235908D10065269A /* TableViewCell.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		B4A4C8E622D2507600B6F22B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				B43D077722EA31F30051ECF5 /* LoginVC.swift */,
-				B43D077922EA32050051ECF5 /* CreateUserVC.swift */,
-				B4A4C8F322D2889500B6F22B /* MainVC.swift */,
-				B4A4C8C622D2503C00B6F22B /* RegistroVC.swift */,
-				B431755D22DE51D7008FC835 /* CommentsVC.swift */,
+				70DE83E12493D47D009ED4D7 /* Main */,
+				70DE83E02493D45E009ED4D7 /* Login */,
+				70DE83DD2493D3EA009ED4D7 /* Commenti */,
+				70DE83DA2493D1F1009ED4D7 /* Registro */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -189,10 +225,9 @@
 		B4A4C8E722D2507E00B6F22B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				B4109C3722E78A8A0032DC0D /* KeyboardBoundView.swift */,
+				70DE83E22493D49F009ED4D7 /* Graphics */,
 				B4A4C8EC22D252ED00B6F22B /* Constants.swift */,
 				B41240CB22D3465E0031ECF8 /* Extensions.swift */,
-				70352A642492594D0053A9ED /* SetupUI.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -408,6 +443,7 @@
 				B4A4C8ED22D252ED00B6F22B /* Constants.swift in Sources */,
 				70352A652492594D0053A9ED /* SetupUI.swift in Sources */,
 				B431756022DE5C11008FC835 /* CommentsCell.swift in Sources */,
+				70DE83DC2493D2A3009ED4D7 /* RegistroDataSource.swift in Sources */,
 				B462A3CE237DE26800B4508B /* MyGradients.swift in Sources */,
 				B43D077822EA31F30051ECF5 /* LoginVC.swift in Sources */,
 				B462A3A4237CA87100B4508B /* Alert.swift in Sources */,
@@ -417,9 +453,9 @@
 				B4A4C8F122D2845F00B6F22B /* Run.swift in Sources */,
 				B4369006235908D10065269A /* TableViewCell.swift in Sources */,
 				B431755E22DE51D7008FC835 /* CommentsVC.swift in Sources */,
-				B4A4C8EB22D2529E00B6F22B /* RecordsCollectionCell.swift in Sources */,
 				B4A4C8C722D2503C00B6F22B /* RegistroVC.swift in Sources */,
 				B41240CC22D3465E0031ECF8 /* Extensions.swift in Sources */,
+				70DE83DF2493D418009ED4D7 /* CommentDelegate.swift in Sources */,
 				B4A4C8C522D2503C00B6F22B /* AppDelegate.swift in Sources */,
 				B43D077A22EA32050051ECF5 /* CreateUserVC.swift in Sources */,
 				702980552492083400C401D7 /* FirebaseDataSource.swift in Sources */,

@@ -71,7 +71,7 @@ class LoginVC: UIViewController {
     
  
     func checkAutologin(){
-        var check = AutoLogin.share.checkAutoLogin()
+        let check = AutoLogin.share.checkAutoLogin()
         
         if check {
             let user = AutoLogin.share.retriveDataForLogin()
