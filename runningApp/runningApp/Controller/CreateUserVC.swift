@@ -37,17 +37,7 @@ class CreateUserVC: UIViewController {
 
         // Do any additional setup after loading the view.
     }
-    
-    
-    
-    func setupBackground(forView view : UIView){
-        view.layer.cornerRadius = 15
-        view.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        view.layer.shadowRadius = 5
-        view.layer.shadowOpacity = 0.7
-        view.layer.shadowOffset = CGSize(width: 3, height: 3)
-    }
-    
+
     
     
     // Actions

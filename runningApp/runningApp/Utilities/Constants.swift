@@ -36,3 +36,10 @@ let USERS_REF = "users"
 let DATE_CREATED = "dateCreated"
 let USER_LIKE = "userLike"
 let DOCUMENT_ID = "documentID"
+
+
+
+/* USER DEFAULTS */
+let EMAIL_DEFAULT = "email"
+let PASSWORD_DEFAULT = "password"
+let CHECK_DEFAULT = "check"

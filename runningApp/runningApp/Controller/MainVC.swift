@@ -8,10 +8,10 @@
 
 import UIKit
 import MapKit
-import CoreLocation
+//import CoreLocation
 import Firebase
 
-class MainVC: UIViewController, MKMapViewDelegate{
+class MainVC: UIViewController {
     
     
     // Outlets
@@ -26,11 +26,11 @@ class MainVC: UIViewController, MKMapViewDelegate{
     
     
     // Variables
-
+    
     fileprivate var time = Timer()
     fileprivate var speed = 0
     fileprivate var speedDouble = 0.0
-    fileprivate var myBool : Bool!
+    fileprivate var checkState : Bool!
     fileprivate var oraInizio : String?
     fileprivate var oraFine : String?
     fileprivate var realTime = Timestamp()
@@ -43,7 +43,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
     
     
     var mapDataSource: MapDataSource!
-
+    
     
     
     override func viewDidLoad() {
@@ -54,7 +54,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
         mapDataSource.addDelegationOnMap()
         mapDataSource.checkLocationServices()
         mapDataSource.delegate = self
- 
+        
         pauseResumeBtn.isHidden = true
         newBtn.isHidden = true
         blackView.isHidden = true
@@ -63,7 +63,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
         username = Auth.auth().currentUser?.displayName! ?? ""
     }
     
-
+    
     override func viewWillAppear(_ animated: Bool) {
         
         mapDataSource.centerViewOnUserLocation()
@@ -76,15 +76,15 @@ class MainVC: UIViewController, MKMapViewDelegate{
         
         
         
-//        handle = Auth.auth().addStateDidChangeListener({ (auth, user) in
-//            if user == nil {
-//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//                let loginVC = storyboard.instantiateViewController(withIdentifier: "loginVC")
-//                self.present(loginVC, animated: true, completion: nil)
-//            } else {
-//                //self.setListener()
-//            }
-//        })
+        //        handle = Auth.auth().addStateDidChangeListener({ (auth, user) in
+        //            if user == nil {
+        //                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        //                let loginVC = storyboard.instantiateViewController(withIdentifier: "loginVC")
+        //                self.present(loginVC, animated: true, completion: nil)
+        //            } else {
+        //                //self.setListener()
+        //            }
+        //        })
         
         
     }
@@ -92,9 +92,9 @@ class MainVC: UIViewController, MKMapViewDelegate{
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-         print(#function,"main")
+        print(#function,"main")
     }
-
+    
     // Actions
     
     @IBAction func newBtnWasPressed(_ sender: Any) {
@@ -104,7 +104,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
         let overlays = mapDataSource?.map.overlays
         mapDataSource.map.removeOverlays(overlays!)
         mapDataSource.polylineLocation.removeAll()
-
+        
     }
     
     
@@ -118,7 +118,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
             startRun()
             
         } else {
-            myBool = false
+            checkState = false
             endRun()
         }
         
@@ -143,7 +143,8 @@ class MainVC: UIViewController, MKMapViewDelegate{
         let firebaseAuth = Auth.auth()
         do {
             try firebaseAuth.signOut()
-           // dismiss(animated: true, completion: nil)
+            AutoLogin.share.logout()
+            // dismiss(animated: true, completion: nil)
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let loginVC = storyboard.instantiateViewController(withIdentifier: "loginVC") as! LoginVC
             
@@ -153,7 +154,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
                 Gradients.myGradients(on: loginVC, view: loginVC.backgroundView)
             }
             
-           // self.present(loginVC, animated: true, completion: nil)
+            // self.present(loginVC, animated: true, completion: nil)
         } catch let signoutError as NSError{
             debugPrint("Error signing out: \(signoutError)")
         }
@@ -164,7 +165,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
     
     // Functions
     func startRun() {
-        myBool = true
+        checkState = true
         oraInizio = getCurrentTime()
         
         mapDataSource.locationManager.startUpdatingLocation()
@@ -210,7 +211,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
     }
     
     func endRun() {
-        myBool = false
+        checkState = false
         
         mapDataSource.locationManager.stopUpdatingLocation()
         
@@ -221,7 +222,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
         alertExit()
         
         mapDataSource.polylineLocation.removeAll()
-       
+        
     }
     
     func newRide() {
@@ -238,7 +239,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
         
         mapDataSource.isEndRun = false
         mapDataSource.polylineLocation.removeAll()
-      
+        
     }
     
     
@@ -252,12 +253,13 @@ class MainVC: UIViewController, MKMapViewDelegate{
         
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (UIAlertAction) in
             
-            self.myBool = false
+            self.checkState = false
             self.oraFine = self.getCurrentTime()
             self.pauseResumeBtn.isHidden = true
             self.newBtn.isHidden = false
             self.blackView.isHidden = false
-            self.saveOnDB()
+            
+            FirebaseDataSource.shared.saveDataOnFirebase(dataRunning: self.getCurrentData(), oraInizio: self.oraInizio!, oraFine: self.oraFine!, kmTotali: self.mapDataSource.runDistance.metersToMiles(places: 3), speedMax: self.mapDataSource.speedMax.twoDecimalNumbers(place: 1), tempoTotale: self.mapDataSource.counter.formatTimeDurationToString(), arrayPercorso: self.mapDataSource.arrayGeo, latitudine: self.mapDataSource.latitudine, longitudine: self.mapDataSource.longitude, realDataRunning: self.realTime, username: self.username, numOfcomment: self.numComments, numOfLike: self.numLike, usersLikeit: self.userLike)
             
             self.mapDataSource.locationManager.stopUpdatingLocation()
             self.mapDataSource.polylineLocation.removeAll()
@@ -286,37 +288,11 @@ class MainVC: UIViewController, MKMapViewDelegate{
         data = "\(String(describing: components.day!))-\(components.month!)-\(components.year!)"
         return data
     }
- 
+    
     func checkNumCommenti () {
-         Firestore.firestore().collection(RUN_REFERENCE).document(run.documentID).collection(COMMENTS_REF).getDocuments { (snapshot, error) in
+        Firestore.firestore().collection(RUN_REFERENCE).document(run.documentID).collection(COMMENTS_REF).getDocuments { (snapshot, error) in
             guard let numeroCommenti = snapshot?.count else { return debugPrint("Error fetching comments: \(error!)") }
             self.numComments += numeroCommenti
-        }
-    }
-    
-    func saveOnDB() {
-      
-        Firestore.firestore().collection(RUN_REFERENCE).addDocument(data: [
-            DATA_RUNNING : getCurrentData(),
-            ORA_INIZIO : oraInizio!,
-            ORA_FINE : oraFine!,
-            KM_TOTALI : mapDataSource.runDistance.metersToMiles(places: 3),
-            SPEED_MAX : mapDataSource.speedMax.twoDecimalNumbers(place: 1),
-            TOTALE_TEMPO : mapDataSource.counter.formatTimeDurationToString(),
-            ARRAY_PERCORSO : mapDataSource.arrayGeo,
-            LATITUDINE : mapDataSource.latitudine,
-            LONGITUDINE : mapDataSource.longitude,
-            REAL_DATA_RUNNING : realTime,
-            USERNAME : username,
-            NUMBER_OF_COMMENTS : numComments,
-            NUMBER_OF_LIKE : numLike,
-            USER_LIKE : userLike
-        ]) { err in
-            if let err = err {
-                print("Error adding document: \(err)")
-            } else {
-                //print("Document added with ID: \(ref!.documentID)")
-            }
         }
     }
     
@@ -338,7 +314,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
 
 
 extension MainVC: MapDataSourceProtocol {
-
+    
     func addTotalKm(km: String) {
         totalKmLbl.text = km
     }
@@ -346,5 +322,5 @@ extension MainVC: MapDataSourceProtocol {
     func addAvarageSpeed(speed: String) {
         avarageSpeedLbl.text = speed
     }
-
+    
 }

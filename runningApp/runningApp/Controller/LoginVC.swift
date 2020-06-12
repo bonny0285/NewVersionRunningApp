@@ -22,31 +22,39 @@ class LoginVC: UIViewController {
     @IBOutlet var backgroundView: UIView!
     
     
+
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        checkAutologin()
+        
         Gradients.myGradients(on: self, view: backgroundView)
-        setupBackground(forView: emailTxt)
-        setupBackground(forView: passwordTxt)
-        setupBackground(forView: loginBtn)
-        setupBackground(forView: createUserBtn)
+
+        SetupUIElement.shared.setupUIElement(element: emailTxt)
+        SetupUIElement.shared.setupUIElement(element: passwordTxt)
+        SetupUIElement.shared.setupUIElement(element: loginBtn)
+        SetupUIElement.shared.setupUIElement(element: createUserBtn)
     }
+        
+
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         print(#function)
+        
+    
+        
         Gradients.myGradients(on: self, view: backgroundView)
-//        emailTxt.text = ""
-//        passwordTxt.text = ""
+        emailTxt.text = ""
+        passwordTxt.text = ""
         SetupUIElement.shared.setupUIElement(element: emailTxt)
         SetupUIElement.shared.setupUIElement(element: passwordTxt)
         SetupUIElement.shared.setupUIElement(element: loginBtn)
         SetupUIElement.shared.setupUIElement(element: createUserBtn)
-//        setupBackground(forView: emailTxt)
-//        setupBackground(forView: passwordTxt)
-//        setupBackground(forView: loginBtn)
-//        setupBackground(forView: createUserBtn)
     }
     
     
@@ -61,19 +69,27 @@ class LoginVC: UIViewController {
         Gradients.myGradients(on: self, view: backgroundView)
     }
     
-    
-    
-    
-    
-    
-    func setupBackground(forView view : UIView){
-        view.layer.cornerRadius = 15
-        view.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        view.layer.shadowRadius = 5
-        view.layer.shadowOpacity = 0.7
-        view.layer.shadowOffset = CGSize(width: 3, height: 3)
+ 
+    func checkAutologin(){
+        var check = AutoLogin.share.checkAutoLogin()
+        
+        if check {
+            let user = AutoLogin.share.retriveDataForLogin()
+            
+            FirebaseDataSource.shared.loginWithMailAndPassword(withEmail: user.0, password: user.1) { (user, error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                } else {
+                    self.emailTxt.text = ""
+                    self.passwordTxt.text = ""
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let mainVC = storyboard.instantiateViewController(withIdentifier: "Principale")
+                    mainVC.modalPresentationStyle = .fullScreen
+                    self.present(mainVC, animated: true, completion: nil)
+                }
+            }
+        }
     }
-    
     
     // Actions
     @IBAction func loginBtnWasPressed(_ sender: Any) {
@@ -96,6 +112,9 @@ class LoginVC: UIViewController {
                 RunningAlert.loginError(on: self)
                 debugPrint("Error signing in: \(error)")
             } else {
+                
+                AutoLogin.share.saveUser(email: email, password: password)
+                
                 self.emailTxt.textContentType = .username
                 self.passwordTxt.textContentType = .password
                 self.emailTxt.text = ""
