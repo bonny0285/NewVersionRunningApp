@@ -11,11 +11,6 @@ import MapKit
 import CoreLocation
 import Firebase
 
-
-protocol PassStartEndButotnTitle: class {
-    func passtitle (title: String)
-}
-
 class MainVC: UIViewController, MKMapViewDelegate{
     
     
@@ -31,27 +26,13 @@ class MainVC: UIViewController, MKMapViewDelegate{
     
     
     // Variables
-    fileprivate let locationManager = CLLocationManager()
-    fileprivate let regionMeter : Double = 1000
+
     fileprivate var time = Timer()
-    fileprivate var counter = 0
     fileprivate var speed = 0
     fileprivate var speedDouble = 0.0
-    fileprivate var startLocation : CLLocation!
-    fileprivate var lastLocation : CLLocation!
-    fileprivate var runDistance = 0.0
-    fileprivate var polylineLocation = [CLLocationCoordinate2D]()
     fileprivate var myBool : Bool!
-   // fileprivate var ref: DocumentReference? = nil
-    fileprivate var arrayKM = [Double]()
-   // fileprivate var dataRun = NSDate()
-   // fileprivate var giornoInizio : String?
     fileprivate var oraInizio : String?
     fileprivate var oraFine : String?
-    fileprivate var speedMax : Double = 0.0
-    fileprivate var arrayGeo = [GeoPoint?]()
-    fileprivate var latitudine : Double = 0.0
-    fileprivate var longitude : Double = 0.0
     fileprivate var realTime = Timestamp()
     fileprivate var username : String = ""
     fileprivate var numComments = 0
@@ -70,28 +51,27 @@ class MainVC: UIViewController, MKMapViewDelegate{
         
         
         mapDataSource = MapDataSource(mapView: mapView)
-        mapDataSource?.addDelegationOnMap()
-        mapDataSource?.checkLocationServices()
-        mapDataSource?.delegate = self
-        
-         print(#function,"main")
-        //mapView.delegate = self
-        //checkLocationServices()
+        mapDataSource.addDelegationOnMap()
+        mapDataSource.checkLocationServices()
+        mapDataSource.delegate = self
+ 
         pauseResumeBtn.isHidden = true
         newBtn.isHidden = true
         blackView.isHidden = true
         startEndBtn.layer.cornerRadius = 10
         startEndBtn.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         username = Auth.auth().currentUser?.displayName! ?? ""
-        print("USERNAME CORRENTE", username)
     }
     
 
     override func viewWillAppear(_ animated: Bool) {
-         print(#function,"main")
         
-        mapDataSource?.centerViewOnUserLocation()
-        //centerViewOnUserLocation()
+        mapDataSource.centerViewOnUserLocation()
+        mapDataSource.locationManager.stopUpdatingLocation()
+        mapDataSource.isEndRun = false
+        mapDataSource.polylineLocation.removeAll()
+        mapDataSource.startLocation = nil
+        mapDataSource.lastLocation = nil
         
         
         
@@ -114,53 +94,17 @@ class MainVC: UIViewController, MKMapViewDelegate{
         super.viewDidLayoutSubviews()
          print(#function,"main")
     }
-    
-    
-//    func setListener(){
-//
-//        if selectedCategory == ThoughtCategory.popular.rawValue{
-//            thoughtListener = thoughtCollectionRef
-//                .order(by: NUM_LIKES, descending: true)
-//                .addSnapshotListener { (snapshot, error) in
-//                    if let err = error {
-//                        debugPrint("Error fetching docs: \(err)")
-//                    } else{
-//                        self.thoughts.removeAll()
-//                        self.thoughts = Thought.parseData(snapshot: snapshot)
-//                        self.tableView.reloadData()
-//                    }
-//            }
-//        } else {
-//            thoughtListener = thoughtCollectionRef
-//                .whereField(CATEGORY, isEqualTo: selectedCategory)
-//                .order(by: TIME_STAMP, descending: true)
-//                .addSnapshotListener { (snapshot, error) in
-//                    if let err = error {
-//                        debugPrint("Error fetching docs: \(err)")
-//                    } else{
-//                        self.thoughts.removeAll()
-//                        self.thoughts = Thought.parseData(snapshot: snapshot)
-//                        self.tableView.reloadData()
-//                    }
-//            }
-//        }
-//    }
-    
-    
+
     // Actions
     
     @IBAction func newBtnWasPressed(_ sender: Any) {
         newRide()
         
-        mapDataSource?.centerViewOnUserLocation()
+        mapDataSource.centerViewOnUserLocation()
         let overlays = mapDataSource?.map.overlays
-        mapDataSource?.map.removeOverlays(overlays!)
-        mapDataSource?.polylineLocation.removeAll()
-        
-//        centerViewOnUserLocation()
-//        let overlays = mapView.overlays
-//        mapView.removeOverlays(overlays)
-        //polylineLocation.removeAll()
+        mapDataSource.map.removeOverlays(overlays!)
+        mapDataSource.polylineLocation.removeAll()
+
     }
     
     
@@ -219,31 +163,28 @@ class MainVC: UIViewController, MKMapViewDelegate{
     
     
     // Functions
-    func startRun(){
+    func startRun() {
         myBool = true
         oraInizio = getCurrentTime()
         
-        mapDataSource?.locationManager.startUpdatingLocation()
-        //locationManager.startUpdatingLocation()
-        
+        mapDataSource.locationManager.startUpdatingLocation()
         
         startTimer()
         pauseResumeBtn.isHidden = false
         pauseResumeBtn.setImage(#imageLiteral(resourceName: "pauseButton"), for: .normal)
         startEndBtn.setTitle("End Run", for: .normal)
         mapDataSource.isEndRun = true
-        mapDataSource?.arrayGeo.removeAll()
-        //arrayGeo.removeAll()
+        mapDataSource.arrayGeo.removeAll()
     }
     
-    func startTimer(){
-        timerRunLbl.text = mapDataSource?.counter.formatTimeDurationToString()
+    func startTimer() {
+        timerRunLbl.text = mapDataSource.counter.formatTimeDurationToString()
         time = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
     }
     
-    @objc func updateCounter(){
-        mapDataSource?.counter += 1
-        timerRunLbl.text = mapDataSource?.counter.formatTimeDurationToString()
+    @objc func updateCounter() {
+        mapDataSource.counter += 1
+        timerRunLbl.text = mapDataSource.counter.formatTimeDurationToString()
     }
     
     
@@ -257,63 +198,52 @@ class MainVC: UIViewController, MKMapViewDelegate{
         return speedDouble
     }
     
-    func pauseRun(){
+    func pauseRun() {
         
-        mapDataSource?.startLocation = nil
-        //startLocation = nil
-        mapDataSource?.lastLocation = nil
-        //lastLocation = nil
+        mapDataSource.startLocation = nil
+        mapDataSource.lastLocation = nil
         time.invalidate()
         
-        
-        mapDataSource?.locationManager.stopUpdatingLocation()
-        //locationManager.stopUpdatingLocation()
-        
-        
+        mapDataSource.locationManager.stopUpdatingLocation()
         
         pauseResumeBtn.setImage(UIImage(named: "resumeButton"), for: .normal)
     }
     
-    func endRun(){
+    func endRun() {
         myBool = false
         
-        mapDataSource?.locationManager.stopUpdatingLocation()
-        //locationManager.stopUpdatingLocation()
+        mapDataSource.locationManager.stopUpdatingLocation()
         
-        mapDataSource?.startLocation = nil
-        //startLocation = nil
-        mapDataSource?.lastLocation = nil
-        //lastLocation = nil
-        // add our object to Realm
+        mapDataSource.startLocation = nil
+        mapDataSource.lastLocation = nil
+        
         pauseRun()
         alertExit()
         
-        mapDataSource?.polylineLocation.removeAll()
-        //polylineLocation.removeAll()
+        mapDataSource.polylineLocation.removeAll()
        
     }
     
-    func newRide(){
+    func newRide() {
         newBtn.isHidden = true
         blackView.isHidden = true
         
-        mapDataSource?.counter = 0
-        //counter = 0
+        mapDataSource.counter = 0
         
         time.invalidate()
         avarageSpeedLbl.text = "\(00.0)"
         totalKmLbl.text = "\(00.0)"
         timerRunLbl.text = "00:00"
         startEndBtn.setTitle("Start running", for: .normal)
+        
         mapDataSource.isEndRun = false
-        mapDataSource?.polylineLocation.removeAll()
-        //polylineLocation.removeAll()
+        mapDataSource.polylineLocation.removeAll()
       
     }
     
     
     
-    func alertExit(){
+    func alertExit() {
         let alert = UIAlertController(title: "Are you want terminate your session?", message: "Press 'Cancel' for stay or 'OK' for leave.", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) in
@@ -327,13 +257,11 @@ class MainVC: UIViewController, MKMapViewDelegate{
             self.pauseResumeBtn.isHidden = true
             self.newBtn.isHidden = false
             self.blackView.isHidden = false
-           // self.saveOnDB()
+            self.saveOnDB()
             
-            self.mapDataSource?.locationManager.stopUpdatingLocation()
-            self.mapDataSource?.polylineLocation.removeAll()
+            self.mapDataSource.locationManager.stopUpdatingLocation()
+            self.mapDataSource.polylineLocation.removeAll()
             
-//            self.locationManager.stopUpdatingLocation()
-//            self.polylineLocation.removeAll()
         }))
         
         self.present(alert,animated: true, completion: {
@@ -341,7 +269,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
         })
     }
     
-    func getCurrentTime()-> String{
+    func getCurrentTime() -> String {
         var data = ""
         let date = Date()
         let calendar = Calendar.current
@@ -350,7 +278,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
         return data
     }
     
-    func getCurrentData() -> String{
+    func getCurrentData() -> String {
         var data = ""
         let date = Date()
         let calendar = Calendar.current
@@ -358,72 +286,26 @@ class MainVC: UIViewController, MKMapViewDelegate{
         data = "\(String(describing: components.day!))-\(components.month!)-\(components.year!)"
         return data
     }
-    
-//    func checkLocationServices(){
-//        if CLLocationManager.locationServicesEnabled(){
-//            setupLocationManager()
-//            checkLocationAuthorizzation()
-//        } else {
-//            // show alert letting the user know they have to turn this on
-//        }
-//    }
-    
-//    func setupLocationManager(){
-//        locationManager.delegate = self
-//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//    }
-//
-//    func checkLocationAuthorizzation(){
-//        switch CLLocationManager.authorizationStatus() {
-//        case .authorizedWhenInUse:
-//            mapView.showsUserLocation = true
-//            centerViewOnUserLocation()
-//            locationManager.startUpdatingLocation()
-//            break
-//        case .notDetermined:
-//            locationManager.requestWhenInUseAuthorization()
-//        case .restricted:
-//            // show alert not allowed
-//            break
-//        case .authorizedAlways:
-//            mapView.showsUserLocation = true
-//            centerViewOnUserLocation()
-//            locationManager.startUpdatingLocation()
-//            break
-//        case .denied:
-//            // show alert instruction them how to turn on permission
-//            break
-//        }
-//    }
-    
-    
-    
-//    func centerViewOnUserLocation(){
-//        if let location = locationManager.location?.coordinate {
-//            let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionMeter, longitudinalMeters: regionMeter)
-//            mapView.setRegion(region, animated: true)
-//        }
-//    }
-    
-    func checkNumCommenti (){
+ 
+    func checkNumCommenti () {
          Firestore.firestore().collection(RUN_REFERENCE).document(run.documentID).collection(COMMENTS_REF).getDocuments { (snapshot, error) in
             guard let numeroCommenti = snapshot?.count else { return debugPrint("Error fetching comments: \(error!)") }
             self.numComments += numeroCommenti
         }
     }
     
-    func saveOnDB(){
+    func saveOnDB() {
       
         Firestore.firestore().collection(RUN_REFERENCE).addDocument(data: [
             DATA_RUNNING : getCurrentData(),
             ORA_INIZIO : oraInizio!,
             ORA_FINE : oraFine!,
-            KM_TOTALI : runDistance.metersToMiles(places: 3),
-            SPEED_MAX : speedMax.twoDecimalNumbers(place: 1),
-            TOTALE_TEMPO : counter.formatTimeDurationToString(),
-            ARRAY_PERCORSO : arrayGeo,
-            LATITUDINE : latitudine,
-            LONGITUDINE : longitude,
+            KM_TOTALI : mapDataSource.runDistance.metersToMiles(places: 3),
+            SPEED_MAX : mapDataSource.speedMax.twoDecimalNumbers(place: 1),
+            TOTALE_TEMPO : mapDataSource.counter.formatTimeDurationToString(),
+            ARRAY_PERCORSO : mapDataSource.arrayGeo,
+            LATITUDINE : mapDataSource.latitudine,
+            LONGITUDINE : mapDataSource.longitude,
             REAL_DATA_RUNNING : realTime,
             USERNAME : username,
             NUMBER_OF_COMMENTS : numComments,
@@ -439,7 +321,7 @@ class MainVC: UIViewController, MKMapViewDelegate{
     }
     
     
-    func calcolaMediaKM(km : [Double]) -> Double{
+    func calcolaMediaKM(km : [Double]) -> Double {
         
         var indice = 0
         var conta = 0.0
@@ -455,11 +337,8 @@ class MainVC: UIViewController, MKMapViewDelegate{
 }
 
 
-extension MainVC: MapDataSourceProtocol{
-    func addTitleOnStartEndButton(title: String) {
-        
-    }
-    
+extension MainVC: MapDataSourceProtocol {
+
     func addTotalKm(km: String) {
         totalKmLbl.text = km
     }
@@ -467,87 +346,5 @@ extension MainVC: MapDataSourceProtocol{
     func addAvarageSpeed(speed: String) {
         avarageSpeedLbl.text = speed
     }
-    
-    
+
 }
-
-
-
-//extension MainVC : CLLocationManagerDelegate{
-//
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        guard let location = locations.last else { return }
-//        guard let locationFirst = locations.first else { return }
-//
-//        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-//        let region = MKCoordinateRegion(center: center, latitudinalMeters: regionMeter, longitudinalMeters: regionMeter)
-//        mapView.setRegion(region, animated: true)
-//
-//
-//
-//        if startEndBtn.titleLabel?.text == "End Run"{
-//
-//            latitudine = locationFirst.coordinate.latitude
-//            longitude = locationFirst.coordinate.longitude
-//
-//            let inizio = CLLocationCoordinate2D(latitude: locationFirst.coordinate.latitude, longitude: locationFirst.coordinate.longitude)
-//            let fine = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-//
-//            drawLine(startCoordinate: inizio,endingRun: fine)
-//
-//            if startLocation == nil {
-//                startLocation = locations.first
-//            } else if let locations = locations.last {
-//                runDistance += lastLocation.distance(from: locations)
-//
-//
-//                totalKmLbl.text = "\(runDistance.metersToMiles(places: 3))"
-//                if counter > 0 && runDistance > 0 {
-//                    arrayKM.append(lastLocation.speed)
-//                    avarageSpeedLbl.text = "\((lastLocation.speed * 3.6).twoDecimalNumbers(place: 1)) Km/h"
-//
-//                    speedMax = calcolaMediaKM(km: arrayKM)
-//
-//                }
-//            }
-//            lastLocation = locations.last
-//        } else {
-//            // check this function
-//
-//        }
-//    }
-//
-//
-//
-////    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-////        checkLocationAuthorizzation()
-////    }
-//
-//
-//
-//    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-//
-//        if (overlay is MKPolyline){
-//            let polylineRender = MKPolylineRenderer(overlay: overlay)
-//            polylineRender.strokeColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
-//            polylineRender.lineWidth = 3
-//            return polylineRender
-//        }
-//        return MKOverlayRenderer()
-//    }
-//
-//
-//
-//
-//    func drawLine(startCoordinate : CLLocationCoordinate2D, endingRun : CLLocationCoordinate2D){
-//
-//        polylineLocation.append(startCoordinate)
-//        arrayGeo.append(GeoPoint(latitude: startCoordinate.latitude, longitude: startCoordinate.longitude))
-//        let aPolyline = MKPolyline(coordinates: polylineLocation, count: polylineLocation.count)
-//        self.mapView.addOverlay(aPolyline)
-//
-//    }
-//
-//
-//
-//}

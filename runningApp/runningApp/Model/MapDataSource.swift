@@ -14,7 +14,6 @@ import Firebase
 
 
 protocol MapDataSourceProtocol: class {
-    func addTitleOnStartEndButton(title: String)
     func addTotalKm(km: String)
     func addAvarageSpeed(speed: String)
 }

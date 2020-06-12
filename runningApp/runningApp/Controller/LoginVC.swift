@@ -37,8 +37,8 @@ class LoginVC: UIViewController {
         super.viewWillAppear(true)
         print(#function)
         Gradients.myGradients(on: self, view: backgroundView)
-        emailTxt.text = ""
-        passwordTxt.text = ""
+//        emailTxt.text = ""
+//        passwordTxt.text = ""
         SetupUIElement.shared.setupUIElement(element: emailTxt)
         SetupUIElement.shared.setupUIElement(element: passwordTxt)
         SetupUIElement.shared.setupUIElement(element: loginBtn)
