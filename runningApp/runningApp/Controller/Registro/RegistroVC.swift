@@ -18,15 +18,15 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     
     
     
-    // Outlets
+    //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var backgroundView: UIView!
     
     
     
-    
-    // Variables
+    //MARK: - Properties
+
     private var runListener : ListenerRegistration!
     private var runs = [Running]()
     private var datiDaPassare : Running?
@@ -41,33 +41,28 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(#function,"registro")
         tableView.delegate = self
         mapView.delegate = self
         runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
-        
-        
         setListener()
 
     }
     
     override func viewDidLayoutSubviews() {
            super.viewDidLayoutSubviews()
-            print(#function,"registro")
         dataSource = RegistroDataSource(running: runs)
         tableView.dataSource = dataSource
         tableView.reloadData()
        }
     
     override func viewDidAppear(_ animated: Bool) {
-        print(#function,"registro")
+        super.viewDidAppear(animated)
         setListener()
-        
-        
         tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setListener()
         tableView.reloadData()
         
@@ -75,6 +70,7 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         if runListener != nil {
             runListener.remove()
         }
@@ -86,7 +82,6 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
         Firestore.firestore().collection(RUN_REFERENCE).getDocuments(completion: { (snapshot, error) in
             
             guard let snapshot = snapshot else { return debugPrint("Error fetching comments: \(error!)")}
-            
             self.runs.removeAll()
             self.runs = Running.parseData(snapshot: snapshot)
             self.tableView.reloadData()
@@ -115,10 +110,10 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     
 }
 
-/*-------------------------------------------------------------------------*/
 
 
 
+//MARK: - UITableViewDelegate
 
 extension RegistroVC : UITableViewDelegate{
 
@@ -131,9 +126,7 @@ extension RegistroVC : UITableViewDelegate{
 }
 
 
-
-/*-----------------------------------------------------------------------------------------*/
-
+//MARK: - RegistroDataSource
 
 extension RegistroVC: RegistroDataSourceProtocol {
     
@@ -160,7 +153,8 @@ extension RegistroVC: RegistroDataSourceProtocol {
     
     
 }
-/*-----------------------------------------------------------------------------------------*/
+
+//MARK: - CLLocationManagerDelegate
 
 extension RegistroVC : CLLocationManagerDelegate{
     

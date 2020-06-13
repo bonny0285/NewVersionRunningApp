@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class CommentsVC: UIViewController {
+class CommentsVC: UIViewController, UITableViewDelegate {
     
     
     
@@ -30,13 +30,13 @@ class CommentsVC: UIViewController {
     // private var corsa = [Running]()
     private var username : String!
     
+    var dataSource: CommentDataSource!
     
     override func viewDidLoad() {
         super.viewDidLoad()
          print(#function,"comment")
         
         tableView.delegate = self
-        tableView.dataSource = self
         
         commentRef = firestore.collection(RUN_REFERENCE).document(run.documentID)
         if let name = Auth.auth().currentUser?.displayName {
@@ -60,6 +60,10 @@ class CommentsVC: UIViewController {
             
             self.comments.removeAll()
             self.comments = Comment.parseData(snapshot: snapshot)
+            
+            self.dataSource = CommentDataSource(comments: self.comments)
+            self.tableView.dataSource = self.dataSource
+            
             self.tableView.reloadData()
         })
     }
@@ -132,22 +136,3 @@ class CommentsVC: UIViewController {
     
 }
 
-
-/*-----------------------------------------------------------------------------------------*/
-
-extension CommentsVC : UITableViewDelegate, UITableViewDataSource{
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return comments.count
-       
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "commentsCell", for: indexPath) as? CommentsCell else { return UITableViewCell() }
-        cell.configureCell(comment: comments[indexPath.row])
-        return cell
-    }
-    
-    
-}

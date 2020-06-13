@@ -32,13 +32,11 @@ class Comment {
         var comments = [Comment]()
         guard let snap = snapshot else { return comments }
         for document in snap.documents{
-            // print("DATAAAA",document.data())
             let data = document.data()
             let username = data[USERNAME] as? String ?? "Anonymous"
             let time = data[TIME_STAMP] as? Timestamp ?? Timestamp()
             let timeStamp = time.dateValue()
             let commentTxt = data[COMMENT_TXT] as? String ?? ""
-        
             let newComment = Comment(username: username, timeStamp: timeStamp, commentTxt: commentTxt)
             comments.append(newComment)
         }

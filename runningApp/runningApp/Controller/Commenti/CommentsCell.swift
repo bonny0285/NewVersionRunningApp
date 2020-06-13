@@ -12,8 +12,8 @@ import Firebase
 class CommentsCell: UITableViewCell {
 
     
-    
-    // Outlets
+    //MARK: - Outlets
+
     @IBOutlet var usernameLbl: UILabel!
     @IBOutlet var dateLbl: UILabel!
     @IBOutlet var commentsLbl: UILabel!
