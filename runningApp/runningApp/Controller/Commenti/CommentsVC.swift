@@ -13,7 +13,8 @@ class CommentsVC: UIViewController, UITableViewDelegate {
     
     
     
-    // Outlets
+    //MARK: - Outlets
+
     @IBOutlet var tableView: UITableView!
     @IBOutlet var keyboardView: UIView!
     @IBOutlet var addBtn: UIButton!
@@ -21,27 +22,30 @@ class CommentsVC: UIViewController, UITableViewDelegate {
     
     
     
-    // Variables
+    //MARK: - Properties
+
     // var commentListener : ListenerRegistration!
     private var commentRef : DocumentReference!
     private let firestore = Firestore.firestore()
     var run : Running!
     private var comments = [Comment]()
-    // private var corsa = [Running]()
     private var username : String!
-    
     var dataSource: CommentDataSource!
+    
+ 
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-         print(#function,"comment")
         
         tableView.delegate = self
-        
         commentRef = firestore.collection(RUN_REFERENCE).document(run.documentID)
+        
         if let name = Auth.auth().currentUser?.displayName {
             username = name
         }
+        
         self.view.bindToKeyboard()
         
     }
@@ -49,32 +53,20 @@ class CommentsVC: UIViewController, UITableViewDelegate {
     
     
     override func viewDidAppear(_ animated: Bool) {
-        print(#function,"comment")
-        refresh()
+       refreshCommentList()
     }
     
     
-    func refresh (){
-        firestore.collection(RUN_REFERENCE).document(run.documentID).collection(COMMENTS_REF).order(by: TIME_STAMP, descending: true).getDocuments(completion: { (snapshot, error) in
-            guard let snapshot = snapshot else { return debugPrint("Error fetching comments: \(error!)")}
-            
+    func refreshCommentList () {
+        FirebaseDataSource.shared.retriveComments(documentID: self.run.documentID) { (snapshot) -> (Void) in
             self.comments.removeAll()
             self.comments = Comment.parseData(snapshot: snapshot)
-            
             self.dataSource = CommentDataSource(comments: self.comments)
             self.tableView.dataSource = self.dataSource
-            
             self.tableView.reloadData()
-        })
+        }
     }
-    
-    
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        //commentListener.remove()
-        
-    }
-    
+
     @IBAction func backBtnWasPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -90,6 +82,7 @@ class CommentsVC: UIViewController, UITableViewDelegate {
             guard let numeroCommenti = snapshot?.count else { return debugPrint("Error fetching comments: \(error!)") }
             
             guard let commentTxt = self.commentTxt.text else { return }
+            
             self.firestore.runTransaction({ (transaction, error) -> Any? in
                 
                 let thoughtDocument : DocumentSnapshot
@@ -102,7 +95,7 @@ class CommentsVC: UIViewController, UITableViewDelegate {
                     return nil
                 }
                 
-                guard let oldNumComments = thoughtDocument.data()![NUMBER_OF_COMMENTS] as? Int else { return nil }
+                guard (thoughtDocument.data()![NUMBER_OF_COMMENTS] as? Int) != nil else { return nil }
                 
                 
                 
@@ -124,7 +117,8 @@ class CommentsVC: UIViewController, UITableViewDelegate {
                 } else {
                     self.commentTxt.text = ""
                     self.commentTxt.resignFirstResponder()
-                    self.refresh()
+                    self.refreshCommentList()
+                  
                 }
             }
             self.view.endEditing(true)
@@ -132,6 +126,18 @@ class CommentsVC: UIViewController, UITableViewDelegate {
         })
     }
     
+    
+    func AddNewDocument (){
+        FirebaseDataSource.shared.addCommentToDataBase(documetID: run.documentID, comments: commentTxt.text, username: username) { object, error in
+            if let error = error {
+                debugPrint("Transaction failed: \(error)")
+            } else {
+                self.commentTxt.text = ""
+                self.commentTxt.resignFirstResponder()
+                self.refreshCommentList()
+            }
+        }
+    }
     
     
 }

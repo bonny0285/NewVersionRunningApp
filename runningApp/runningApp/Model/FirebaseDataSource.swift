@@ -63,5 +63,59 @@ class FirebaseDataSource {
     
     
     
+    func retriveComments(documentID: String, completion: @escaping (QuerySnapshot) -> (Void)) {
+        
+        Firestore.firestore().collection(RUN_REFERENCE).document(documentID).collection(COMMENTS_REF).order(by: TIME_STAMP, descending: true).getDocuments { (snapshot, error) in
+            
+            guard let snapshot = snapshot else { return debugPrint("Error fetching comments: \(error!)") }
+            completion(snapshot)
+        }
+    }
+    
+    
+    
+    func addCommentToDataBase (documetID: String, comments: String?, username: String, completion: @escaping(Any?,Error?) -> ()) {
+        var commentRef : DocumentReference!
+        commentRef = Firestore.firestore().collection(RUN_REFERENCE).document(documetID)
+        
+        
+        Firestore.firestore().collection(RUN_REFERENCE).document(documetID).collection(COMMENTS_REF).getDocuments { (snapshot, error) in
+            guard let numeroCommenti = snapshot?.count else { return debugPrint("Error fetching comments: \(error!)") }
+            
+            guard let commentTxt = comments else { return }
+            
+            Firestore.firestore().runTransaction({ (transaction, error) -> Any? in
+                
+                let thoughtDocument : DocumentSnapshot
+                
+                do {
+                    try thoughtDocument = transaction.getDocument(Firestore.firestore().collection(RUN_REFERENCE).document(documetID))
+                } catch let error as NSError {
+                    debugPrint("Fetch error: \(error.localizedDescription)")
+                    return nil
+                }
+                
+                guard (thoughtDocument.data()![NUMBER_OF_COMMENTS] as? Int) != nil else { return nil }
+                
+                transaction.updateData([NUMBER_OF_COMMENTS : numeroCommenti + 1], forDocument: commentRef!)
+                
+                let newCommentRef = Firestore.firestore().collection(RUN_REFERENCE).document(documetID).collection(COMMENTS_REF).document()
+                
+                transaction.setData([
+                    COMMENT_TXT : commentTxt,
+                    TIME_STAMP : FieldValue.serverTimestamp(),
+                    USERNAME : username
+                ], forDocument: newCommentRef)
+                
+                return nil
+            }) {(object, error) in
+                completion(object,error)
+            }
+            
+        }
+    }
+    
+    
+    
 }
 
