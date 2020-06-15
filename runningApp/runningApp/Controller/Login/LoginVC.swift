@@ -43,10 +43,8 @@ class LoginVC: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        print(#function)
+        super.viewWillAppear(animated)
         
-    
         
         Gradients.myGradients(on: self, view: backgroundView)
         emailTxt.text = ""
