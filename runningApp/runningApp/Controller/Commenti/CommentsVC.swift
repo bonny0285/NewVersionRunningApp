@@ -73,61 +73,14 @@ class CommentsVC: UIViewController, UITableViewDelegate {
     
     
     @IBAction func addBtnWasPressed(_ sender: Any) {
-        aggiungiCommento()
+        AddNewComment()
     }
     
     
-    func aggiungiCommento () {
-        firestore.collection(RUN_REFERENCE).document(self.run.documentID).collection(COMMENTS_REF).getDocuments(completion: { (snapshot, error) in
-            guard let numeroCommenti = snapshot?.count else { return debugPrint("Error fetching comments: \(error!)") }
-            
-            guard let commentTxt = self.commentTxt.text else { return }
-            
-            self.firestore.runTransaction({ (transaction, error) -> Any? in
-                
-                let thoughtDocument : DocumentSnapshot
-                
-                
-                do {
-                    try thoughtDocument = transaction.getDocument(Firestore.firestore().collection(RUN_REFERENCE).document(self.run.documentID))
-                } catch let error as NSError {
-                    debugPrint("Fetch error: \(error.localizedDescription)")
-                    return nil
-                }
-                
-                guard (thoughtDocument.data()![NUMBER_OF_COMMENTS] as? Int) != nil else { return nil }
-                
-                
-                
-                transaction.updateData([NUMBER_OF_COMMENTS : numeroCommenti + 1], forDocument: self.commentRef!)
-                
-                let newCommentRef = self.firestore.collection(RUN_REFERENCE).document(self.run.documentID).collection(COMMENTS_REF).document()
-                
-                
-                transaction.setData([
-                    COMMENT_TXT : commentTxt,
-                    TIME_STAMP : FieldValue.serverTimestamp(),
-                    USERNAME : self.username!
-                ], forDocument: newCommentRef)
-                
-                return nil
-            }) { (object, errro) in
-                if let error = errro{
-                    debugPrint("Transaction failed: \(error)")
-                } else {
-                    self.commentTxt.text = ""
-                    self.commentTxt.resignFirstResponder()
-                    self.refreshCommentList()
-                  
-                }
-            }
-            self.view.endEditing(true)
-            
-        })
-    }
+
     
     
-    func AddNewDocument (){
+    func AddNewComment (){
         FirebaseDataSource.shared.addCommentToDataBase(documetID: run.documentID, comments: commentTxt.text, username: username) { object, error in
             if let error = error {
                 debugPrint("Transaction failed: \(error)")
