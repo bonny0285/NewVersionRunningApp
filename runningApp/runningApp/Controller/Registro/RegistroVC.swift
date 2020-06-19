@@ -41,6 +41,9 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let nib = UINib(nibName: "RunningSavedCell", bundle: nil)
+        self.tableView.register(nib, forCellReuseIdentifier: "RunningSavedCell")
         tableView.delegate = self
         mapView.delegate = self
         runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
@@ -121,7 +124,17 @@ extension RegistroVC : UITableViewDelegate{
         center(latitudine: runs[indexPath.row].latitude, longitudine: runs[indexPath.row].longitude, arrayUltimaCorsa: runs[indexPath.row].arrayPercorso)
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        200
+    }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+          return 1
+      }
+    
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        5.0
+//    }
     
 }
 

@@ -10,6 +10,8 @@
 		0EC198BD53C8B329575F3577 /* Pods_runningApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D8D0D14E2B32FC7852BAA06 /* Pods_runningApp.framework */; };
 		702980552492083400C401D7 /* FirebaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702980542492083400C401D7 /* FirebaseDataSource.swift */; };
 		70352A652492594D0053A9ED /* SetupUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70352A642492594D0053A9ED /* SetupUI.swift */; };
+		70B6F631249CB00900C0AE37 /* RunningSavedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B6F62F249CB00900C0AE37 /* RunningSavedCell.swift */; };
+		70B6F632249CB00900C0AE37 /* RunningSavedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70B6F630249CB00900C0AE37 /* RunningSavedCell.xib */; };
 		70D53A612497A1B800EE7DE0 /* PresentationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D53A602497A1B800EE7DE0 /* PresentationViewController.swift */; };
 		70DE83D72493908B009ED4D7 /* MapDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE83D62493908A009ED4D7 /* MapDataSource.swift */; };
 		70DE83D92493C52C009ED4D7 /* AutoLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE83D82493C52C009ED4D7 /* AutoLogin.swift */; };
@@ -54,6 +56,8 @@
 		597EFD4B77E2F93D00AE5644 /* Pods-runningAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-runningAppTests.debug.xcconfig"; path = "Target Support Files/Pods-runningAppTests/Pods-runningAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		702980542492083400C401D7 /* FirebaseDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDataSource.swift; sourceTree = "<group>"; };
 		70352A642492594D0053A9ED /* SetupUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUI.swift; sourceTree = "<group>"; };
+		70B6F62F249CB00900C0AE37 /* RunningSavedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningSavedCell.swift; sourceTree = "<group>"; };
+		70B6F630249CB00900C0AE37 /* RunningSavedCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RunningSavedCell.xib; sourceTree = "<group>"; };
 		70D53A602497A1B800EE7DE0 /* PresentationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationViewController.swift; sourceTree = "<group>"; };
 		70DE83D62493908A009ED4D7 /* MapDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataSource.swift; sourceTree = "<group>"; };
 		70DE83D82493C52C009ED4D7 /* AutoLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLogin.swift; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 				B4A4C8C622D2503C00B6F22B /* RegistroVC.swift */,
 				70DE83DB2493D2A2009ED4D7 /* RegistroDataSource.swift */,
 				B4369005235908D10065269A /* TableViewCell.swift */,
+				70B6F62F249CB00900C0AE37 /* RunningSavedCell.swift */,
+				70B6F630249CB00900C0AE37 /* RunningSavedCell.xib */,
 			);
 			path = Registro;
 			sourceTree = "<group>";
@@ -340,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4A4C8CF22D2503F00B6F22B /* LaunchScreen.storyboard in Resources */,
+				70B6F632249CB00900C0AE37 /* RunningSavedCell.xib in Resources */,
 				B4E4523F22D62D31001A124E /* GoogleService-Info.plist in Resources */,
 				B4A4C8CC22D2503F00B6F22B /* Assets.xcassets in Resources */,
 				B4A4C8CA22D2503C00B6F22B /* Main.storyboard in Resources */,
@@ -452,6 +459,7 @@
 				B462A3A4237CA87100B4508B /* Alert.swift in Sources */,
 				70DE83D72493908B009ED4D7 /* MapDataSource.swift in Sources */,
 				70D53A612497A1B800EE7DE0 /* PresentationViewController.swift in Sources */,
+				70B6F631249CB00900C0AE37 /* RunningSavedCell.swift in Sources */,
 				B4109C3822E78A8A0032DC0D /* KeyboardBoundView.swift in Sources */,
 				70DE83D92493C52C009ED4D7 /* AutoLogin.swift in Sources */,
 				B4A4C8F122D2845F00B6F22B /* Run.swift in Sources */,

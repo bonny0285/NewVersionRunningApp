@@ -46,6 +46,9 @@ class TableViewCell: UITableViewCell {
     var delegate : MyButtonDelegate?
     var delegateAlert : AlertDelegate?
     
+    
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         SetupUIElement.shared.setupUIElement(element: viewBackground)

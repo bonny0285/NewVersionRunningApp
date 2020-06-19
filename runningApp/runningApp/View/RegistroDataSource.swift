@@ -60,42 +60,62 @@ extension RegistroDataSource: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath) as? TableViewCell else { return UITableViewCell()}
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "RunningSavedCell", for: indexPath) as? RunningSavedCell else { return UITableViewCell()}
         
         let row = organizer.item(at: indexPath)
         cell.configureRow(at: row)
-        cell.delegate = self
-        cell.delegateAlert = self
+        cell.buttonDelegate = self
+        cell.alertDelegate = self
         
         return cell
     }
 }
 
 
-extension TableViewCell {
+//extension TableViewCell {
+//    
+//    func configureRow (at run: Running) {
+//        myRun = run
+//        dataGiornoLbl.text = "\(run.dataRun)"
+//        inizioCorsaLbl.text = "\(run.oraInizio)"
+//        fineCorsaLbl.text = "\(run.oraFine)"
+//        tempoTotaleLbl.text = "\(run.tempoTotale)"
+//        mediaVelocitaLbl.text = "\((run.mediaVelocita).twoDecimalNumbers(place: 1))"
+//        percorsoTotaleLbl.text = "\((run.totaleKm).twoDecimalNumbers(place: 3))"
+//        usernameLbl.text = "\(run.username)"
+//        commentsLbl.text = "\(run.numComments)"
+//        numLike.text = "\(run.userLike.count)"
+//    }
+//}
+
+
+extension RunningSavedCell {
     
     func configureRow (at run: Running) {
         myRun = run
-        dataGiornoLbl.text = "\(run.dataRun)"
-        inizioCorsaLbl.text = "\(run.oraInizio)"
-        fineCorsaLbl.text = "\(run.oraFine)"
-        tempoTotaleLbl.text = "\(run.tempoTotale)"
-        mediaVelocitaLbl.text = "\((run.mediaVelocita).twoDecimalNumbers(place: 1))"
-        percorsoTotaleLbl.text = "\((run.totaleKm).twoDecimalNumbers(place: 3))"
-        usernameLbl.text = "\(run.username)"
-        commentsLbl.text = "\(run.numComments)"
-        numLike.text = "\(run.userLike.count)"
+        dataGiornoLabel.text = "\(run.dataRun)"
+        inizioCorsaLabel.text = "\(run.oraInizio)"
+        fineCorsaLabel.text = "\(run.oraFine)"
+        tempoTotaleLabel.text = "\(run.tempoTotale)"
+        mediaVelocitàLabel.text = "\((run.mediaVelocita).twoDecimalNumbers(place: 1))"
+        percorsoTotaleLabel.text = "\((run.totaleKm).twoDecimalNumbers(place: 1))"
+        usernameLabel.text = "\(run.username)"
+        numCommentLabel.text = "\(run.numComments)"
+        numLIkeLabel.text = "\(run.userLike.count)"
     }
 }
 
 
-extension RegistroDataSource: MyButtonDelegate, AlertDelegate{
-    
+extension RegistroDataSource: ButtonDelegate, AlertLikeDelegate {
     func likeTwice() {
         delegate?.passAlert()
     }
     
-    func opneCommentVC(for run: Running) {
+    
+    func commentButtonWasPressed(for run: Running) {
         delegate?.dataForPrepareSegue(run: run)
     }
+    
+    
+  
 }
