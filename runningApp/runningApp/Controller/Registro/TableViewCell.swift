@@ -63,9 +63,9 @@ class TableViewCell: UITableViewCell {
     
     @objc func likeTapped(_ sender: UITapGestureRecognizer){
         
-        var runListener : ListenerRegistration!
-        var runCollectionRef: CollectionReference!
-        runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
+        //var runListener : ListenerRegistration!
+//        let runCollectionRef: CollectionReference!
+//        runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
         
         username = Auth.auth().currentUser?.displayName! ?? ""
         Firestore.firestore().collection(RUN_REFERENCE).document(myRun.documentID).getDocument { (snapshot, error) in
@@ -80,21 +80,21 @@ class TableViewCell: UITableViewCell {
     
     
     
-    func findUserLike (data : [String : Any], userName : String) -> Bool{
-        var myBool : Bool?
+    func findUserLike (data : [String : Any], userName : String) {
+        //var myBool : Bool?
         for i in data{
             if i.key == "userLike"{
-                myBool = true
+               // myBool = true
                 userSearch(userLike: [i.key : i.value], user: userName)
                 //print("trovato, cerchiamo se contiene il nostro user", myBool!)
                 break
             } else {
-                myBool = false
+               // myBool = false
                 Firestore.firestore().collection(RUN_REFERENCE).document(myRun.documentID).updateData([USER_LIKE : [username]])
-                print("nessun userlike, dobbiamo creare USER_LIKE", myBool!)
+                print("nessun userlike, dobbiamo creare USER_LIKE")
             }
         }
-        return myBool!
+       // return myBool!
     }
     
     

@@ -10,6 +10,8 @@
 		0EC198BD53C8B329575F3577 /* Pods_runningApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D8D0D14E2B32FC7852BAA06 /* Pods_runningApp.framework */; };
 		702980552492083400C401D7 /* FirebaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702980542492083400C401D7 /* FirebaseDataSource.swift */; };
 		70352A652492594D0053A9ED /* SetupUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70352A642492594D0053A9ED /* SetupUI.swift */; };
+		7066E8CF249DE07600B18C4C /* MainConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7066E8CE249DE07600B18C4C /* MainConsole.swift */; };
+		7066E8D1249DE09F00B18C4C /* MainConsole.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7066E8D0249DE09F00B18C4C /* MainConsole.xib */; };
 		70B6F631249CB00900C0AE37 /* RunningSavedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B6F62F249CB00900C0AE37 /* RunningSavedCell.swift */; };
 		70B6F632249CB00900C0AE37 /* RunningSavedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70B6F630249CB00900C0AE37 /* RunningSavedCell.xib */; };
 		70D53A612497A1B800EE7DE0 /* PresentationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D53A602497A1B800EE7DE0 /* PresentationViewController.swift */; };
@@ -56,6 +58,8 @@
 		597EFD4B77E2F93D00AE5644 /* Pods-runningAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-runningAppTests.debug.xcconfig"; path = "Target Support Files/Pods-runningAppTests/Pods-runningAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		702980542492083400C401D7 /* FirebaseDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDataSource.swift; sourceTree = "<group>"; };
 		70352A642492594D0053A9ED /* SetupUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUI.swift; sourceTree = "<group>"; };
+		7066E8CE249DE07600B18C4C /* MainConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainConsole.swift; sourceTree = "<group>"; };
+		7066E8D0249DE09F00B18C4C /* MainConsole.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainConsole.xib; sourceTree = "<group>"; };
 		70B6F62F249CB00900C0AE37 /* RunningSavedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningSavedCell.swift; sourceTree = "<group>"; };
 		70B6F630249CB00900C0AE37 /* RunningSavedCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RunningSavedCell.xib; sourceTree = "<group>"; };
 		70D53A602497A1B800EE7DE0 /* PresentationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationViewController.swift; sourceTree = "<group>"; };
@@ -148,6 +152,8 @@
 			isa = PBXGroup;
 			children = (
 				B4A4C8F322D2889500B6F22B /* MainVC.swift */,
+				7066E8CE249DE07600B18C4C /* MainConsole.swift */,
+				7066E8D0249DE09F00B18C4C /* MainConsole.xib */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -347,6 +353,7 @@
 			files = (
 				B4A4C8CF22D2503F00B6F22B /* LaunchScreen.storyboard in Resources */,
 				70B6F632249CB00900C0AE37 /* RunningSavedCell.xib in Resources */,
+				7066E8D1249DE09F00B18C4C /* MainConsole.xib in Resources */,
 				B4E4523F22D62D31001A124E /* GoogleService-Info.plist in Resources */,
 				B4A4C8CC22D2503F00B6F22B /* Assets.xcassets in Resources */,
 				B4A4C8CA22D2503C00B6F22B /* Main.storyboard in Resources */,
@@ -369,30 +376,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-runningApp/Pods-runningApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/BoringSSL-GRPC/openssl_grpc.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
-				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
-				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
-				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-runningApp/Pods-runningApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl_grpc.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpcpp.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-runningApp/Pods-runningApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -470,6 +458,7 @@
 				70DE83DF2493D418009ED4D7 /* CommentDataSource.swift in Sources */,
 				B4A4C8C522D2503C00B6F22B /* AppDelegate.swift in Sources */,
 				B43D077A22EA32050051ECF5 /* CreateUserVC.swift in Sources */,
+				7066E8CF249DE07600B18C4C /* MainConsole.swift in Sources */,
 				702980552492083400C401D7 /* FirebaseDataSource.swift in Sources */,
 				B4109C3A22E78FEC0032DC0D /* Comment.swift in Sources */,
 				B4A4C8F422D2889500B6F22B /* MainVC.swift in Sources */,

@@ -129,11 +129,10 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
                 runDistance += lastLocation.distance(from: locations)
                 
                 delegate?.addTotalKm(km: "\(runDistance.metersToMiles(places: 3))")
-                //totalKmLbl.text = "\(runDistance.metersToMiles(places: 3))"
+                
                 if counter > 0 && runDistance > 0 {
                     arrayKM.append(lastLocation.speed)
                     delegate?.addAvarageSpeed(speed: "\((lastLocation.speed * 3.6).twoDecimalNumbers(place: 1)) Km/h")
-                    //avarageSpeedLbl.text = "\((lastLocation.speed * 3.6).twoDecimalNumbers(place: 1)) Km/h"
                     
                     speedMax = calcolaMediaKM(km: arrayKM)
                     

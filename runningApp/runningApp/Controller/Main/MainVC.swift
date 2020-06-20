@@ -8,25 +8,20 @@
 
 import UIKit
 import MapKit
-//import CoreLocation
 import Firebase
 
 class MainVC: UIViewController {
     
-    
-    // Outlets
+    //MARK: - Outlets
+
     @IBOutlet var mapView: MKMapView!
-    @IBOutlet var startEndBtn: UIButton!
-    @IBOutlet var timerRunLbl: UILabel!
-    @IBOutlet var avarageSpeedLbl: UILabel!
-    @IBOutlet var totalKmLbl: UILabel!
-    @IBOutlet var pauseResumeBtn: UIButton!
     @IBOutlet var blackView: UIView!
     @IBOutlet var newBtn: UIButton!
+    @IBOutlet weak var mainConsoleView: MainConsole!
     
     
-    // Variables
-    
+    //MARK: - Properties
+
     fileprivate var time = Timer()
     fileprivate var speed = 0
     fileprivate var speedDouble = 0.0
@@ -38,28 +33,27 @@ class MainVC: UIViewController {
     fileprivate var numComments = 0
     fileprivate var numLike = 0
     fileprivate var userLike : [String] = []
-    private var handle : AuthStateDidChangeListenerHandle?
+    fileprivate var handle : AuthStateDidChangeListenerHandle?
     fileprivate var run : Running!
+    fileprivate var mapDataSource: MapDataSource!
     
     
-    var mapDataSource: MapDataSource!
-    
-    
-    
+    //MARK: - Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         mapDataSource = MapDataSource(mapView: mapView)
         mapDataSource.addDelegationOnMap()
         mapDataSource.checkLocationServices()
         mapDataSource.delegate = self
         
-        pauseResumeBtn.isHidden = true
+        mainConsoleView.delegate = self
+        mainConsoleView.pauseButton.isHidden = true
+        
         newBtn.isHidden = true
         blackView.isHidden = true
-        startEndBtn.layer.cornerRadius = 10
-        startEndBtn.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+
         username = Auth.auth().currentUser?.displayName! ?? ""
     }
     
@@ -97,9 +91,9 @@ class MainVC: UIViewController {
     
     // Actions
     
+    
     @IBAction func newBtnWasPressed(_ sender: Any) {
         newRide()
-        
         mapDataSource.centerViewOnUserLocation()
         let overlays = mapDataSource?.map.overlays
         mapDataSource.map.removeOverlays(overlays!)
@@ -112,31 +106,6 @@ class MainVC: UIViewController {
     }
     
     
-    @IBAction func startEndBtnPressed(_ sender: Any) {
-        if startEndBtn.titleLabel?.text == "Start running"{
-            mapDataSource.isEndRun = false
-            startRun()
-            
-        } else {
-            checkState = false
-            endRun()
-        }
-        
-    }
-    
-    @IBAction func pauseResumeBtnPressed(_ sender: Any) {
-        
-        if startEndBtn.titleLabel?.text == "End Run" && time.isValid{
-            mapDataSource.isEndRun = true
-            pauseRun()
-        } else if startEndBtn.titleLabel?.text == "Start running" && time.isValid == false{
-            mapDataSource.isEndRun = false
-            print("nulla da fare")
-        } else {
-            mapDataSource.isEndRun = false
-            startRun()
-        }
-    }
     
     
     @IBAction func logoutBtnWasPressed(_ sender: Any) {
@@ -164,6 +133,11 @@ class MainVC: UIViewController {
     
     
     // Functions
+    
+    
+    
+    //MARK: - Start Run
+
     func startRun() {
         checkState = true
         oraInizio = getCurrentTime()
@@ -171,34 +145,50 @@ class MainVC: UIViewController {
         mapDataSource.locationManager.startUpdatingLocation()
         
         startTimer()
-        pauseResumeBtn.isHidden = false
-        pauseResumeBtn.setImage(#imageLiteral(resourceName: "pauseButton"), for: .normal)
-        startEndBtn.setTitle("End Run", for: .normal)
+        
+        mainConsoleView.pauseButton.isHidden = false
+        mainConsoleView.pauseButton.setImage(#imageLiteral(resourceName: "pauseButton"), for: .normal)
+        mainConsoleView.startButton.setTitle("End Run", for: .normal)
         mapDataSource.isEndRun = true
         mapDataSource.arrayGeo.removeAll()
     }
     
+    
+    //MARK: - Start Timer
+
     func startTimer() {
-        timerRunLbl.text = mapDataSource.counter.formatTimeDurationToString()
+        mainConsoleView.timeLabel.text = mapDataSource.counter.formatTimeDurationToString()
         time = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
     }
     
+    
+    //MARK: - Selector Update Counter
+
     @objc func updateCounter() {
         mapDataSource.counter += 1
-        timerRunLbl.text = mapDataSource.counter.formatTimeDurationToString()
+        
+        mainConsoleView.timeLabel.text = mapDataSource.counter.formatTimeDurationToString()
     }
     
     
+    //MARK: - Calculate Speed
+
     func calculateSpeed(time seconds: Int, miles: Double) -> String{
         speed = Int(Double(seconds) / miles)
         return speed.formatTimeDurationToString()
     }
     
+    
+    //MARK: - Calculate Speed For Km
+
     func calculateSpeedForKm(time : Int, Km : Double)-> Double {
         speedDouble = Double(time) * Km
         return speedDouble
     }
     
+    
+    //MARK: - Pause
+
     func pauseRun() {
         
         mapDataSource.startLocation = nil
@@ -207,14 +197,15 @@ class MainVC: UIViewController {
         
         mapDataSource.locationManager.stopUpdatingLocation()
         
-        pauseResumeBtn.setImage(UIImage(named: "resumeButton"), for: .normal)
+        mainConsoleView.pauseButton.setImage(UIImage(named: "resumeButton"), for: .normal)
     }
     
+    //MARK: - End Run
+
     func endRun() {
         checkState = false
         
         mapDataSource.locationManager.stopUpdatingLocation()
-        
         mapDataSource.startLocation = nil
         mapDataSource.lastLocation = nil
         
@@ -225,6 +216,8 @@ class MainVC: UIViewController {
         
     }
     
+    //MARK: - New Ride
+
     func newRide() {
         newBtn.isHidden = true
         blackView.isHidden = true
@@ -232,10 +225,11 @@ class MainVC: UIViewController {
         mapDataSource.counter = 0
         
         time.invalidate()
-        avarageSpeedLbl.text = "\(00.0)"
-        totalKmLbl.text = "\(00.0)"
-        timerRunLbl.text = "00:00"
-        startEndBtn.setTitle("Start running", for: .normal)
+        
+        mainConsoleView.speedLabel.text = "\(00.0)"
+        mainConsoleView.kmLabel.text = "\(00.0)"
+        mainConsoleView.timeLabel.text = "00:00"
+        mainConsoleView.startButton.setTitle("Start running", for: .normal)
         
         mapDataSource.isEndRun = false
         mapDataSource.polylineLocation.removeAll()
@@ -255,7 +249,9 @@ class MainVC: UIViewController {
             
             self.checkState = false
             self.oraFine = self.getCurrentTime()
-            self.pauseResumeBtn.isHidden = true
+            
+            self.mainConsoleView.pauseButton.isHidden = true
+            
             self.newBtn.isHidden = false
             self.blackView.isHidden = false
             
@@ -312,15 +308,50 @@ class MainVC: UIViewController {
     
 }
 
+//MARK: - MapDataSourceProtocol
 
 extension MainVC: MapDataSourceProtocol {
     
     func addTotalKm(km: String) {
-        totalKmLbl.text = km
+        mainConsoleView.kmLabel.text = km
     }
     
     func addAvarageSpeed(speed: String) {
-        avarageSpeedLbl.text = speed
+        mainConsoleView.speedLabel.text = speed
     }
     
+}
+
+
+//MARK: - MainConsoleDelegate
+
+extension MainVC: MainConsoleDelegate {
+
+    func startButtonWasPressed() {
+        if mainConsoleView.startButton.titleLabel?.text == "Start running"{
+            mapDataSource.isEndRun = false
+            startRun()
+            
+        } else {
+            checkState = false
+            endRun()
+        }
+    }
+    
+    
+    
+    func pauseButtonWasPressed() {
+        if mainConsoleView.startButton.titleLabel?.text == "End Run" && time.isValid{
+            mapDataSource.isEndRun = true
+            pauseRun()
+        } else if mainConsoleView.startButton.titleLabel?.text == "Start running" && time.isValid == false{
+            mapDataSource.isEndRun = false
+            print("nulla da fare")
+        } else {
+            mapDataSource.isEndRun = false
+            startRun()
+        }
+    }
+    
+  
 }
