@@ -177,6 +177,7 @@
                         <outlet property="backgroundView" destination="69q-qv-F7X" id="aSR-Yv-bbX"/>
                         <outlet property="createUserBtn" destination="7xh-SS-Sm8" id="29A-cJ-5ad"/>
                         <outlet property="emailTxt" destination="l4G-tA-cXq" id="Gv3-nD-yeb"/>
+                        <outlet property="hintLabel" destination="61x-Ip-gVc" id="3Ee-ze-ZX7"/>
                         <outlet property="loginBtn" destination="yZt-UP-eUN" id="j1g-8N-6aK"/>
                         <outlet property="myLbl" destination="61x-Ip-gVc" id="NMA-nI-8St"/>
                         <outlet property="passwordTxt" destination="dNJ-0O-P8X" id="r9d-wY-94c"/>

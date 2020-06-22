@@ -20,6 +20,7 @@ class LoginVC: UIViewController {
     @IBOutlet var createUserBtn: UIButton!
     @IBOutlet var myLbl: UILabel!
     @IBOutlet var backgroundView: UIView!
+    @IBOutlet weak var hintLabel: UILabel!
     
     
 
@@ -28,6 +29,8 @@ class LoginVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+       
         
         checkAutologin()
         
@@ -45,6 +48,9 @@ class LoginVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        hintLabel.text = NSLocalizedString("dont_you_have_an_account", comment: "")
+        loginBtn.setTitle(NSLocalizedString("login", comment: ""), for: .normal)
+               createUserBtn.setTitle(NSLocalizedString("create_account", comment: ""), for: .normal)
         
         Gradients.myGradients(on: self, view: backgroundView)
         emailTxt.text = ""

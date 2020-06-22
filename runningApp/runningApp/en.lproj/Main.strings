@@ -1,0 +1,63 @@
+
+/* Class = "UILabel"; text = "Don't have an account?"; ObjectID = "61x-Ip-gVc"; */
+"61x-Ip-gVc.text" = "Don't have an account?";
+
+/* Class = "UITextField"; placeholder = "Type your message:"; ObjectID = "6fp-XB-V0Y"; */
+"6fp-XB-V0Y.placeholder" = "Type your message:";
+
+/* Class = "UIButton"; normalTitle = "Create User"; ObjectID = "7xh-SS-Sm8"; */
+"7xh-SS-Sm8.normalTitle" = "Create User";
+
+/* Class = "UIButton"; normalTitle = "New Run"; ObjectID = "85y-5R-gNa"; */
+"85y-5R-gNa.normalTitle" = "New Run";
+
+/* Class = "UITabBarItem"; title = "Corsa"; ObjectID = "93U-mh-CCj"; */
+"93U-mh-CCj.title" = "Corsa";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "FC4-PL-bi1"; */
+"FC4-PL-bi1.normalTitle" = "Cancel";
+
+/* Class = "UIButton"; normalTitle = "Create"; ObjectID = "TaG-vb-1FW"; */
+"TaG-vb-1FW.normalTitle" = "Create";
+
+/* Class = "UILabel"; text = "17-02-1985  17:17:17"; ObjectID = "Xrd-nJ-yK9"; */
+"Xrd-nJ-yK9.text" = "17-02-1985  17:17:17";
+
+/* Class = "UILabel"; text = "Bonny"; ObjectID = "Xy3-Jh-cAe"; */
+"Xy3-Jh-cAe.text" = "Bonny";
+
+/* Class = "UITabBarItem"; title = "Registro"; ObjectID = "Y7g-qJ-aqc"; */
+"Y7g-qJ-aqc.title" = "Registro";
+
+/* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "aUd-q5-omA"; */
+"aUd-q5-omA.normalTitle" = "Logout";
+
+/* Class = "UITextField"; placeholder = "_password"; ObjectID = "bdt-2h-mUf"; */
+"bdt-2h-mUf.placeholder" = "_password";
+
+/* Class = "UITextField"; placeholder = "_email"; ObjectID = "bwS-ae-6wq"; */
+"bwS-ae-6wq.placeholder" = "_email";
+
+/* Class = "UITextField"; placeholder = "_password"; ObjectID = "dNJ-0O-P8X"; */
+"dNJ-0O-P8X.placeholder" = "_password";
+
+/* Class = "UITextField"; text = "17021985"; ObjectID = "dNJ-0O-P8X"; */
+"dNJ-0O-P8X.text" = "17021985";
+
+/* Class = "UILabel"; text = "message"; ObjectID = "gv4-Z4-vJv"; */
+"gv4-Z4-vJv.text" = "message";
+
+/* Class = "UITextField"; placeholder = "_email"; ObjectID = "l4G-tA-cXq"; */
+"l4G-tA-cXq.placeholder" = "_email";
+
+/* Class = "UITextField"; text = "bonnyiphone@gmail.com"; ObjectID = "l4G-tA-cXq"; */
+"l4G-tA-cXq.text" = "bonnyiphone@gmail.com";
+
+/* Class = "UITextField"; placeholder = "_username"; ObjectID = "oPJ-Dj-IbU"; */
+"oPJ-Dj-IbU.placeholder" = "_username";
+
+/* Class = "UIButton"; normalTitle = "Back"; ObjectID = "yIs-uf-BAm"; */
+"yIs-uf-BAm.normalTitle" = "Back";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "yZt-UP-eUN"; */
+"yZt-UP-eUN.normalTitle" = "Login";
