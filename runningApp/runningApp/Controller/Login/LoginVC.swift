@@ -50,7 +50,7 @@ class LoginVC: UIViewController {
         
         hintLabel.text = NSLocalizedString("dont_you_have_an_account", comment: "")
         loginBtn.setTitle(NSLocalizedString("login", comment: ""), for: .normal)
-               createUserBtn.setTitle(NSLocalizedString("create_account", comment: ""), for: .normal)
+        createUserBtn.setTitle(NSLocalizedString("create_account", comment: ""), for: .normal)
         
         Gradients.myGradients(on: self, view: backgroundView)
         emailTxt.text = ""
@@ -78,6 +78,14 @@ class LoginVC: UIViewController {
         let check = AutoLogin.share.checkAutoLogin()
         
         if check {
+            let coverView = createCoverView()
+            view.addSubview(coverView)
+            coverView.translatesAutoresizingMaskIntoConstraints = false
+            coverView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+            coverView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+            coverView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+            coverView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+            
             let user = AutoLogin.share.retriveDataForLogin()
             
             FirebaseDataSource.shared.loginWithMailAndPassword(withEmail: user.0, password: user.1) { (user, error) in
@@ -92,8 +100,30 @@ class LoginVC: UIViewController {
                     self.present(mainVC, animated: true, completion: nil)
                 }
             }
+           
         }
     }
+    
+    
+    func createCoverView () -> UIView {
+        let coverView = UIView()
+        let indicator = UIActivityIndicatorView()
+        if #available(iOS 13.0, *) {
+            indicator.style = .large
+        } else {
+            // Fallback on earlier versions
+        }
+        indicator.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        coverView.addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.centerYAnchor.constraint(equalTo: coverView.centerYAnchor, constant: 0).isActive = true
+        indicator.centerXAnchor.constraint(equalTo: coverView.centerXAnchor, constant: 0).isActive = true
+        coverView.backgroundColor = #colorLiteral(red: 0.9759346843, green: 0.5839473009, blue: 0.02618087828, alpha: 1)
+        coverView.alpha = 0.9
+        indicator.startAnimating()
+        return coverView
+    }
+    
     
     // Actions
     @IBAction func loginBtnWasPressed(_ sender: Any) {

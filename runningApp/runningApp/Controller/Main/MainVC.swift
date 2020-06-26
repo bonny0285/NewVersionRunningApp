@@ -50,7 +50,7 @@ class MainVC: UIViewController {
         
         mainConsoleView.delegate = self
         mainConsoleView.pauseButton.isHidden = true
-        
+
         newBtn.isHidden = true
         blackView.isHidden = true
 

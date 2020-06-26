@@ -6,5 +6,5 @@
   Copyright © 2020 Massimiliano Bonafede. All rights reserved.
 */
 "login" = "Login";
-"create_account" = "Crea un account";
-"dont_you_have_an_account" = "Non hai ancora un account?";
+"create_account" = "Create an account";
+"dont_you_have_an_account" = "Don't have an account?";
