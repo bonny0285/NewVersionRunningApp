@@ -14,6 +14,7 @@
 		7066E8D1249DE09F00B18C4C /* MainConsole.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7066E8D0249DE09F00B18C4C /* MainConsole.xib */; };
 		70B6F631249CB00900C0AE37 /* RunningSavedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B6F62F249CB00900C0AE37 /* RunningSavedCell.swift */; };
 		70B6F632249CB00900C0AE37 /* RunningSavedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70B6F630249CB00900C0AE37 /* RunningSavedCell.xib */; };
+		70C9237624AF0840005E004A /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C9237524AF0840005E004A /* R.generated.swift */; };
 		70C9773C24A08C440050188D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70C9773B24A08C430050188D /* LaunchScreen.storyboard */; };
 		70C9774124A08C990050188D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70C9773F24A08C990050188D /* Localizable.strings */; };
 		70C9774924A08E4E0050188D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70C9774B24A08E4E0050188D /* Main.storyboard */; };
@@ -63,11 +64,10 @@
 		7066E8D0249DE09F00B18C4C /* MainConsole.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainConsole.xib; sourceTree = "<group>"; };
 		70B6F62F249CB00900C0AE37 /* RunningSavedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningSavedCell.swift; sourceTree = "<group>"; };
 		70B6F630249CB00900C0AE37 /* RunningSavedCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RunningSavedCell.xib; sourceTree = "<group>"; };
+		70C9237524AF0840005E004A /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
+		70C9237824AF0886005E004A /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = ../it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70C9773B24A08C430050188D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		70C9774024A08C990050188D /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = runningApp/it.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		70C9774A24A08E4E0050188D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		70C9774D24A08E690050188D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
-		70C9774F24A08E830050188D /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Main.strings; sourceTree = "<group>"; };
 		70C9775024A08F230050188D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70D53A602497A1B800EE7DE0 /* PresentationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationViewController.swift; sourceTree = "<group>"; };
 		70DE83D62493908A009ED4D7 /* MapDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataSource.swift; sourceTree = "<group>"; };
@@ -121,12 +121,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		70C9772D24A087B00050188D /* Localization */ = {
+		70C9237424AF0751005E004A /* Generated */ = {
 			isa = PBXGroup;
 			children = (
-				70C9773F24A08C990050188D /* Localizable.strings */,
+				70C9237524AF0840005E004A /* R.generated.swift */,
 			);
-			path = Localization;
+			path = Generated;
 			sourceTree = "<group>";
 		};
 		70DE83DA2493D1F1009ED4D7 /* Registro */ = {
@@ -203,7 +203,7 @@
 		B4A4C8C322D2503C00B6F22B /* runningApp */ = {
 			isa = PBXGroup;
 			children = (
-				70C9772D24A087B00050188D /* Localization */,
+				70C9237424AF0751005E004A /* Generated */,
 				B4A4C8E722D2507E00B6F22B /* Utilities */,
 				B4A4C8E422D2506100B6F22B /* Model */,
 				B4A4C8E622D2507600B6F22B /* Controller */,
@@ -211,6 +211,7 @@
 				70C9774B24A08E4E0050188D /* Main.storyboard */,
 				70C9773B24A08C430050188D /* LaunchScreen.storyboard */,
 				B4A4C8CB22D2503F00B6F22B /* Assets.xcassets */,
+				70C9773F24A08C990050188D /* Localizable.strings */,
 				B4A4C8D022D2503F00B6F22B /* Info.plist */,
 				B4E4523E22D62D31001A124E /* GoogleService-Info.plist */,
 				70D53A602497A1B800EE7DE0 /* PresentationViewController.swift */,
@@ -289,6 +290,7 @@
 			buildConfigurationList = B4A4C8DE22D2503F00B6F22B /* Build configuration list for PBXNativeTarget "runningApp" */;
 			buildPhases = (
 				517C73BBF2319CAE6BCF601C /* [CP] Check Pods Manifest.lock */,
+				70C9237324AF0713005E004A /* ShellScript */,
 				B4A4C8BD22D2503B00B6F22B /* Sources */,
 				B4A4C8BE22D2503B00B6F22B /* Frameworks */,
 				B4A4C8BF22D2503B00B6F22B /* Resources */,
@@ -347,8 +349,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				it,
 				Base,
+				it,
 			);
 			mainGroup = B4A4C8B822D2503B00B6F22B;
 			productRefGroup = B4A4C8C222D2503C00B6F22B /* Products */;
@@ -425,6 +427,25 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		70C9237324AF0713005E004A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$TEMP_DIR/rswift-lastrun",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+		};
 		D246C56E3A6D804756D2FAF9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -456,6 +477,7 @@
 			files = (
 				B4A4C8ED22D252ED00B6F22B /* Constants.swift in Sources */,
 				70352A652492594D0053A9ED /* SetupUI.swift in Sources */,
+				70C9237624AF0840005E004A /* R.generated.swift in Sources */,
 				B431756022DE5C11008FC835 /* CommentsCell.swift in Sources */,
 				70DE83DC2493D2A3009ED4D7 /* RegistroDataSource.swift in Sources */,
 				B462A3CE237DE26800B4508B /* MyGradients.swift in Sources */,
@@ -503,8 +525,8 @@
 		70C9773F24A08C990050188D /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				70C9774024A08C990050188D /* it */,
 				70C9775024A08F230050188D /* en */,
+				70C9237824AF0886005E004A /* it */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -513,8 +535,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				70C9774A24A08E4E0050188D /* Base */,
-				70C9774D24A08E690050188D /* en */,
-				70C9774F24A08E830050188D /* it */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

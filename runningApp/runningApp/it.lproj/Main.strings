@@ -61,9 +61,3 @@
 
 /* Class = "UIButton"; normalTitle = "Login"; ObjectID = "yZt-UP-eUN"; */
 "yZt-UP-eUN.normalTitle" = "Login";
-
-
-
-"login" = "Entra";
-"create_account" = "Crea un account";
-"dont_you_have_an_account" = "Non hai ancora un account?";

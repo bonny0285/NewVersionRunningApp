@@ -7,9 +7,10 @@ target 'runningApp' do
 
   # Pods for runningApp
 
-	pod 'Firebase/Core'
-	pod 'Firebase/Firestore'
+	  pod 'Firebase/Core'
+	  pod 'Firebase/Firestore'
   	pod 'Firebase/Auth'
+    pod 'R.swift'
 
   target 'runningAppTests' do
     inherit! :search_paths
