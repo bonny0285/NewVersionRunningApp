@@ -79,38 +79,32 @@ class RunningSavedCell: UITableViewCell {
     
     
     func userSearch (userLike : [String : Any], user : String){
-        var service : Any?
-        //var myUser = user
-        var myBool = true
         var userLiked : Bool?
-        for i in userLike {
-            if i.key == "userLike"{
-                service = i.value
-                print(service!)
-                for i in service as! [String] {
-                    let a = i
-                    if a == user {
+        userLike.forEach { key, value in
+            if key == "userLike" {
+                let service = value as! [String]
+                service.forEach {
+                    if $0 == user {
                         alertDelegate?.likeTwice()
-                        print("HAI GIA MESSO MI PIACE")
-                        print("non incremntare il contatore")
+                        debugPrint("HAI GIA MESSO MI PIACE")
+                        debugPrint("non incremntare il contatore")
                         userLiked = true
-                        break
+                        return
                     } else {
-                        myBool = false
                         userLiked = false
                     }
                 }
-                if myBool == false && userLiked == false{
-                    print("COMPLIMENTI HAI MESSO MI PIACE !!!")
-                    print("incrementa il contatore e aggiungi il nome all'array")
+                if userLiked == false {
+                    debugPrint("COMPLIMENTI HAI MESSO MI PIACE !!!")
+                    debugPrint("incrementa il contatore e aggiungi il nome all'array")
                     
                     run.userLike.append(user)
                     Firestore.firestore().collection(RUN_REFERENCE).document(run.documentID).setData([NUMBER_OF_LIKE : self.run.numLike + 1, USER_LIKE : self.run.userLike], merge: true)
                 } else {
-                    break
+                    return
                 }
             } else {
-                print("CE UN ERRORE")
+                debugPrint("CE UN ERRORE")
             }
         }
     }
@@ -119,20 +113,16 @@ class RunningSavedCell: UITableViewCell {
     
     
     func findUserLike (data : [String : Any], userName : String) {
-        //var myBool : Bool?
         for i in data{
             if i.key == "userLike"{
-                //myBool = true
                 userSearch(userLike: [i.key : i.value], user: userName)
-                //print("trovato, cerchiamo se contiene il nostro user", myBool!)
+                debugPrint("trovato, cerchiamo se contiene il nostro user")
                 break
             } else {
-               // myBool = false
                 Firestore.firestore().collection(RUN_REFERENCE).document(myRun.documentID).updateData([USER_LIKE : [username]])
                 print("nessun userlike, dobbiamo creare USER_LIKE")
             }
         }
-       // return myBool!
     }
     
     
@@ -140,10 +130,6 @@ class RunningSavedCell: UITableViewCell {
    
     
     @IBAction func likeButtonWasPressed(_ sender: UIButton) {
-//        var runListener : ListenerRegistration!
-//        var runCollectionRef: CollectionReference!
-//        runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
-        
         username = Auth.auth().currentUser?.displayName! ?? ""
         Firestore.firestore().collection(RUN_REFERENCE).document(myRun.documentID).getDocument { (snapshot, error) in
             if let error = error {

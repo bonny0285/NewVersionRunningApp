@@ -60,7 +60,7 @@ extension RegistroDataSource: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "RunningSavedCell", for: indexPath) as? RunningSavedCell else { return UITableViewCell()}
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.runningSavedCell , for: indexPath) else { return UITableViewCell() }
         
         let row = organizer.item(at: indexPath)
         cell.configureRow(at: row)
@@ -71,22 +71,6 @@ extension RegistroDataSource: UITableViewDataSource {
     }
 }
 
-
-//extension TableViewCell {
-//    
-//    func configureRow (at run: Running) {
-//        myRun = run
-//        dataGiornoLbl.text = "\(run.dataRun)"
-//        inizioCorsaLbl.text = "\(run.oraInizio)"
-//        fineCorsaLbl.text = "\(run.oraFine)"
-//        tempoTotaleLbl.text = "\(run.tempoTotale)"
-//        mediaVelocitaLbl.text = "\((run.mediaVelocita).twoDecimalNumbers(place: 1))"
-//        percorsoTotaleLbl.text = "\((run.totaleKm).twoDecimalNumbers(place: 3))"
-//        usernameLbl.text = "\(run.username)"
-//        commentsLbl.text = "\(run.numComments)"
-//        numLike.text = "\(run.userLike.count)"
-//    }
-//}
 
 
 extension RunningSavedCell {

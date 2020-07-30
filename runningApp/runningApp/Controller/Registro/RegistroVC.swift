@@ -38,12 +38,12 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let nib = UINib(nibName: "RunningSavedCell", bundle: nil)
-        self.tableView.register(nib, forCellReuseIdentifier: "RunningSavedCell")
+        tableView.register(R.nib.runningSavedCell)
+//        let nib = UINib(nibName: "RunningSavedCell", bundle: nil)
+//        self.tableView.register(nib, forCellReuseIdentifier: "RunningSavedCell")
         tableView.delegate = self
         mapView.delegate = self
         runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
@@ -53,23 +53,24 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     
     override func viewDidLayoutSubviews() {
            super.viewDidLayoutSubviews()
+        setListener()
         dataSource = RegistroDataSource(running: runs)
         tableView.dataSource = dataSource
         tableView.reloadData()
        }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        setListener()
-        tableView.reloadData()
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        setListener()
+//        tableView.reloadData()
+//    }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setListener()
-        tableView.reloadData()
-        
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        setListener()
+//        tableView.reloadData()
+//        
+//    }
     
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -151,12 +152,13 @@ extension RegistroVC: RegistroDataSourceProtocol {
     }
     
     func dataForPrepareSegue(run: Running) {
-        performSegue(withIdentifier: "segueToCommentVC", sender: run)
+        performSegue(withIdentifier: R.segue.registroVC.segueToCommentVC, sender: run)
     }
     
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == "segueToCommentVC"{
             if let destinationVC = segue.destination as? CommentsVC {
                 if let run = sender as? Running{

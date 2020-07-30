@@ -25,11 +25,15 @@ class CommentsVC: UIViewController, UITableViewDelegate {
     //MARK: - Properties
 
     // var commentListener : ListenerRegistration!
-    private var commentRef : DocumentReference!
+    private var commentRef : DocumentReference! {
+        firestore.collection(RUN_REFERENCE).document(run.documentID)
+    }
     private let firestore = Firestore.firestore()
     var run : Running!
     private var comments = [Comment]()
-    private var username : String!
+    private var username : String! {
+        Auth.auth().currentUser?.displayName
+    }
     var dataSource: CommentDataSource!
     
  
@@ -40,11 +44,11 @@ class CommentsVC: UIViewController, UITableViewDelegate {
         super.viewDidLoad()
         
         tableView.delegate = self
-        commentRef = firestore.collection(RUN_REFERENCE).document(run.documentID)
+        //commentRef = firestore.collection(RUN_REFERENCE).document(run.documentID)
         
-        if let name = Auth.auth().currentUser?.displayName {
-            username = name
-        }
+//        if let name = Auth.auth().currentUser?.displayName {
+//            username = name
+//        }
         
         self.view.bindToKeyboard()
         
@@ -58,7 +62,7 @@ class CommentsVC: UIViewController, UITableViewDelegate {
     
     
     func refreshCommentList () {
-        FirebaseDataSource.shared.retriveComments(documentID: self.run.documentID) {[weak self] (snapshot) -> (Void) in
+        FirebaseDataSource.shared.retriveComments(documentID: self.run.documentID) { [weak self] (snapshot) -> (Void) in
             guard let self = self else { return }
             
             self.comments.removeAll()
@@ -83,7 +87,7 @@ class CommentsVC: UIViewController, UITableViewDelegate {
     
     
     func AddNewComment (){
-        FirebaseDataSource.shared.addCommentToDataBase(documetID: run.documentID, comments: commentTxt.text, username: username) {[weak self] object, error in
+        FirebaseDataSource.shared.addCommentToDataBase(documetID: run.documentID, comments: commentTxt.text, username: username) { [weak self] object, error in
             guard let self = self else { return }
             
             if let error = error {

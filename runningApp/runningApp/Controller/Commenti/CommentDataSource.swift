@@ -46,7 +46,7 @@ extension CommentDataSource: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "commentsCell", for: indexPath) as? CommentsCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.commentsCell, for: indexPath) else { return UITableViewCell() }
         
         let row = organizer.getComment(at: indexPath)
         cell.configureRow(at: row)
