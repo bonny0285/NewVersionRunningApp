@@ -58,7 +58,7 @@ class MainConsole: UIView {
         contentView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         contentView.leadingAnchor.constraint(equalTo:  leadingAnchor).isActive = true
         contentView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        
+        startButton.setTitle(R.string.localizable.start_running(), for: .normal)
         startButton.layer.cornerRadius = 10
         startButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }

@@ -58,7 +58,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
             setupLocationManager()
             checkLocationAuthorizzation()
         } else {
-            // show alert letting the user know they have to turn this on
+            #warning("show alert letting user know they have to turn this on")
         }
     }
     
@@ -78,7 +78,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .restricted:
-            // show alert not allowed
+            #warning("show alert not allowed")
             break
         case .authorizedAlways:
             map.showsUserLocation = true
@@ -86,7 +86,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
             locationManager.startUpdatingLocation()
             break
         case .denied:
-            // show alert instruction them how to turn on permission
+            #warning("show alert instruction them how to turn on permission")
             break
         @unknown default:
             fatalError()

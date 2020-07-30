@@ -321,8 +321,20 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 3 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 13 localization keys.
     struct localizable {
+      /// en translation: Are you want terminate your session?
+      ///
+      /// Locales: en, it
+      static let alert_terminate_session_title = Rswift.StringResource(key: "alert_terminate_session_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Cancel
+      ///
+      /// Locales: en, it
+      static let cancel_button = Rswift.StringResource(key: "cancel_button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Create
+      ///
+      /// Locales: en, it
+      static let create_button = Rswift.StringResource(key: "create_button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
       /// en translation: Create an account
       ///
       /// Locales: en, it
@@ -331,10 +343,83 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, it
       static let dont_you_have_an_account = Rswift.StringResource(key: "dont_you_have_an_account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Don't have an account?
+      ///
+      /// Locales: en, it
+      static let login_view_controller_hint = Rswift.StringResource(key: "login_view_controller_hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: End Run
+      ///
+      /// Locales: en, it
+      static let end_running = Rswift.StringResource(key: "end_running", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
       /// en translation: Login
       ///
       /// Locales: en, it
       static let login = Rswift.StringResource(key: "login", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Logout
+      ///
+      /// Locales: en, it
+      static let logout = Rswift.StringResource(key: "logout", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: New Run
+      ///
+      /// Locales: en, it
+      static let new_run = Rswift.StringResource(key: "new_run", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: OK
+      ///
+      /// Locales: en, it
+      static let ok_button = Rswift.StringResource(key: "ok_button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Press 'Cancel' for stay or 'OK' for leave.
+      ///
+      /// Locales: en, it
+      static let alert_terminate_session_message = Rswift.StringResource(key: "alert_terminate_session_message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Start running
+      ///
+      /// Locales: en, it
+      static let start_running = Rswift.StringResource(key: "start_running", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+
+      /// en translation: Are you want terminate your session?
+      ///
+      /// Locales: en, it
+      static func alert_terminate_session_title(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("alert_terminate_session_title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "alert_terminate_session_title"
+        }
+
+        return NSLocalizedString("alert_terminate_session_title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Cancel
+      ///
+      /// Locales: en, it
+      static func cancel_button(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("cancel_button", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "cancel_button"
+        }
+
+        return NSLocalizedString("cancel_button", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Create
+      ///
+      /// Locales: en, it
+      static func create_button(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("create_button", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "create_button"
+        }
+
+        return NSLocalizedString("create_button", bundle: bundle, comment: "")
+      }
 
       /// en translation: Create an account
       ///
@@ -366,6 +451,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("dont_you_have_an_account", bundle: bundle, comment: "")
       }
 
+      /// en translation: Don't have an account?
+      ///
+      /// Locales: en, it
+      static func login_view_controller_hint(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("login_view_controller_hint", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "login_view_controller_hint"
+        }
+
+        return NSLocalizedString("login_view_controller_hint", bundle: bundle, comment: "")
+      }
+
+      /// en translation: End Run
+      ///
+      /// Locales: en, it
+      static func end_running(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("end_running", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "end_running"
+        }
+
+        return NSLocalizedString("end_running", bundle: bundle, comment: "")
+      }
+
       /// en translation: Login
       ///
       /// Locales: en, it
@@ -379,6 +494,81 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("login", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Logout
+      ///
+      /// Locales: en, it
+      static func logout(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("logout", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "logout"
+        }
+
+        return NSLocalizedString("logout", bundle: bundle, comment: "")
+      }
+
+      /// en translation: New Run
+      ///
+      /// Locales: en, it
+      static func new_run(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("new_run", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "new_run"
+        }
+
+        return NSLocalizedString("new_run", bundle: bundle, comment: "")
+      }
+
+      /// en translation: OK
+      ///
+      /// Locales: en, it
+      static func ok_button(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("ok_button", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "ok_button"
+        }
+
+        return NSLocalizedString("ok_button", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Press 'Cancel' for stay or 'OK' for leave.
+      ///
+      /// Locales: en, it
+      static func alert_terminate_session_message(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("alert_terminate_session_message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "alert_terminate_session_message"
+        }
+
+        return NSLocalizedString("alert_terminate_session_message", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Start running
+      ///
+      /// Locales: en, it
+      static func start_running(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("start_running", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "start_running"
+        }
+
+        return NSLocalizedString("start_running", bundle: bundle, comment: "")
       }
 
       fileprivate init() {}

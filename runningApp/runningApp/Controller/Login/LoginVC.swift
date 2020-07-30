@@ -16,9 +16,21 @@ class LoginVC: UIViewController {
     // Outlets
     @IBOutlet var emailTxt: UITextField!
     @IBOutlet var passwordTxt: UITextField!
-    @IBOutlet var loginBtn: UIButton!
-    @IBOutlet var createUserBtn: UIButton!
-    @IBOutlet var myLbl: UILabel!
+    @IBOutlet var loginBtn: UIButton! {
+        didSet {
+            loginBtn.setTitle(R.string.localizable.login(), for: .normal)
+        }
+    }
+    @IBOutlet var createUserBtn: UIButton! {
+        didSet {
+            createUserBtn.setTitle(R.string.localizable.create_account(), for: .normal)
+        }
+    }
+    @IBOutlet var myLbl: UILabel! {
+        didSet {
+            myLbl.text = R.string.localizable.login_view_controller_hint()
+        }
+    }
     @IBOutlet var backgroundView: UIView!
     @IBOutlet weak var hintLabel: UILabel!
     
@@ -48,9 +60,9 @@ class LoginVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        hintLabel.text = NSLocalizedString("dont_you_have_an_account", comment: "")
-        loginBtn.setTitle(NSLocalizedString("login", comment: ""), for: .normal)
-        createUserBtn.setTitle(NSLocalizedString("create_account", comment: ""), for: .normal)
+        hintLabel.text = R.string.localizable.dont_you_have_an_account()
+        
+        
         
         Gradients.myGradients(on: self, view: backgroundView)
         emailTxt.text = ""
@@ -88,13 +100,15 @@ class LoginVC: UIViewController {
             
             let user = AutoLogin.share.retriveDataForLogin()
             
-            FirebaseDataSource.shared.loginWithMailAndPassword(withEmail: user.0, password: user.1) { (user, error) in
+            FirebaseDataSource.shared.loginWithMailAndPassword(withEmail: user.0, password: user.1) {[weak self] (user, error) in
+                guard let self = self else { return }
+                
                 if let error = error {
                     print(error.localizedDescription)
                 } else {
                     self.emailTxt.text = ""
                     self.passwordTxt.text = ""
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let storyboard = R.storyboard.main()
                     let mainVC = storyboard.instantiateViewController(withIdentifier: "Principale")
                     mainVC.modalPresentationStyle = .fullScreen
                     self.present(mainVC, animated: true, completion: nil)
@@ -140,7 +154,8 @@ class LoginVC: UIViewController {
         guard let email = emailTxt.text, let password = passwordTxt.text else { return }
         
         
-        FirebaseDataSource.shared.loginWithMailAndPassword(withEmail: email, password: password) { (user, error) in
+        FirebaseDataSource.shared.loginWithMailAndPassword(withEmail: email, password: password) {[weak self] (user, error) in
+            guard let self = self else { return }
             
             if let error = error {
                 RunningAlert.loginError(on: self)
@@ -153,7 +168,7 @@ class LoginVC: UIViewController {
                 self.passwordTxt.textContentType = .password
                 self.emailTxt.text = ""
                 self.passwordTxt.text = ""
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let storyboard = R.storyboard.main()
                 let mainVC = storyboard.instantiateViewController(withIdentifier: "Principale")
                 mainVC.modalPresentationStyle = .fullScreen
                 self.present(mainVC, animated: true, completion: nil)
@@ -167,7 +182,7 @@ class LoginVC: UIViewController {
     
     @IBAction func createUserBtnWasPressed(_ sender: Any) {
         
-        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard : UIStoryboard = R.storyboard.main()
         let newVC = storyboard.instantiateViewController(withIdentifier: "createUserVC") as! CreateUserVC
         newVC.modalPresentationStyle = .fullScreen
         present(newVC, animated: true) {

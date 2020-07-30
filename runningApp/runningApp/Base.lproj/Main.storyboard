@@ -79,6 +79,7 @@
                     <tabBarItem key="tabBarItem" title="Corsa" image="tabbar-runIconGray" id="93U-mh-CCj"/>
                     <connections>
                         <outlet property="blackView" destination="MEb-zg-b6h" id="o6b-XS-gH5"/>
+                        <outlet property="logoutButtonOutlet" destination="aUd-q5-omA" id="fg0-mF-fcd"/>
                         <outlet property="mainConsoleView" destination="cgG-nN-1Cp" id="Mp4-Sx-226"/>
                         <outlet property="mapView" destination="BeI-5i-6SZ" id="Ryh-a7-Ni4"/>
                         <outlet property="newBtn" destination="85y-5R-gNa" id="hep-Dt-s2S"/>

@@ -82,7 +82,8 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     
     
     func refresh (){
-        Firestore.firestore().collection(RUN_REFERENCE).getDocuments(completion: { (snapshot, error) in
+        Firestore.firestore().collection(RUN_REFERENCE).getDocuments(completion: {[weak self] (snapshot, error) in
+            guard let self = self else { return }
             
             guard let snapshot = snapshot else { return debugPrint("Error fetching comments: \(error!)")}
             self.runs.removeAll()
@@ -95,7 +96,9 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     func setListener(){
         runListener = runCollectionRef
             .order(by: REAL_DATA_RUNNING, descending: true)
-            .addSnapshotListener { (snapshot, error) in
+            .addSnapshotListener {[weak self] (snapshot, error) in
+                guard let self = self else { return }
+                
                 if let err = error {
                     debugPrint("Error fetching docs: \(err)")
                 } else{

@@ -58,7 +58,9 @@ class CommentsVC: UIViewController, UITableViewDelegate {
     
     
     func refreshCommentList () {
-        FirebaseDataSource.shared.retriveComments(documentID: self.run.documentID) { (snapshot) -> (Void) in
+        FirebaseDataSource.shared.retriveComments(documentID: self.run.documentID) {[weak self] (snapshot) -> (Void) in
+            guard let self = self else { return }
+            
             self.comments.removeAll()
             self.comments = Comment.parseData(snapshot: snapshot)
             self.dataSource = CommentDataSource(comments: self.comments)
@@ -81,7 +83,9 @@ class CommentsVC: UIViewController, UITableViewDelegate {
     
     
     func AddNewComment (){
-        FirebaseDataSource.shared.addCommentToDataBase(documetID: run.documentID, comments: commentTxt.text, username: username) { object, error in
+        FirebaseDataSource.shared.addCommentToDataBase(documetID: run.documentID, comments: commentTxt.text, username: username) {[weak self] object, error in
+            guard let self = self else { return }
+            
             if let error = error {
                 debugPrint("Transaction failed: \(error)")
             } else {

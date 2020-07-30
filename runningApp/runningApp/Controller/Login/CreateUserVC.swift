@@ -19,8 +19,16 @@ class CreateUserVC: UIViewController {
     @IBOutlet var usernameTxt: UITextField!
     @IBOutlet var mailTxt: UITextField!
     @IBOutlet var passwordTxt: UITextField!
-    @IBOutlet var createBtn: UIButton!
-    @IBOutlet var cancelBtn: UIButton!
+    @IBOutlet var createBtn: UIButton! {
+        didSet {
+            createBtn.setTitle(R.string.localizable.create_button(), for: .normal)
+        }
+    }
+    @IBOutlet var cancelBtn: UIButton! {
+        didSet {
+            cancelBtn.setTitle(R.string.localizable.cancel_button(), for: .normal)
+        }
+    }
     @IBOutlet var backgroundView: UIView!
     
     
@@ -58,7 +66,8 @@ class CreateUserVC: UIViewController {
         guard let email = mailTxt.text, let password = passwordTxt.text, let username = usernameTxt.text else { return }
         
         
-        FirebaseDataSource.shared.createNewUser(withEmail: email, password: password, username: username) { (user, error) in
+        FirebaseDataSource.shared.createNewUser(withEmail: email, password: password, username: username) {[weak self] (user, error) in
+            guard let self = self else { return }
             
             if let error = error {
                 print(error.localizedDescription)
@@ -95,7 +104,7 @@ class CreateUserVC: UIViewController {
     }
     
     @IBAction func cancelBtnWasPressed(_ sender: Any) {
-        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard : UIStoryboard = R.storyboard.main()
         let vc = storyboard.instantiateViewController(withIdentifier: "loginVC") as! LoginVC
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true) {
