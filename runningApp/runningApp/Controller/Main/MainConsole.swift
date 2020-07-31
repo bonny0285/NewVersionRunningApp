@@ -18,7 +18,13 @@ protocol MainConsoleDelegate: class {
 class MainConsole: UIView {
 
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var startButton: UIButton! {
+        didSet {
+            startButton.setTitle(R.string.localizable.start_running(), for: .normal)
+            startButton.layer.cornerRadius = 10
+            startButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        }
+    }
     @IBOutlet weak var pauseButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var speedLabel: UILabel!
@@ -50,7 +56,7 @@ class MainConsole: UIView {
     
     
     private func commonInit() {
-        Bundle.main.loadNibNamed("MainConsole", owner: self, options: nil)
+        Bundle.main.loadNibNamed( "MainConsole", owner: self, options: nil)
         addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.frame = self.bounds
@@ -58,9 +64,9 @@ class MainConsole: UIView {
         contentView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         contentView.leadingAnchor.constraint(equalTo:  leadingAnchor).isActive = true
         contentView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        startButton.setTitle(R.string.localizable.start_running(), for: .normal)
-        startButton.layer.cornerRadius = 10
-        startButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+//        startButton.setTitle(R.string.localizable.start_running(), for: .normal)
+//        startButton.layer.cornerRadius = 10
+//        startButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
     
     

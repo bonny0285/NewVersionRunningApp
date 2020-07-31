@@ -13,8 +13,21 @@ import Firebase
 class MainVC: UIViewController {
     
     //MARK: - Outlets
-
-    @IBOutlet var mapView: MKMapView!
+    
+    @IBOutlet var mapView: MKMapView! {
+        didSet{
+            mapDataSource = MapDataSource(mapView: mapView, username: username ?? "")
+            mapDataSource.addDelegationOnMap()
+            mapDataSource.checkLocationServices()
+            mapDataSource.delegate = self
+            mapDataSource.centerViewOnUserLocation()
+            mapDataSource.locationManager.stopUpdatingLocation()
+            mapDataSource.isEndRun = false
+            mapDataSource.polylineLocation.removeAll()
+            mapDataSource.startLocation = nil
+            mapDataSource.lastLocation = nil
+        }
+    }
     @IBOutlet var blackView: UIView!
     @IBOutlet weak var logoutButtonOutlet: UIButton! {
         didSet {
@@ -27,7 +40,12 @@ class MainVC: UIViewController {
             newBtn.setTitle(R.string.localizable.new_run(), for: .normal)
         }
     }
-    @IBOutlet weak var mainConsoleView: MainConsole!
+    @IBOutlet weak var mainConsoleView: MainConsole! {
+        didSet {
+            mainConsoleView.delegate = self
+            mainConsoleView.pauseButton.isHidden = true
+        }
+    }
     
     
     //MARK: - Properties
@@ -36,6 +54,7 @@ class MainVC: UIViewController {
         didSet {
             switch state {
             case .start:
+                debugPrint("start")
                 checkState = true
                 oraInizio = getCurrentTime
                 
@@ -50,6 +69,7 @@ class MainVC: UIViewController {
                 mapDataSource.arrayGeo.removeAll()
                 
             case .reset:
+                debugPrint("reset")
                 newBtn.isHidden = true
                 blackView.isHidden = true
                 
@@ -65,7 +85,7 @@ class MainVC: UIViewController {
                 mainConsoleView.startButton.setTitle(R.string.localizable.start_running(), for: .normal)
                 
             case .pause:
-                print("pause")
+                debugPrint("pause")
                 mapDataSource.startLocation = nil
                 mapDataSource.lastLocation = nil
                 time.invalidate()
@@ -74,7 +94,8 @@ class MainVC: UIViewController {
                 mainConsoleView.pauseButton.setImage(UIImage(named: "resumeButton"), for: .normal)
                 
             case .stop:
-                print("stop")
+                debugPrint("stop")
+                time.invalidate()
                 checkState = false
                 mapDataSource.locationManager.stopUpdatingLocation()
                 mapDataSource.startLocation = nil
@@ -127,33 +148,21 @@ class MainVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        mapDataSource = MapDataSource(mapView: mapView, username: username ?? "")
-        mapDataSource.addDelegationOnMap()
-        mapDataSource.checkLocationServices()
-        mapDataSource.delegate = self
-        
-        mainConsoleView.delegate = self
-        mainConsoleView.pauseButton.isHidden = true
 
         newBtn.isHidden = true
         blackView.isHidden = true
 
-        //username = Auth.auth().currentUser?.displayName! ?? ""
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         
         mapDataSource.centerViewOnUserLocation()
-        mapDataSource.locationManager.stopUpdatingLocation()
-        mapDataSource.isEndRun = false
-        mapDataSource.polylineLocation.removeAll()
-        mapDataSource.startLocation = nil
-        mapDataSource.lastLocation = nil
-        
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        mapDataSource.locationManager.stopUpdatingLocation()
+    }
     
     // Actions
     

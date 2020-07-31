@@ -24,22 +24,39 @@ protocol MapDataSourceProtocol: class {
 class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     
     
-    var delegate: MapDataSourceProtocol?
-    var map: MKMapView
-    let locationManager = CLLocationManager()
-    private let regionMeter : Double = 1000
-    var polylineLocation = [CLLocationCoordinate2D]()
-    var arrayGeo = [GeoPoint?]()
-    var startLocation : CLLocation!
-    var latitudine : Double = 0.0
-    var longitude : Double = 0.0
-    var runDistance = 0.0
-    var lastLocation : CLLocation!
-    var counter = 0
-    var arrayKM = [Double]()
-    var speedMax : Double = 0.0
-    var isEndRun: Bool = true
-    var username: String
+     var delegate: MapDataSourceProtocol?
+     var map: MKMapView
+     let locationManager = CLLocationManager()
+     let regionMeter : Double = 1000
+     var polylineLocation = [CLLocationCoordinate2D]()
+     var arrayGeo = [GeoPoint?]()
+     var startLocation : CLLocation!
+     var latitudine : Double = 0.0
+     var longitude : Double = 0.0
+     var runDistance = 0.0
+     var lastLocation : CLLocation!
+     var counter = 0
+     var arrayKM = [Double]()
+     var speedMax : Double = 0.0
+     var isEndRun: Bool = true
+     var username: String
+    
+    var getCoordinateCLLocationCoordinate2D: (Double, Double) -> (CLLocationCoordinate2D) = {lat, long in
+        CLLocationCoordinate2D(latitude: lat, longitude: long)
+    }
+    
+    
+    var calcolaMedia: ([Double]) -> Double = { km in
+        var indice = 0
+        var conta = 0.0
+        for i in km{
+            conta += i
+            indice += 1
+        }
+        var risultato = conta / Double(indice)
+        risultato = risultato * 3.6
+        return risultato
+    }
     
     init(mapView: MKMapView, username: String) {
         self.map = mapView
@@ -116,9 +133,11 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
             
             latitudine = locationFirst.coordinate.latitude
             longitude = locationFirst.coordinate.longitude
-            
-            let inizio = CLLocationCoordinate2D(latitude: locationFirst.coordinate.latitude, longitude: locationFirst.coordinate.longitude)
-            let fine = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+
+            let inizio = getCoordinateCLLocationCoordinate2D(locationFirst.coordinate.latitude,locationFirst.coordinate.longitude)
+            //let inizio = CLLocationCoordinate2D(latitude: locationFirst.coordinate.latitude, longitude: locationFirst.coordinate.longitude)
+            let fine = getCoordinateCLLocationCoordinate2D(location.coordinate.latitude, location.coordinate.latitude)
+            //let fine = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.latitude)
             
             drawLine(startCoordinate: inizio,endingRun: fine)
             
@@ -133,8 +152,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
                     arrayKM.append(lastLocation.speed)
                     delegate?.addAvarageSpeed(speed: "\((lastLocation.speed * 3.6).twoDecimalNumbers(place: 1)) Km/h")
                     
-                    speedMax = calcolaMediaKM(km: arrayKM)
-                    
+                    speedMax = calcolaMedia(arrayKM)
                 }
             }
             lastLocation = locations.last
@@ -194,19 +212,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         
     }
     
-    
-    func calcolaMediaKM(km : [Double]) -> Double{
-        
-        var indice = 0
-        var conta = 0.0
-        for i in km{
-            conta += i
-            indice += 1
-        }
-        var risultato = conta / Double(indice)
-        risultato = risultato * 3.6
-        return risultato
-    }
+
     
 }
 

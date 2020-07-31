@@ -36,14 +36,13 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     private let locationManager = CLLocationManager()
     private var dataSource: RegistroDataSource!
     
+ 
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.register(R.nib.runningSavedCell)
-//        let nib = UINib(nibName: "RunningSavedCell", bundle: nil)
-//        self.tableView.register(nib, forCellReuseIdentifier: "RunningSavedCell")
         tableView.delegate = self
         mapView.delegate = self
         runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
@@ -58,20 +57,7 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
         tableView.dataSource = dataSource
         tableView.reloadData()
        }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        setListener()
-//        tableView.reloadData()
-//    }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        setListener()
-//        tableView.reloadData()
-//        
-//    }
-    
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -191,6 +177,7 @@ extension RegistroVC : CLLocationManagerDelegate{
     
     func center(latitudine : Double, longitudine : Double, arrayUltimaCorsa : [GeoPoint]){
         //var geo = [GeoPoint]()
+
         var geoLoc = [CLLocationCoordinate2D]()
         geoLoc.removeAll()
         let overlays = mapView.overlays
