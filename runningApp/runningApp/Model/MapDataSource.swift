@@ -39,12 +39,11 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     var arrayKM = [Double]()
     var speedMax : Double = 0.0
     var isEndRun: Bool = true
+    var username: String
     
-    
-    init(mapView: MKMapView) {
+    init(mapView: MKMapView, username: String) {
         self.map = mapView
-        
-       
+        self.username = username
     }
     
     func addDelegationOnMap(){
@@ -165,11 +164,29 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         return MKOverlayRenderer()
     }
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            let pin = mapView.view(for: annotation) as? MKPinAnnotationView ?? MKPinAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            pin.pinTintColor = #colorLiteral(red: 0.2745098039, green: 0.5490196078, blue: 0.9019607843, alpha: 1)
+            let label = UILabel()
+            label.text = username
+            label.textAlignment = .center
+            pin.addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.bottomAnchor.constraint(equalTo: pin.topAnchor).isActive = true
+            label.centerXAnchor.constraint(equalTo: pin.centerXAnchor).isActive = true
+            return pin
+
+        } else {
+            // handle other annotations
+
+        }
+        return nil
+    }
+
     
-    
-    
+
     func drawLine(startCoordinate : CLLocationCoordinate2D, endingRun : CLLocationCoordinate2D){
-        
         polylineLocation.append(startCoordinate)
         arrayGeo.append(GeoPoint(latitude: startCoordinate.latitude, longitude: startCoordinate.longitude))
         let aPolyline = MKPolyline(coordinates: polylineLocation, count: polylineLocation.count)
@@ -192,3 +209,8 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     }
     
 }
+
+
+
+
+

@@ -112,7 +112,9 @@ class MainVC: UIViewController {
     fileprivate var oraInizio : String?
     fileprivate var oraFine : String?
     fileprivate var realTime = Timestamp()
-    fileprivate var username : String = ""
+    fileprivate var username : String? {
+        Auth.auth().currentUser?.displayName
+    }
     fileprivate var numComments = 0
     fileprivate var numLike = 0
     fileprivate var userLike : [String] = []
@@ -126,7 +128,7 @@ class MainVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapDataSource = MapDataSource(mapView: mapView)
+        mapDataSource = MapDataSource(mapView: mapView, username: username ?? "")
         mapDataSource.addDelegationOnMap()
         mapDataSource.checkLocationServices()
         mapDataSource.delegate = self
@@ -137,7 +139,7 @@ class MainVC: UIViewController {
         newBtn.isHidden = true
         blackView.isHidden = true
 
-        username = Auth.auth().currentUser?.displayName! ?? ""
+        //username = Auth.auth().currentUser?.displayName! ?? ""
     }
     
     
@@ -250,7 +252,7 @@ class MainVC: UIViewController {
             self.newBtn.isHidden = false
             self.blackView.isHidden = false
             
-            FirebaseDataSource.shared.saveDataOnFirebase(dataRunning: self.getCurrentData, oraInizio: self.oraInizio!, oraFine: self.oraFine!, kmTotali: self.mapDataSource.runDistance.metersToMiles(places: 3), speedMax: self.mapDataSource.speedMax.twoDecimalNumbers(place: 1), tempoTotale: self.mapDataSource.counter.formatTimeDurationToString(), arrayPercorso: self.mapDataSource.arrayGeo, latitudine: self.mapDataSource.latitudine, longitudine: self.mapDataSource.longitude, realDataRunning: self.realTime, username: self.username, numOfcomment: self.numComments, numOfLike: self.numLike, usersLikeit: self.userLike)
+            FirebaseDataSource.shared.saveDataOnFirebase(dataRunning: self.getCurrentData, oraInizio: self.oraInizio!, oraFine: self.oraFine!, kmTotali: self.mapDataSource.runDistance.metersToMiles(places: 3), speedMax: self.mapDataSource.speedMax.twoDecimalNumbers(place: 1), tempoTotale: self.mapDataSource.counter.formatTimeDurationToString(), arrayPercorso: self.mapDataSource.arrayGeo, latitudine: self.mapDataSource.latitudine, longitudine: self.mapDataSource.longitude, realDataRunning: self.realTime, username: self.username ?? "", numOfcomment: self.numComments, numOfLike: self.numLike, usersLikeit: self.userLike)
             
             self.mapDataSource.locationManager.stopUpdatingLocation()
             self.mapDataSource.polylineLocation.removeAll()
