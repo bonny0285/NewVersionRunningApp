@@ -29,6 +29,7 @@ class MainVC: UIViewController {
         }
     }
     @IBOutlet var blackView: UIView!
+    
     @IBOutlet weak var logoutButtonOutlet: UIButton! {
         didSet {
             logoutButtonOutlet.setTitle(R.string.localizable.logout(), for: .normal)

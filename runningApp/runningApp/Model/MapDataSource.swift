@@ -49,7 +49,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     var calcolaMedia: ([Double]) -> Double = { km in
         var indice = 0
         var conta = 0.0
-        for i in km{
+        for i in km {
             conta += i
             indice += 1
         }
@@ -78,13 +78,13 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         }
     }
     
-    func setupLocationManager(){
+    func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
     
-    func checkLocationAuthorizzation(){
+    func checkLocationAuthorizzation() {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse:
             map.showsUserLocation = true
@@ -109,7 +109,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         }
     }
     
-    func centerViewOnUserLocation(){
+    func centerViewOnUserLocation() {
         if let location = locationManager.location?.coordinate {
             let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionMeter, longitudinalMeters: regionMeter)
             map.setRegion(region, animated: true)
@@ -204,7 +204,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
 
     
 
-    func drawLine(startCoordinate : CLLocationCoordinate2D, endingRun : CLLocationCoordinate2D){
+    func drawLine(startCoordinate : CLLocationCoordinate2D, endingRun : CLLocationCoordinate2D) {
         polylineLocation.append(startCoordinate)
         arrayGeo.append(GeoPoint(latitude: startCoordinate.latitude, longitude: startCoordinate.longitude))
         let aPolyline = MKPolyline(coordinates: polylineLocation, count: polylineLocation.count)

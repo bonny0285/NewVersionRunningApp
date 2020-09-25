@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/massimilianobonafede/Desktop/RuningApp/runningApp/runningApp/View/RegistroDataSource.swift">
-   </FileRef>
-   <FileRef
       location = "group:runningApp.xcodeproj">
    </FileRef>
    <FileRef
