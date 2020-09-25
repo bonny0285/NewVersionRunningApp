@@ -10,11 +10,16 @@ import UIKit
 import MapKit
 import CoreLocation
 import Firebase
+import FirebaseFirestore
 
 
 
 
-class RegistroVC: UIViewController, MKMapViewDelegate {
+class RegistroVC: UIViewController, MKMapViewDelegate, MainCoordinated, RunningManaged {
+    
+    
+    
+    
     
     
     
@@ -30,22 +35,28 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
     private var runListener : ListenerRegistration!
     private var runs = [Running]()
     private var datiDaPassare : Running?
-    private var runCollectionRef: CollectionReference!
+    private var runCollectionRef: CollectionReference! {
+        Firestore.firestore().collection(RUN_REFERENCE)
+    }
     private var handle : AuthStateDidChangeListenerHandle?
     private let regionMeter : Double = 1000
     private let locationManager = CLLocationManager()
     private var dataSource: RegistroDataSource!
+    var mainCoordinator: MainCoordinator?
+    var runningManager: RunningManager?
     
- 
     
-    
+    //MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.register(R.nib.runningSavedCell)
         tableView.delegate = self
+        
         mapView.delegate = self
-        runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
+        
+        //runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
         setListener()
 
     }
@@ -67,7 +78,14 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
         
     }
     
-    
+    //MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        mainCoordinator?.configure(viewController: segue.destination)
+    }
+
+    //MARK: - Actions
+
     func refresh (){
         Firestore.firestore().collection(RUN_REFERENCE).getDocuments(completion: {[weak self] (snapshot, error) in
             guard let self = self else { return }
@@ -108,7 +126,7 @@ class RegistroVC: UIViewController, MKMapViewDelegate {
 
 //MARK: - UITableViewDelegate
 
-extension RegistroVC : UITableViewDelegate{
+extension RegistroVC : UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         center(latitudine: runs[indexPath.row].latitude, longitudine: runs[indexPath.row].longitude, arrayUltimaCorsa: runs[indexPath.row].arrayPercorso)
@@ -138,24 +156,9 @@ extension RegistroVC: RegistroDataSourceProtocol {
     }
     
     func dataForPrepareSegue(run: Running) {
-        performSegue(withIdentifier: R.segue.registroVC.segueToCommentVC, sender: run)
+        runningManager?.run = run
+        mainCoordinator?.registroViewControllerDidPressededComments(self)
     }
-    
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "segueToCommentVC"{
-            if let destinationVC = segue.destination as? CommentsVC {
-                if let run = sender as? Running{
-                    destinationVC.run = run
-                }
-            }
-        }
-    }
-    
-    
-    
 }
 
 //MARK: - CLLocationManagerDelegate
@@ -173,11 +176,7 @@ extension RegistroVC : CLLocationManagerDelegate{
         return MKOverlayRenderer()
     }
     
-    
-    
     func center(latitudine : Double, longitudine : Double, arrayUltimaCorsa : [GeoPoint]){
-        //var geo = [GeoPoint]()
-
         var geoLoc = [CLLocationCoordinate2D]()
         geoLoc.removeAll()
         let overlays = mapView.overlays
@@ -194,7 +193,4 @@ extension RegistroVC : CLLocationManagerDelegate{
         self.mapView.addOverlay(aPolyline)
         tableView.reloadData()
     }
-    
-    
-        
 }

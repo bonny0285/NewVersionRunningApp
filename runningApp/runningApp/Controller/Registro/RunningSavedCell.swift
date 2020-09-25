@@ -47,7 +47,8 @@ class RunningSavedCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        SetupUIElement.shared.setupUIElement(element: sfondo)
+        sfondo.setupRunningView()
+        //SetupUIElement.shared.setupUIElement(element: sfondo)
         commonInit()
     }
     

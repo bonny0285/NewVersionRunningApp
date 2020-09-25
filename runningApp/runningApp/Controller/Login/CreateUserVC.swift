@@ -12,67 +12,100 @@ import FirebaseAuth
 import FirebaseFirestore
 
 
-class CreateUserVC: UIViewController {
+class CreateUserVC: UIViewController, MainCoordinated {
     
     
-    // Outlets
-    @IBOutlet var usernameTxt: UITextField!
-    @IBOutlet var mailTxt: UITextField!
-    @IBOutlet var passwordTxt: UITextField!
-    @IBOutlet var createBtn: UIButton! {
+    
+    
+    //MARK: - Outlets
+
+    @IBOutlet var usernameTextFiled: UITextField!
+    @IBOutlet var mailTextField: UITextField!
+    @IBOutlet var passwordTextField: UITextField!
+    
+    @IBOutlet var createButton: UIButton! {
         didSet {
-            createBtn.setTitle(R.string.localizable.create_button(), for: .normal)
+            createButton.setTitle(R.string.localizable.create_button(), for: .normal)
         }
     }
-    @IBOutlet var cancelBtn: UIButton! {
+    
+    @IBOutlet var cancelButton: UIButton! {
         didSet {
-            cancelBtn.setTitle(R.string.localizable.cancel_button(), for: .normal)
+            cancelButton.setTitle(R.string.localizable.cancel_button(), for: .normal)
         }
     }
+    
     @IBOutlet var backgroundView: UIView!
     
+    //MARK: - Properties
+
+    var mainCoordinator: MainCoordinator?
+    var gradients: Gradients?
+    var firebaseManager: FirebaseManager?
     
+    //MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        Gradients.myGradients(on: self, view: backgroundView)
-        
-        SetupUIElement.shared.setupUIElement(element: usernameTxt)
-        SetupUIElement.shared.setupUIElement(element: mailTxt)
-        SetupUIElement.shared.setupUIElement(element: passwordTxt)
-        SetupUIElement.shared.setupUIElement(element: createBtn)
-        SetupUIElement.shared.setupUIElement(element: cancelBtn)
 
-        // Do any additional setup after loading the view.
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+        firebaseManager = FirebaseManager()
+        gradients = Gradients()
+        gradients?.myGradients(on: self, view: backgroundView)
+        
+        usernameTextFiled.setupRunningView()
+        mailTextField.setupRunningView()
+        passwordTextField.setupRunningView()
+        createButton.setupRunningView()
+        cancelButton.setupRunningView()
+    }
+    
+    //MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        mainCoordinator?.configure(viewController: segue.destination)
     }
 
     
     
-    // Actions
+    //MARK: - Actions
+
     
     @IBAction func createBtnWasPressed(_ sender: Any) {
         
-        
-        if usernameTxt.text == ""{
+        guard let email = usernameTextFiled.text else {
             RunningAlert.missingUsername(on: self)
-        } else if passwordTxt.text == ""{
-            RunningAlert.missingPassword(on: self)
-        } else if mailTxt.text == "" && passwordTxt.text == ""{
-            RunningAlert.missingMail(on: self)
+            return
         }
         
+        guard let password = passwordTextField.text else {
+            RunningAlert.missingPassword(on: self)
+            return
+        }
         
+        guard let username = mailTextField.text else {
+            RunningAlert.missingMail(on: self)
+            return
+        }
         
-        guard let email = mailTxt.text, let password = passwordTxt.text, let username = usernameTxt.text else { return }
+//        if usernameTextFiled.text == ""{
+//            RunningAlert.missingUsername(on: self)
+//        } else if passwordTextField.text == ""{
+//            RunningAlert.missingPassword(on: self)
+//        } else if mailTextField.text == "" && passwordTextField.text == ""{
+//            RunningAlert.missingMail(on: self)
+//        }
+//        guard let email = mailTextField.text, let password = passwordTextField.text, let username = usernameTextFiled.text else { return }
         
-        
-        FirebaseDataSource.shared.createNewUser(withEmail: email, password: password, username: username) {[weak self] (user, error) in
+        firebaseManager?.createUser(email, password, completion: { [weak self] (user, error) in
             guard let self = self else { return }
             
             if let error = error {
-                print(error.localizedDescription)
+                debugPrint(error.localizedDescription)
             } else {
-                
                 let changeProfile = user?.user.createProfileChangeRequest()
                 
                 changeProfile?.displayName = username
@@ -94,22 +127,54 @@ class CreateUserVC: UIViewController {
                         if let error = error {
                             debugPrint(error.localizedDescription)
                         } else {
-                            self.dismiss(animated: true, completion: nil)
+                            self.mainCoordinator?.creteUserDidSuccessfullyCreated(self)
+                            //self.dismiss(animated: true, completion: nil)
                             
                         }
                 })
+
             }
-        }
+        })
+        
+//        FirebaseDataSource.shared.createNewUser(withEmail: email, password: password, username: username) {[weak self] (user, error) in
+//            guard let self = self else { return }
+//
+//            if let error = error {
+//                print(error.localizedDescription)
+//            } else {
+//
+//                let changeProfile = user?.user.createProfileChangeRequest()
+//
+//                changeProfile?.displayName = username
+//
+//                changeProfile?.commitChanges(completion: { (error) in
+//                    if let error = error {
+//
+//                        debugPrint(error.localizedDescription)
+//                    }
+//                })
+//
+//
+//                guard let userID = user?.user.uid else { return }
+//
+//                Firestore.firestore().collection(USERS_REF).document(userID).setData([
+//                    USERNAME : username,
+//                    DATE_CREATED : FieldValue.serverTimestamp()]
+//                    , completion: { (error) in
+//                        if let error = error {
+//                            debugPrint(error.localizedDescription)
+//                        } else {
+//                            self.dismiss(animated: true, completion: nil)
+//
+//                        }
+//                })
+//            }
+//        }
 
     }
     
     @IBAction func cancelBtnWasPressed(_ sender: Any) {
-        let storyboard : UIStoryboard = R.storyboard.main()
-        let vc = storyboard.instantiateViewController(withIdentifier: "loginVC") as! LoginVC
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true) {
-            Gradients.myGradients(on: vc, view: vc.backgroundView)
-        }
+        mainCoordinator?.popViewController(self)
     }
     
 }

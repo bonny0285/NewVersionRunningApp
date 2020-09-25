@@ -9,8 +9,11 @@
 import UIKit
 import MapKit
 import Firebase
+import FirebaseFirestore
 
-class MainVC: UIViewController {
+class MainViewController: UIViewController, MainCoordinated {
+    var mainCoordinator: MainCoordinator?
+    
     
     //MARK: - Outlets
     
@@ -63,6 +66,11 @@ class MainVC: UIViewController {
                 
                 startTimer()
                 
+                mainConsoleView.speed.isHidden = false
+                mainConsoleView.total.isHidden = false
+                mainConsoleView.kmLabel.isHidden = false
+                mainConsoleView.speedLabel.isHidden = false
+                mainConsoleView.timeLabel.isHidden = false
                 mainConsoleView.pauseButton.isHidden = false
                 mainConsoleView.pauseButton.setImage(#imageLiteral(resourceName: "pauseButton"), for: .normal)
                 mainConsoleView.startButton.setTitle(R.string.localizable.end_running(), for: .normal)
@@ -80,8 +88,13 @@ class MainVC: UIViewController {
                 
                 mapDataSource.isEndRun = false
                 mapDataSource.polylineLocation.removeAll()
+                mainConsoleView.total.isHidden = true
+                mainConsoleView.speed.isHidden = true
+                mainConsoleView.speedLabel.isHidden = true
                 mainConsoleView.speedLabel.text = "\(00.0)"
+                mainConsoleView.kmLabel.isHidden = true
                 mainConsoleView.kmLabel.text = "\(00.0)"
+                mainConsoleView.timeLabel.isHidden = true
                 mainConsoleView.timeLabel.text = "00:00"
                 mainConsoleView.startButton.setTitle(R.string.localizable.start_running(), for: .normal)
                 
@@ -126,6 +139,8 @@ class MainVC: UIViewController {
         data = "\(String(describing: components.day!))-\(components.month!)-\(components.year!)"
         return data
     }
+    var autoLogin: AutoLogin?
+    var firebaseManager: FirebaseManager?
     
     fileprivate var time = Timer()
     fileprivate var speed = 0
@@ -144,19 +159,27 @@ class MainVC: UIViewController {
     fileprivate var run : Running!
     fileprivate var mapDataSource: MapDataSource!
     
-    
     //MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationController?.navigationBar.isHidden = false
+        let rightButton = UIBarButtonItem(title: "Result", style: .plain, target: self, action: #selector(navigationBarRightButtonPressed(_:)))
+        navigationItem.rightBarButtonItem = rightButton
+        let leftButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(navigationBarLeftButtonPressed(_:)))
+        navigationItem.leftBarButtonItem = leftButton
+        
+        firebaseManager = FirebaseManager()
+        autoLogin = AutoLogin()
         newBtn.isHidden = true
         blackView.isHidden = true
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        state = .reset
+        mapDataSource.locationManager.startUpdatingLocation()
         mapDataSource.centerViewOnUserLocation()
     }
 
@@ -165,8 +188,31 @@ class MainVC: UIViewController {
         mapDataSource.locationManager.stopUpdatingLocation()
     }
     
-    // Actions
+    //MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        mainCoordinator?.configure(viewController: segue.destination)
+    }
     
+    
+    
+    //MARK: - Actions
+
+    @objc func navigationBarRightButtonPressed(_ sender: UIBarButtonItem) {
+        mainCoordinator?.mainViewControllerDidPressedRecords(self)
+    }
+    
+    @objc func navigationBarLeftButtonPressed(_ sender: UIBarButtonItem) {
+        firebaseManager?.logout(completion: { [weak self] (response, error) in
+            guard let self = self else { return }
+            
+            if let error = error {
+                debugPrint(error.localizedDescription)
+            } else if response == true {
+                self.autoLogin?.logout()
+                self.mainCoordinator?.popViewController(self)
+            }
+        })
+    }
     
     @IBAction func newBtnWasPressed(_ sender: Any) {
         state = .reset
@@ -185,23 +231,35 @@ class MainVC: UIViewController {
     
     
     @IBAction func logoutBtnWasPressed(_ sender: Any) {
-        let firebaseAuth = Auth.auth()
-        do {
-            try firebaseAuth.signOut()
-            AutoLogin.share.logout()
-            // dismiss(animated: true, completion: nil)
-            let storyboard = R.storyboard.main()
-            let loginVC = storyboard.instantiateViewController(withIdentifier: "loginVC") as! LoginVC
+        
+        firebaseManager?.logout(completion: { [weak self] (response, error) in
+            guard let self = self else { return }
             
-            loginVC.modalPresentationStyle = .fullScreen
-            self.present(loginVC, animated: true) {
-                Gradients.myGradients(on: loginVC, view: loginVC.backgroundView)
+            if let error = error {
+                debugPrint(error.localizedDescription)
+            } else if response == true {
+                self.autoLogin?.logout()
+                self.mainCoordinator?.popViewController(self)
             }
-            
-            // self.present(loginVC, animated: true, completion: nil)
-        } catch let signoutError as NSError{
-            debugPrint("Error signing out: \(signoutError)")
-        }
+        })
+//        let firebaseAuth = Auth.auth()
+//        do {
+//            try firebaseAuth.signOut()
+//            AutoLogin.share.logout()
+//            // dismiss(animated: true, completion: nil)
+//
+////            let storyboard = R.storyboard.main()
+////            let loginVC = storyboard.instantiateViewController(withIdentifier: "loginVC") as! LoginViewController
+//
+////            loginVC.modalPresentationStyle = .fullScreen
+////            self.present(loginVC, animated: true) {
+////                Gradients.myGradients(on: loginVC, view: loginVC.backgroundView)
+////            }
+//
+//            // self.present(loginVC, animated: true, completion: nil)
+//        } catch let signoutError as NSError{
+//            debugPrint("Error signing out: \(signoutError)")
+//        }
     }
     
     
@@ -262,7 +320,9 @@ class MainVC: UIViewController {
             self.newBtn.isHidden = false
             self.blackView.isHidden = false
             
-            FirebaseDataSource.shared.saveDataOnFirebase(dataRunning: self.getCurrentData, oraInizio: self.oraInizio!, oraFine: self.oraFine!, kmTotali: self.mapDataSource.runDistance.metersToMiles(places: 3), speedMax: self.mapDataSource.speedMax.twoDecimalNumbers(place: 1), tempoTotale: self.mapDataSource.counter.formatTimeDurationToString(), arrayPercorso: self.mapDataSource.arrayGeo, latitudine: self.mapDataSource.latitudine, longitudine: self.mapDataSource.longitude, realDataRunning: self.realTime, username: self.username ?? "", numOfcomment: self.numComments, numOfLike: self.numLike, usersLikeit: self.userLike)
+            self.firebaseManager?.saveDataOnFirebase(dataRunning: self.getCurrentData, oraInizio: self.oraInizio!, oraFine: self.oraFine!, kmTotali: self.mapDataSource.runDistance.metersToMiles(places: 3), speedMax: self.mapDataSource.speedMax.twoDecimalNumbers(place: 1), tempoTotale: self.mapDataSource.counter.formatTimeDurationToString(), arrayPercorso: self.mapDataSource.arrayGeo, latitudine: self.mapDataSource.latitudine, longitudine: self.mapDataSource.longitude, realDataRunning: self.realTime, username: self.username ?? "Unknow", numOfcomment: self.numComments, numOfLike: self.numLike, usersLikeit: self.userLike)
+            
+//            FirebaseDataSource.shared.saveDataOnFirebase(dataRunning: self.getCurrentData, oraInizio: self.oraInizio!, oraFine: self.oraFine!, kmTotali: self.mapDataSource.runDistance.metersToMiles(places: 3), speedMax: self.mapDataSource.speedMax.twoDecimalNumbers(place: 1), tempoTotale: self.mapDataSource.counter.formatTimeDurationToString(), arrayPercorso: self.mapDataSource.arrayGeo, latitudine: self.mapDataSource.latitudine, longitudine: self.mapDataSource.longitude, realDataRunning: self.realTime, username: self.username ?? "", numOfcomment: self.numComments, numOfLike: self.numLike, usersLikeit: self.userLike)
             
             self.mapDataSource.locationManager.stopUpdatingLocation()
             self.mapDataSource.polylineLocation.removeAll()
@@ -292,7 +352,7 @@ class MainVC: UIViewController {
 
 //MARK: - MapDataSourceProtocol
 
-extension MainVC: MapDataSourceProtocol {
+extension MainViewController: MapDataSourceProtocol {
     
     func addTotalKm(km: String) {
         mainConsoleView.kmLabel.text = km
@@ -307,7 +367,7 @@ extension MainVC: MapDataSourceProtocol {
 
 //MARK: - MainConsoleDelegate
 
-extension MainVC: MainConsoleDelegate {
+extension MainViewController: MainConsoleDelegate {
 
     func startButtonWasPressed() {
         let startRunning = R.string.localizable.start_running()
@@ -343,7 +403,7 @@ extension MainVC: MainConsoleDelegate {
 }
 
 
-extension MainVC {
+extension MainViewController {
     
     enum State {
         case start

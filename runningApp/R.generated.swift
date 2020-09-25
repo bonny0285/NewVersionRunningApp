@@ -89,19 +89,81 @@ struct R: Rswift.Validatable {
   }
 
   #if os(iOS) || os(tvOS)
-  /// This `R.segue` struct is generated, and contains static references to 1 view controllers.
+  /// This `R.segue` struct is generated, and contains static references to 4 view controllers.
   struct segue {
-    /// This struct is generated for `RegistroVC`, and contains static references to 1 segues.
-    struct registroVC {
-      /// Segue identifier `segueToCommentVC`.
-      static let segueToCommentVC: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, RegistroVC, CommentsVC> = Rswift.StoryboardSegueIdentifier(identifier: "segueToCommentVC")
+    /// This struct is generated for `CreateUserVC`, and contains static references to 1 segues.
+    struct createUserVC {
+      /// Segue identifier `ShowMain`.
+      static let showMain: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, CreateUserVC, MainViewController> = Rswift.StoryboardSegueIdentifier(identifier: "ShowMain")
 
       #if os(iOS) || os(tvOS)
-      /// Optionally returns a typed version of segue `segueToCommentVC`.
+      /// Optionally returns a typed version of segue `ShowMain`.
       /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
       /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
-      static func segueToCommentVC(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, RegistroVC, CommentsVC>? {
-        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.registroVC.segueToCommentVC, segue: segue)
+      static func showMain(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, CreateUserVC, MainViewController>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.createUserVC.showMain, segue: segue)
+      }
+      #endif
+
+      fileprivate init() {}
+    }
+
+    /// This struct is generated for `LoginViewController`, and contains static references to 2 segues.
+    struct loginViewController {
+      /// Segue identifier `ShowCreateUser`.
+      static let showCreateUser: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, LoginViewController, CreateUserVC> = Rswift.StoryboardSegueIdentifier(identifier: "ShowCreateUser")
+      /// Segue identifier `ShowMain`.
+      static let showMain: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, LoginViewController, MainViewController> = Rswift.StoryboardSegueIdentifier(identifier: "ShowMain")
+
+      #if os(iOS) || os(tvOS)
+      /// Optionally returns a typed version of segue `ShowCreateUser`.
+      /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
+      /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
+      static func showCreateUser(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, LoginViewController, CreateUserVC>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.loginViewController.showCreateUser, segue: segue)
+      }
+      #endif
+
+      #if os(iOS) || os(tvOS)
+      /// Optionally returns a typed version of segue `ShowMain`.
+      /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
+      /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
+      static func showMain(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, LoginViewController, MainViewController>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.loginViewController.showMain, segue: segue)
+      }
+      #endif
+
+      fileprivate init() {}
+    }
+
+    /// This struct is generated for `MainViewController`, and contains static references to 1 segues.
+    struct mainViewController {
+      /// Segue identifier `ShowRecords`.
+      static let showRecords: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, MainViewController, RegistroVC> = Rswift.StoryboardSegueIdentifier(identifier: "ShowRecords")
+
+      #if os(iOS) || os(tvOS)
+      /// Optionally returns a typed version of segue `ShowRecords`.
+      /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
+      /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
+      static func showRecords(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, MainViewController, RegistroVC>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.mainViewController.showRecords, segue: segue)
+      }
+      #endif
+
+      fileprivate init() {}
+    }
+
+    /// This struct is generated for `RegistroVC`, and contains static references to 1 segues.
+    struct registroVC {
+      /// Segue identifier `ShowComment`.
+      static let showComment: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, RegistroVC, CommentsVC> = Rswift.StoryboardSegueIdentifier(identifier: "ShowComment")
+
+      #if os(iOS) || os(tvOS)
+      /// Optionally returns a typed version of segue `ShowComment`.
+      /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
+      /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
+      static func showComment(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, RegistroVC, CommentsVC>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.registroVC.showComment, segue: segue)
       }
       #endif
 
@@ -688,16 +750,15 @@ struct _R: Rswift.Validatable {
 
     #if os(iOS) || os(tvOS)
     struct main: Rswift.StoryboardResourceWithInitialControllerType, Rswift.Validatable {
-      typealias InitialController = LoginVC
+      typealias InitialController = MainNavigationController
 
       let bundle = R.hostingBundle
-      let commentsVC = StoryboardViewControllerResource<CommentsVC>(identifier: "commentsVC")
-      let createUserVC = StoryboardViewControllerResource<CreateUserVC>(identifier: "createUserVC")
-      let loginVC = StoryboardViewControllerResource<LoginVC>(identifier: "loginVC")
-      let mainVC = StoryboardViewControllerResource<MainVC>(identifier: "MainVC")
+      let commentsVC = StoryboardViewControllerResource<CommentsVC>(identifier: "CommentsVC")
+      let createUserVC = StoryboardViewControllerResource<CreateUserVC>(identifier: "CreateUserVC")
+      let loginViewController = StoryboardViewControllerResource<LoginViewController>(identifier: "LoginViewController")
+      let mainViewController = StoryboardViewControllerResource<MainViewController>(identifier: "MainViewController")
       let name = "Main"
-      let principale = StoryboardViewControllerResource<UIKit.UITabBarController>(identifier: "Principale")
-      let registroVC = StoryboardViewControllerResource<RegistroVC>(identifier: "registroVC")
+      let registroVC = StoryboardViewControllerResource<RegistroVC>(identifier: "RegistroVC")
 
       func commentsVC(_: Void = ()) -> CommentsVC? {
         return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: commentsVC)
@@ -707,16 +768,12 @@ struct _R: Rswift.Validatable {
         return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: createUserVC)
       }
 
-      func loginVC(_: Void = ()) -> LoginVC? {
-        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: loginVC)
+      func loginViewController(_: Void = ()) -> LoginViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: loginViewController)
       }
 
-      func mainVC(_: Void = ()) -> MainVC? {
-        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: mainVC)
-      }
-
-      func principale(_: Void = ()) -> UIKit.UITabBarController? {
-        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: principale)
+      func mainViewController(_: Void = ()) -> MainViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: mainViewController)
       }
 
       func registroVC(_: Void = ()) -> RegistroVC? {
@@ -728,11 +785,10 @@ struct _R: Rswift.Validatable {
         if UIKit.UIImage(named: "tabbar-runIconGray", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'tabbar-runIconGray' is used in storyboard 'Main', but couldn't be loaded.") }
         if #available(iOS 11.0, tvOS 11.0, *) {
         }
-        if _R.storyboard.main().mainVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'mainVC' could not be loaded from storyboard 'Main' as 'MainVC'.") }
-        if _R.storyboard.main().principale() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'principale' could not be loaded from storyboard 'Main' as 'UIKit.UITabBarController'.") }
         if _R.storyboard.main().commentsVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'commentsVC' could not be loaded from storyboard 'Main' as 'CommentsVC'.") }
         if _R.storyboard.main().createUserVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'createUserVC' could not be loaded from storyboard 'Main' as 'CreateUserVC'.") }
-        if _R.storyboard.main().loginVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'loginVC' could not be loaded from storyboard 'Main' as 'LoginVC'.") }
+        if _R.storyboard.main().loginViewController() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'loginViewController' could not be loaded from storyboard 'Main' as 'LoginViewController'.") }
+        if _R.storyboard.main().mainViewController() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'mainViewController' could not be loaded from storyboard 'Main' as 'MainViewController'.") }
         if _R.storyboard.main().registroVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'registroVC' could not be loaded from storyboard 'Main' as 'RegistroVC'.") }
       }
 

@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import Firebase
+import FirebaseFirestore
 
 
 
@@ -168,6 +169,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorizzation()
+        centerViewOnUserLocation()
     }
     
     
