@@ -89,19 +89,81 @@ struct R: Rswift.Validatable {
   }
 
   #if os(iOS) || os(tvOS)
-  /// This `R.segue` struct is generated, and contains static references to 1 view controllers.
+  /// This `R.segue` struct is generated, and contains static references to 4 view controllers.
   struct segue {
-    /// This struct is generated for `RegistroVC`, and contains static references to 1 segues.
-    struct registroVC {
-      /// Segue identifier `segueToCommentVC`.
-      static let segueToCommentVC: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, RegistroVC, CommentsVC> = Rswift.StoryboardSegueIdentifier(identifier: "segueToCommentVC")
+    /// This struct is generated for `CreateUserVC`, and contains static references to 1 segues.
+    struct createUserVC {
+      /// Segue identifier `ShowMain`.
+      static let showMain: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, CreateUserVC, MainViewController> = Rswift.StoryboardSegueIdentifier(identifier: "ShowMain")
 
       #if os(iOS) || os(tvOS)
-      /// Optionally returns a typed version of segue `segueToCommentVC`.
+      /// Optionally returns a typed version of segue `ShowMain`.
       /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
       /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
-      static func segueToCommentVC(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, RegistroVC, CommentsVC>? {
-        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.registroVC.segueToCommentVC, segue: segue)
+      static func showMain(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, CreateUserVC, MainViewController>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.createUserVC.showMain, segue: segue)
+      }
+      #endif
+
+      fileprivate init() {}
+    }
+
+    /// This struct is generated for `LoginViewController`, and contains static references to 2 segues.
+    struct loginViewController {
+      /// Segue identifier `ShowCreateUser`.
+      static let showCreateUser: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, LoginViewController, CreateUserVC> = Rswift.StoryboardSegueIdentifier(identifier: "ShowCreateUser")
+      /// Segue identifier `ShowMain`.
+      static let showMain: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, LoginViewController, MainViewController> = Rswift.StoryboardSegueIdentifier(identifier: "ShowMain")
+
+      #if os(iOS) || os(tvOS)
+      /// Optionally returns a typed version of segue `ShowCreateUser`.
+      /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
+      /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
+      static func showCreateUser(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, LoginViewController, CreateUserVC>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.loginViewController.showCreateUser, segue: segue)
+      }
+      #endif
+
+      #if os(iOS) || os(tvOS)
+      /// Optionally returns a typed version of segue `ShowMain`.
+      /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
+      /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
+      static func showMain(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, LoginViewController, MainViewController>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.loginViewController.showMain, segue: segue)
+      }
+      #endif
+
+      fileprivate init() {}
+    }
+
+    /// This struct is generated for `MainViewController`, and contains static references to 1 segues.
+    struct mainViewController {
+      /// Segue identifier `ShowRecords`.
+      static let showRecords: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, MainViewController, RegistroVC> = Rswift.StoryboardSegueIdentifier(identifier: "ShowRecords")
+
+      #if os(iOS) || os(tvOS)
+      /// Optionally returns a typed version of segue `ShowRecords`.
+      /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
+      /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
+      static func showRecords(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, MainViewController, RegistroVC>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.mainViewController.showRecords, segue: segue)
+      }
+      #endif
+
+      fileprivate init() {}
+    }
+
+    /// This struct is generated for `RegistroVC`, and contains static references to 1 segues.
+    struct registroVC {
+      /// Segue identifier `ShowComment`.
+      static let showComment: Rswift.StoryboardSegueIdentifier<UIKit.UIStoryboardSegue, RegistroVC, CommentsVC> = Rswift.StoryboardSegueIdentifier(identifier: "ShowComment")
+
+      #if os(iOS) || os(tvOS)
+      /// Optionally returns a typed version of segue `ShowComment`.
+      /// Returns nil if either the segue identifier, the source, destination, or segue types don't match.
+      /// For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`.
+      static func showComment(segue: UIKit.UIStoryboardSegue) -> Rswift.TypedStoryboardSegueInfo<UIKit.UIStoryboardSegue, RegistroVC, CommentsVC>? {
+        return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.registroVC.showComment, segue: segue)
       }
       #endif
 
@@ -152,7 +214,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 13 images.
+  /// This `R.image` struct is generated, and contains static references to 14 images.
   struct image {
     /// Image `Icon-1024 copia`.
     static let icon1024Copia = Rswift.ImageResource(bundle: R.hostingBundle, name: "Icon-1024 copia")
@@ -168,6 +230,8 @@ struct R: Rswift.Validatable {
     static let pauseButton = Rswift.ImageResource(bundle: R.hostingBundle, name: "pauseButton")
     /// Image `resumeButton`.
     static let resumeButton = Rswift.ImageResource(bundle: R.hostingBundle, name: "resumeButton")
+    /// Image `runner`.
+    static let runner = Rswift.ImageResource(bundle: R.hostingBundle, name: "runner")
     /// Image `starIconFilled`.
     static let starIconFilled = Rswift.ImageResource(bundle: R.hostingBundle, name: "starIconFilled")
     /// Image `startRunningButton`.
@@ -227,6 +291,13 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "resumeButton", bundle: ..., traitCollection: ...)`
     static func resumeButton(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.resumeButton, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "runner", bundle: ..., traitCollection: ...)`
+    static func runner(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.runner, compatibleWith: traitCollection)
     }
     #endif
 
@@ -321,8 +392,20 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 3 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 13 localization keys.
     struct localizable {
+      /// en translation: Are you want terminate your session?
+      ///
+      /// Locales: en, it
+      static let alert_terminate_session_title = Rswift.StringResource(key: "alert_terminate_session_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Cancel
+      ///
+      /// Locales: en, it
+      static let cancel_button = Rswift.StringResource(key: "cancel_button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Create
+      ///
+      /// Locales: en, it
+      static let create_button = Rswift.StringResource(key: "create_button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
       /// en translation: Create an account
       ///
       /// Locales: en, it
@@ -331,10 +414,83 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, it
       static let dont_you_have_an_account = Rswift.StringResource(key: "dont_you_have_an_account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Don't have an account?
+      ///
+      /// Locales: en, it
+      static let login_view_controller_hint = Rswift.StringResource(key: "login_view_controller_hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: End Run
+      ///
+      /// Locales: en, it
+      static let end_running = Rswift.StringResource(key: "end_running", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
       /// en translation: Login
       ///
       /// Locales: en, it
       static let login = Rswift.StringResource(key: "login", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Logout
+      ///
+      /// Locales: en, it
+      static let logout = Rswift.StringResource(key: "logout", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: New Run
+      ///
+      /// Locales: en, it
+      static let new_run = Rswift.StringResource(key: "new_run", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: OK
+      ///
+      /// Locales: en, it
+      static let ok_button = Rswift.StringResource(key: "ok_button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Press 'Cancel' for stay or 'OK' for leave.
+      ///
+      /// Locales: en, it
+      static let alert_terminate_session_message = Rswift.StringResource(key: "alert_terminate_session_message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+      /// en translation: Start running
+      ///
+      /// Locales: en, it
+      static let start_running = Rswift.StringResource(key: "start_running", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "it"], comment: nil)
+
+      /// en translation: Are you want terminate your session?
+      ///
+      /// Locales: en, it
+      static func alert_terminate_session_title(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("alert_terminate_session_title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "alert_terminate_session_title"
+        }
+
+        return NSLocalizedString("alert_terminate_session_title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Cancel
+      ///
+      /// Locales: en, it
+      static func cancel_button(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("cancel_button", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "cancel_button"
+        }
+
+        return NSLocalizedString("cancel_button", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Create
+      ///
+      /// Locales: en, it
+      static func create_button(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("create_button", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "create_button"
+        }
+
+        return NSLocalizedString("create_button", bundle: bundle, comment: "")
+      }
 
       /// en translation: Create an account
       ///
@@ -366,6 +522,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("dont_you_have_an_account", bundle: bundle, comment: "")
       }
 
+      /// en translation: Don't have an account?
+      ///
+      /// Locales: en, it
+      static func login_view_controller_hint(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("login_view_controller_hint", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "login_view_controller_hint"
+        }
+
+        return NSLocalizedString("login_view_controller_hint", bundle: bundle, comment: "")
+      }
+
+      /// en translation: End Run
+      ///
+      /// Locales: en, it
+      static func end_running(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("end_running", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "end_running"
+        }
+
+        return NSLocalizedString("end_running", bundle: bundle, comment: "")
+      }
+
       /// en translation: Login
       ///
       /// Locales: en, it
@@ -379,6 +565,81 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("login", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Logout
+      ///
+      /// Locales: en, it
+      static func logout(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("logout", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "logout"
+        }
+
+        return NSLocalizedString("logout", bundle: bundle, comment: "")
+      }
+
+      /// en translation: New Run
+      ///
+      /// Locales: en, it
+      static func new_run(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("new_run", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "new_run"
+        }
+
+        return NSLocalizedString("new_run", bundle: bundle, comment: "")
+      }
+
+      /// en translation: OK
+      ///
+      /// Locales: en, it
+      static func ok_button(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("ok_button", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "ok_button"
+        }
+
+        return NSLocalizedString("ok_button", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Press 'Cancel' for stay or 'OK' for leave.
+      ///
+      /// Locales: en, it
+      static func alert_terminate_session_message(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("alert_terminate_session_message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "alert_terminate_session_message"
+        }
+
+        return NSLocalizedString("alert_terminate_session_message", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Start running
+      ///
+      /// Locales: en, it
+      static func start_running(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("start_running", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "start_running"
+        }
+
+        return NSLocalizedString("start_running", bundle: bundle, comment: "")
       }
 
       fileprivate init() {}
@@ -489,16 +750,15 @@ struct _R: Rswift.Validatable {
 
     #if os(iOS) || os(tvOS)
     struct main: Rswift.StoryboardResourceWithInitialControllerType, Rswift.Validatable {
-      typealias InitialController = LoginVC
+      typealias InitialController = MainNavigationController
 
       let bundle = R.hostingBundle
-      let commentsVC = StoryboardViewControllerResource<CommentsVC>(identifier: "commentsVC")
-      let createUserVC = StoryboardViewControllerResource<CreateUserVC>(identifier: "createUserVC")
-      let loginVC = StoryboardViewControllerResource<LoginVC>(identifier: "loginVC")
-      let mainVC = StoryboardViewControllerResource<MainVC>(identifier: "MainVC")
+      let commentsVC = StoryboardViewControllerResource<CommentsVC>(identifier: "CommentsVC")
+      let createUserVC = StoryboardViewControllerResource<CreateUserVC>(identifier: "CreateUserVC")
+      let loginViewController = StoryboardViewControllerResource<LoginViewController>(identifier: "LoginViewController")
+      let mainViewController = StoryboardViewControllerResource<MainViewController>(identifier: "MainViewController")
       let name = "Main"
-      let principale = StoryboardViewControllerResource<UIKit.UITabBarController>(identifier: "Principale")
-      let registroVC = StoryboardViewControllerResource<RegistroVC>(identifier: "registroVC")
+      let registroVC = StoryboardViewControllerResource<RegistroVC>(identifier: "RegistroVC")
 
       func commentsVC(_: Void = ()) -> CommentsVC? {
         return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: commentsVC)
@@ -508,16 +768,12 @@ struct _R: Rswift.Validatable {
         return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: createUserVC)
       }
 
-      func loginVC(_: Void = ()) -> LoginVC? {
-        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: loginVC)
+      func loginViewController(_: Void = ()) -> LoginViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: loginViewController)
       }
 
-      func mainVC(_: Void = ()) -> MainVC? {
-        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: mainVC)
-      }
-
-      func principale(_: Void = ()) -> UIKit.UITabBarController? {
-        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: principale)
+      func mainViewController(_: Void = ()) -> MainViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: mainViewController)
       }
 
       func registroVC(_: Void = ()) -> RegistroVC? {
@@ -529,11 +785,10 @@ struct _R: Rswift.Validatable {
         if UIKit.UIImage(named: "tabbar-runIconGray", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'tabbar-runIconGray' is used in storyboard 'Main', but couldn't be loaded.") }
         if #available(iOS 11.0, tvOS 11.0, *) {
         }
-        if _R.storyboard.main().mainVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'mainVC' could not be loaded from storyboard 'Main' as 'MainVC'.") }
-        if _R.storyboard.main().principale() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'principale' could not be loaded from storyboard 'Main' as 'UIKit.UITabBarController'.") }
         if _R.storyboard.main().commentsVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'commentsVC' could not be loaded from storyboard 'Main' as 'CommentsVC'.") }
         if _R.storyboard.main().createUserVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'createUserVC' could not be loaded from storyboard 'Main' as 'CreateUserVC'.") }
-        if _R.storyboard.main().loginVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'loginVC' could not be loaded from storyboard 'Main' as 'LoginVC'.") }
+        if _R.storyboard.main().loginViewController() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'loginViewController' could not be loaded from storyboard 'Main' as 'LoginViewController'.") }
+        if _R.storyboard.main().mainViewController() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'mainViewController' could not be loaded from storyboard 'Main' as 'MainViewController'.") }
         if _R.storyboard.main().registroVC() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'registroVC' could not be loaded from storyboard 'Main' as 'RegistroVC'.") }
       }
 

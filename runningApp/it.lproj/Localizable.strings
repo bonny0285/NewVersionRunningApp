@@ -8,3 +8,15 @@
 "login" = "Login";
 "create_account" = "Create an account";
 "dont_you_have_an_account" = "Don't have an account?";
+"logout" = "Esci";
+"login_view_controller_hint" = "Non hai un account?";
+"create_button" = "Create";
+
+"ok_button" = "OK";
+"cancel_button" = "Cancella";
+"start_running" = "Inizia corsa";
+"end_running" = "Termina corsa";
+"new_run" = "Nuova Corsa";
+
+"alert_terminate_session_title" = "Sei sicuro di voler terminare la sessione?";
+"alert_terminate_session_message" = "Premi 'Cancella' per restare o 'OK' per terminare.";

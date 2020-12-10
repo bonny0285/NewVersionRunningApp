@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import Firebase
+import FirebaseFirestore
 
 
 
@@ -19,32 +20,46 @@ protocol MapDataSourceProtocol: class {
 }
 
 
-
-
 class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     
     
-    var delegate: MapDataSourceProtocol?
-    var map: MKMapView
-    let locationManager = CLLocationManager()
-    private let regionMeter : Double = 1000
-    var polylineLocation = [CLLocationCoordinate2D]()
-    var arrayGeo = [GeoPoint?]()
-    var startLocation : CLLocation!
-    var latitudine : Double = 0.0
-    var longitude : Double = 0.0
-    var runDistance = 0.0
-    var lastLocation : CLLocation!
-    var counter = 0
-    var arrayKM = [Double]()
-    var speedMax : Double = 0.0
-    var isEndRun: Bool = true
+     var delegate: MapDataSourceProtocol?
+     var map: MKMapView
+     let locationManager = CLLocationManager()
+     let regionMeter : Double = 1000
+     var polylineLocation = [CLLocationCoordinate2D]()
+     var arrayGeo = [GeoPoint?]()
+     var startLocation : CLLocation!
+     var latitudine : Double = 0.0
+     var longitude : Double = 0.0
+     var runDistance = 0.0
+     var lastLocation : CLLocation!
+     var counter = 0
+     var arrayKM = [Double]()
+     var speedMax : Double = 0.0
+     var isEndRun: Bool = true
+     var username: String
+    
+    var getCoordinateCLLocationCoordinate2D: (Double, Double) -> (CLLocationCoordinate2D) = {lat, long in
+        CLLocationCoordinate2D(latitude: lat, longitude: long)
+    }
     
     
-    init(mapView: MKMapView) {
+    var calcolaMedia: ([Double]) -> Double = { km in
+        var indice = 0
+        var conta = 0.0
+        for i in km {
+            conta += i
+            indice += 1
+        }
+        var risultato = conta / Double(indice)
+        risultato = risultato * 3.6
+        return risultato
+    }
+    
+    init(mapView: MKMapView, username: String) {
         self.map = mapView
-        
-       
+        self.username = username
     }
     
     func addDelegationOnMap(){
@@ -58,17 +73,17 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
             setupLocationManager()
             checkLocationAuthorizzation()
         } else {
-            // show alert letting the user know they have to turn this on
+            #warning("show alert letting user know they have to turn this on")
         }
     }
     
-    func setupLocationManager(){
+    func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
     
-    func checkLocationAuthorizzation(){
+    func checkLocationAuthorizzation() {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse:
             map.showsUserLocation = true
@@ -78,7 +93,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .restricted:
-            // show alert not allowed
+            #warning("show alert not allowed")
             break
         case .authorizedAlways:
             map.showsUserLocation = true
@@ -86,14 +101,14 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
             locationManager.startUpdatingLocation()
             break
         case .denied:
-            // show alert instruction them how to turn on permission
+            #warning("show alert instruction them how to turn on permission")
             break
         @unknown default:
             fatalError()
         }
     }
     
-    func centerViewOnUserLocation(){
+    func centerViewOnUserLocation() {
         if let location = locationManager.location?.coordinate {
             let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionMeter, longitudinalMeters: regionMeter)
             map.setRegion(region, animated: true)
@@ -117,11 +132,13 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
             
             latitudine = locationFirst.coordinate.latitude
             longitude = locationFirst.coordinate.longitude
+
+            let inizio = getCoordinateCLLocationCoordinate2D(locationFirst.coordinate.latitude,locationFirst.coordinate.longitude)
+            //let inizio = CLLocationCoordinate2D(latitude: locationFirst.coordinate.latitude, longitude: locationFirst.coordinate.longitude)
+            let fine = getCoordinateCLLocationCoordinate2D(location.coordinate.latitude, location.coordinate.latitude)
+            //let fine = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.latitude)
             
-            let inizio = CLLocationCoordinate2D(latitude: locationFirst.coordinate.latitude, longitude: locationFirst.coordinate.longitude)
-            let fine = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-            
-            drawLine(startCoordinate: inizio,endingRun: fine)
+            drawLine(inizio,fine)
             
             if startLocation == nil {
                 startLocation = locations.first
@@ -134,8 +151,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
                     arrayKM.append(lastLocation.speed)
                     delegate?.addAvarageSpeed(speed: "\((lastLocation.speed * 3.6).twoDecimalNumbers(place: 1)) Km/h")
                     
-                    speedMax = calcolaMediaKM(km: arrayKM)
-                    
+                    speedMax = calcolaMedia(arrayKM)
                 }
             }
             lastLocation = locations.last
@@ -151,6 +167,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorizzation()
+        centerViewOnUserLocation()
     }
     
     
@@ -165,11 +182,29 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         return MKOverlayRenderer()
     }
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            let pin = mapView.view(for: annotation) as? MKPinAnnotationView ?? MKPinAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            pin.pinTintColor = #colorLiteral(red: 0.2745098039, green: 0.5490196078, blue: 0.9019607843, alpha: 1)
+            let label = UILabel()
+            label.text = username
+            label.textAlignment = .center
+            pin.addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.bottomAnchor.constraint(equalTo: pin.topAnchor).isActive = true
+            label.centerXAnchor.constraint(equalTo: pin.centerXAnchor).isActive = true
+            return pin
+
+        } else {
+            // handle other annotations
+
+        }
+        return nil
+    }
+
     
-    
-    
-    func drawLine(startCoordinate : CLLocationCoordinate2D, endingRun : CLLocationCoordinate2D){
-        
+
+    func drawLine(_ startCoordinate : CLLocationCoordinate2D, _ endingRun : CLLocationCoordinate2D) {
         polylineLocation.append(startCoordinate)
         arrayGeo.append(GeoPoint(latitude: startCoordinate.latitude, longitude: startCoordinate.longitude))
         let aPolyline = MKPolyline(coordinates: polylineLocation, count: polylineLocation.count)
@@ -177,18 +212,11 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         
     }
     
-    
-    func calcolaMediaKM(km : [Double]) -> Double{
-        
-        var indice = 0
-        var conta = 0.0
-        for i in km{
-            conta += i
-            indice += 1
-        }
-        var risultato = conta / Double(indice)
-        risultato = risultato * 3.6
-        return risultato
-    }
+
     
 }
+
+
+
+
+

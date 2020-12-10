@@ -9,33 +9,42 @@
 import UIKit
 
 
-
 class AutoLogin {
-    
-    static let share = AutoLogin()
-    private var userDefault = UserDefaults.standard
-    
-    func checkAutoLogin () -> Bool {
-        let check = userDefault.bool(forKey: CHECK_DEFAULT)
-        return check
+
+    private let userDefaults = UserDefaults.standard
+    var username: String? = nil
+    var password: String? = nil
+
+    init() {
+        let check = self.checkingForCredential()
+        
+        if check {
+            let user = self.retriveCredential()
+            username = user.0
+            password = user.1
+        }
     }
     
-    func retriveDataForLogin () -> (String, String) {
+    func checkingForCredential() -> Bool {
+        let result = userDefaults.bool(forKey: CHECK_DEFAULT)
+        return result
+    }
+    
+    func retriveCredential() -> (String, String) {
         var user: (email: String, password: String)
-        user.email = userDefault.object(forKey: EMAIL_DEFAULT) as! String
-        user.password = userDefault.object(forKey: PASSWORD_DEFAULT) as! String
+        user.email = userDefaults.object(forKey: EMAIL_DEFAULT) as! String
+        user.password = userDefaults.object(forKey: PASSWORD_DEFAULT) as! String
         return user
     }
-
     
-    func saveUser (email: String, password: String) {
-        userDefault.set(email, forKey: EMAIL_DEFAULT)
-        userDefault.set(password, forKey: PASSWORD_DEFAULT)
-        userDefault.set(true, forKey: CHECK_DEFAULT)
+    func saveUserCredential(email: String, password: String) {
+        userDefaults.set(email, forKey: EMAIL_DEFAULT)
+        userDefaults.set(password, forKey: PASSWORD_DEFAULT)
+        userDefaults.set(true, forKey: CHECK_DEFAULT)
+        debugPrint("USER SALVATO",checkingForCredential())
     }
     
-    
     func logout () {
-        userDefault.set(false, forKey: CHECK_DEFAULT)
+        userDefaults.set(false, forKey: CHECK_DEFAULT)
     }
 }

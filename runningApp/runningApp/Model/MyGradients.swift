@@ -10,14 +10,14 @@ import UIKit
 
 
 
-struct Gradients {
+class Gradients {
     
-    private static var gradient = CAGradientLayer()
+    //MARK: - Properties
+    private var gradient = CAGradientLayer()
     
     
-    
-    
-    static func myGradients(on vc: UIViewController, view : UIView){
+    //MARK: - Actions
+    func myGradients(on vc: UIViewController, view : UIView){
         
         gradient.frame = vc.view.bounds // Whole view
         
@@ -29,13 +29,12 @@ struct Gradients {
         view.layer.addSublayer(gradient)
         //vc.view.layer.addSublayer(gradient)
         
-        
         animateView()
         
     }
     
     
-    private static func animateView(){
+    private func animateView(){
         let gradientAnimation = CABasicAnimation(keyPath: "locations")
         gradientAnimation.fromValue = [-0.5, -0.25, 0]
         gradientAnimation.toValue = [1.0, 1.25, 1.5]

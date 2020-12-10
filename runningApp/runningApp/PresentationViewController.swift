@@ -17,7 +17,7 @@ class PresentationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Gradients.myGradients(on: self, view: backgroundView)
+        //Gradients.myGradients(on: self, view: backgroundView)
     }
  
 }
