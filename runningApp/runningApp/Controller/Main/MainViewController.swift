@@ -288,7 +288,7 @@ class MainViewController: UIViewController, MainCoordinated {
     
     //MARK: - Calculate Speed
 
-    func calculateSpeed(time seconds: Int, miles: Double) -> String{
+    func calculateSpeed(time seconds: Int, miles: Double) -> String {
         speed = Int(Double(seconds) / miles)
         return speed.formatTimeDurationToString()
     }

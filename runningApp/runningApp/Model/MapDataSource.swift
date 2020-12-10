@@ -20,8 +20,6 @@ protocol MapDataSourceProtocol: class {
 }
 
 
-
-
 class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     
     
@@ -140,7 +138,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
             let fine = getCoordinateCLLocationCoordinate2D(location.coordinate.latitude, location.coordinate.latitude)
             //let fine = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.latitude)
             
-            drawLine(startCoordinate: inizio,endingRun: fine)
+            drawLine(inizio,fine)
             
             if startLocation == nil {
                 startLocation = locations.first
@@ -206,7 +204,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
 
     
 
-    func drawLine(startCoordinate : CLLocationCoordinate2D, endingRun : CLLocationCoordinate2D) {
+    func drawLine(_ startCoordinate : CLLocationCoordinate2D, _ endingRun : CLLocationCoordinate2D) {
         polylineLocation.append(startCoordinate)
         arrayGeo.append(GeoPoint(latitude: startCoordinate.latitude, longitude: startCoordinate.longitude))
         let aPolyline = MKPolyline(coordinates: polylineLocation, count: polylineLocation.count)
