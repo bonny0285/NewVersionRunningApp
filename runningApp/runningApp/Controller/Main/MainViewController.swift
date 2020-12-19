@@ -31,6 +31,7 @@ class MainViewController: UIViewController, MainCoordinated {
             mapDataSource.lastLocation = nil
         }
     }
+    
     @IBOutlet var blackView: UIView!
     
     @IBOutlet weak var logoutButtonOutlet: UIButton! {
@@ -139,25 +140,28 @@ class MainViewController: UIViewController, MainCoordinated {
         data = "\(String(describing: components.day!))-\(components.month!)-\(components.year!)"
         return data
     }
+    
     var autoLogin: AutoLogin?
     var firebaseManager: FirebaseManager?
     
-    fileprivate var time = Timer()
-    fileprivate var speed = 0
-    fileprivate var speedDouble = 0.0
-    fileprivate var checkState : Bool!
-    fileprivate var oraInizio : String?
-    fileprivate var oraFine : String?
-    fileprivate var realTime = Timestamp()
-    fileprivate var username : String? {
+    private var time = Timer()
+    private var speed = 0
+    private var speedDouble = 0.0
+    private var checkState : Bool!
+    private var oraInizio : String?
+    private var oraFine : String?
+    private var realTime = Timestamp()
+    
+    private var username : String? {
         Auth.auth().currentUser?.displayName
     }
-    fileprivate var numComments = 0
-    fileprivate var numLike = 0
-    fileprivate var userLike : [String] = []
-    fileprivate var handle : AuthStateDidChangeListenerHandle?
-    fileprivate var run : Running!
-    fileprivate var mapDataSource: MapDataSource!
+    
+    private var numComments = 0
+    private var numLike = 0
+    private var userLike : [String] = []
+    private var handle : AuthStateDidChangeListenerHandle?
+    private var run : Running!
+    private var mapDataSource: MapDataSource!
     
     //MARK: - Life Cycle
 
@@ -202,14 +206,15 @@ class MainViewController: UIViewController, MainCoordinated {
     }
     
     @objc func navigationBarLeftButtonPressed(_ sender: UIBarButtonItem) {
-        firebaseManager?.logout(completion: { [weak self] (response, error) in
+        firebaseManager?.logout(completion: { [weak self] result in
             guard let self = self else { return }
             
-            if let error = error {
-                debugPrint(error.localizedDescription)
-            } else if response == true {
+            switch result {
+            case .success(_):
                 self.autoLogin?.logout()
                 self.mainCoordinator?.popViewController(self)
+            case .failure(let error):
+                debugPrint("\(#function): \(error)")
             }
         })
     }
@@ -232,39 +237,20 @@ class MainViewController: UIViewController, MainCoordinated {
     
     @IBAction func logoutBtnWasPressed(_ sender: Any) {
         
-        firebaseManager?.logout(completion: { [weak self] (response, error) in
+        firebaseManager?.logout(completion: { [weak self] result in
             guard let self = self else { return }
             
-            if let error = error {
-                debugPrint(error.localizedDescription)
-            } else if response == true {
+            switch result {
+            case .success(_):
                 self.autoLogin?.logout()
                 self.mainCoordinator?.popViewController(self)
+            case .failure(let error):
+                debugPrint(error.localizedDescription)
             }
         })
-//        let firebaseAuth = Auth.auth()
-//        do {
-//            try firebaseAuth.signOut()
-//            AutoLogin.share.logout()
-//            // dismiss(animated: true, completion: nil)
-//
-////            let storyboard = R.storyboard.main()
-////            let loginVC = storyboard.instantiateViewController(withIdentifier: "loginVC") as! LoginViewController
-//
-////            loginVC.modalPresentationStyle = .fullScreen
-////            self.present(loginVC, animated: true) {
-////                Gradients.myGradients(on: loginVC, view: loginVC.backgroundView)
-////            }
-//
-//            // self.present(loginVC, animated: true, completion: nil)
-//        } catch let signoutError as NSError{
-//            debugPrint("Error signing out: \(signoutError)")
-//        }
     }
     
-    
-    
-    
+
     // Functions
     
     
@@ -281,7 +267,6 @@ class MainViewController: UIViewController, MainCoordinated {
 
     @objc func updateCounter() {
         mapDataSource.counter += 1
-        
         mainConsoleView.timeLabel.text = mapDataSource.counter.formatTimeDurationToString()
     }
     
@@ -322,8 +307,6 @@ class MainViewController: UIViewController, MainCoordinated {
             
             self.firebaseManager?.saveDataOnFirebase(dataRunning: self.getCurrentData, oraInizio: self.oraInizio!, oraFine: self.oraFine!, kmTotali: self.mapDataSource.runDistance.metersToMiles(places: 3), speedMax: self.mapDataSource.speedMax.twoDecimalNumbers(place: 1), tempoTotale: self.mapDataSource.counter.formatTimeDurationToString(), arrayPercorso: self.mapDataSource.arrayGeo, latitudine: self.mapDataSource.latitudine, longitudine: self.mapDataSource.longitude, realDataRunning: self.realTime, username: self.username ?? "Unknow", numOfcomment: self.numComments, numOfLike: self.numLike, usersLikeit: self.userLike)
             
-//            FirebaseDataSource.shared.saveDataOnFirebase(dataRunning: self.getCurrentData, oraInizio: self.oraInizio!, oraFine: self.oraFine!, kmTotali: self.mapDataSource.runDistance.metersToMiles(places: 3), speedMax: self.mapDataSource.speedMax.twoDecimalNumbers(place: 1), tempoTotale: self.mapDataSource.counter.formatTimeDurationToString(), arrayPercorso: self.mapDataSource.arrayGeo, latitudine: self.mapDataSource.latitudine, longitudine: self.mapDataSource.longitude, realDataRunning: self.realTime, username: self.username ?? "", numOfcomment: self.numComments, numOfLike: self.numLike, usersLikeit: self.userLike)
-            
             self.mapDataSource.locationManager.stopUpdatingLocation()
             self.mapDataSource.polylineLocation.removeAll()
             
@@ -339,13 +322,13 @@ class MainViewController: UIViewController, MainCoordinated {
         
         var indice = 0
         var conta = 0.0
-        for i in km{
+        for i in km {
             conta += i
             indice += 1
         }
-        var risultato = conta / Double(indice)
-        risultato = risultato * 3.6
-        return risultato
+        //var risultato = conta / Double(indice)
+        //risultato = risultato * 3.6
+        return (conta / Double(indice)) * 3.6
     }
     
 }

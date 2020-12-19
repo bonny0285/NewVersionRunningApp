@@ -91,86 +91,41 @@ class CreateUserVC: UIViewController, MainCoordinated {
             return
         }
         
-//        if usernameTextFiled.text == ""{
-//            RunningAlert.missingUsername(on: self)
-//        } else if passwordTextField.text == ""{
-//            RunningAlert.missingPassword(on: self)
-//        } else if mailTextField.text == "" && passwordTextField.text == ""{
-//            RunningAlert.missingMail(on: self)
-//        }
-//        guard let email = mailTextField.text, let password = passwordTextField.text, let username = usernameTextFiled.text else { return }
-        
-        firebaseManager?.createUser(email, password, completion: { [weak self] (user, error) in
+        firebaseManager?.createUser(email, password, completion: { [weak self] result in
             guard let self = self else { return }
             
-            if let error = error {
-                debugPrint(error.localizedDescription)
-            } else {
-                let changeProfile = user?.user.createProfileChangeRequest()
+            switch result {
+            case .success(let value):
+                let changeProfile = value.user.createProfileChangeRequest()
                 
-                changeProfile?.displayName = username
+                changeProfile.displayName = username
                 
-                changeProfile?.commitChanges(completion: { (error) in
+                changeProfile.commitChanges(completion: { (error) in
                     if let error = error {
                         
                         debugPrint(error.localizedDescription)
                     }
                 })
                 
+                let userID = value.user.uid
                 
-                guard let userID = user?.user.uid else { return }
-                
-                Firestore.firestore().collection(USERS_REF).document(userID).setData([
-                    USERNAME : username,
-                    DATE_CREATED : FieldValue.serverTimestamp()]
-                    , completion: { (error) in
-                        if let error = error {
-                            debugPrint(error.localizedDescription)
-                        } else {
-                            self.mainCoordinator?.creteUserDidSuccessfullyCreated(self)
-                            //self.dismiss(animated: true, completion: nil)
-                            
-                        }
-                })
-
+                Firestore.firestore().collection(USERS_REF)
+                    .document(userID)
+                    .setData([
+                                USERNAME : username,
+                                DATE_CREATED : FieldValue.serverTimestamp()]
+                             , completion: { (error) in
+                                if let error = error {
+                                    debugPrint(error.localizedDescription)
+                                } else {
+                                    self.mainCoordinator?.creteUserDidSuccessfullyCreated(self)
+                                }
+                             })
+            case .failure(let error):
+                debugPrint(error.localizedDescription)
             }
+            
         })
-        
-//        FirebaseDataSource.shared.createNewUser(withEmail: email, password: password, username: username) {[weak self] (user, error) in
-//            guard let self = self else { return }
-//
-//            if let error = error {
-//                print(error.localizedDescription)
-//            } else {
-//
-//                let changeProfile = user?.user.createProfileChangeRequest()
-//
-//                changeProfile?.displayName = username
-//
-//                changeProfile?.commitChanges(completion: { (error) in
-//                    if let error = error {
-//
-//                        debugPrint(error.localizedDescription)
-//                    }
-//                })
-//
-//
-//                guard let userID = user?.user.uid else { return }
-//
-//                Firestore.firestore().collection(USERS_REF).document(userID).setData([
-//                    USERNAME : username,
-//                    DATE_CREATED : FieldValue.serverTimestamp()]
-//                    , completion: { (error) in
-//                        if let error = error {
-//                            debugPrint(error.localizedDescription)
-//                        } else {
-//                            self.dismiss(animated: true, completion: nil)
-//
-//                        }
-//                })
-//            }
-//        }
-
     }
     
     @IBAction func cancelBtnWasPressed(_ sender: Any) {

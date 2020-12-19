@@ -26,8 +26,7 @@ class AutoLogin {
     }
     
     func checkingForCredential() -> Bool {
-        let result = userDefaults.bool(forKey: CHECK_DEFAULT)
-        return result
+        return userDefaults.bool(forKey: CHECK_DEFAULT)
     }
     
     func retriveCredential() -> (String, String) {

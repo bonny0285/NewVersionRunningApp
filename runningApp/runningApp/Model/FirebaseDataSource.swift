@@ -17,31 +17,68 @@ class FirebaseManager {
     let firestoreCollection = Firestore.firestore().collection(RUN_REFERENCE)
     
     //MARK: - Login & Create User
-
-    func loginWithMailAndPassword(_ email: String, _ password: String, completion: @escaping (AuthDataResult?, Error?) -> Void) {
+    
+    /// Use this method for do a login access
+    /// - Parameters:
+    ///   - email: String
+    ///   - password: String
+    ///   - completion: @escaping (Result<AuthDataResult, Error>) -> Void
+    func loginWithMailAndPassword(_ email: String, _ password: String, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
-            completion(result,error)
+            if let error = error {
+                completion(.failure(error))
+            } else if let result = result {
+                completion(.success(result))
+            }
         }
     }
     
-    func logout(completion: @escaping (Bool, Error?) -> ()) {
+    /// Use this method for do a logout
+    /// - Parameter completion: @escaping (Bool, Error?)
+    /// - Returns: Void
+    func logout(completion: @escaping (Result<Bool, Error>) -> ()) {
         do {
             try Auth.auth().signOut()
-            completion(true,nil)
+            completion(.success(true))
         } catch let error {
-            completion(false, error)
+            completion(.failure(error))
             debugPrint(error.localizedDescription)
         }
     }
     
-    func createUser(_ email: String, _ password: String, completion: @escaping (AuthDataResult?, Error?) -> Void) {
+    /// Use this method for create an user
+    /// - Parameters:
+    ///   - email: String
+    ///   - password: String
+    ///   - completion: @escaping (Result<AuthDataResult, Error>) -> Void
+    func createUser(_ email: String, _ password: String, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
-            completion(result,error)
+            if let error = error {
+                completion(.failure(error))
+            } else if let result = result {
+                completion(.success(result))
+            }
         }
     }
     
     //MARK: - Save Running Data
     
+    /// Use this method for insert Running data in to Firebase
+    /// - Parameters:
+    ///   - dataRunning: String
+    ///   - oraInizio: String
+    ///   - oraFine: String
+    ///   - kmTotali: Double
+    ///   - speedMax: Double
+    ///   - tempoTotale: String
+    ///   - arrayPercorso: [GeoPoint?]
+    ///   - latitudine: Double
+    ///   - longitudine: Double
+    ///   - realDataRunning: Timestamp
+    ///   - username: String
+    ///   - numOfcomment: Int
+    ///   - numOfLike: Int
+    ///   - usersLikeit: [String]
     func saveDataOnFirebase (dataRunning: String,oraInizio: String, oraFine: String, kmTotali: Double,speedMax: Double, tempoTotale: String, arrayPercorso: [GeoPoint?], latitudine: Double, longitudine: Double,realDataRunning: Timestamp, username: String, numOfcomment: Int, numOfLike: Int, usersLikeit: [String]) {
         
         firestoreCollection.addDocument(data: [
@@ -67,16 +104,30 @@ class FirebaseManager {
             }
         }
     }
-
-    func retriveComments(documentID: String, completion: @escaping (QuerySnapshot?, Error?) -> (Void)) {
+    
+    /// Use this method for retrive comment from FIrebase
+    /// - Parameters:
+    ///   - documentID: String
+    ///   - completion: @escaping (Result<QuerySnapshot, Error>) -> Void
+    func retriveComments(documentID: String, completion: @escaping (Result<QuerySnapshot, Error>) -> Void ) {
         firestoreCollection.document(documentID).collection(COMMENTS_REF).order(by: TIME_STAMP, descending: true).getDocuments { (snapshot, error) in
-            completion(snapshot,error)
+            
+            if let error = error {
+                completion(.failure(error))
+            } else if let snapshot = snapshot {
+                completion(.success(snapshot))
+            }
         }
     }
     
-    
-    
-    func addCommentToDataBase (documetID: String, comments: String?, username: String, completion: @escaping(Any?,Error?) -> ()) {
+    /// Use this method for save comment in to FIrebase
+    /// - Parameters:
+    ///   - documetID: String
+    ///   - comments: String?
+    ///   - username: String
+    ///   - completion: @escaping (Result<Any,Error>) -> (Void))
+    /// - Returns: Result<Any,Error>
+    func addCommentToDataBase (documetID: String, comments: String?, username: String, completion: @escaping (Result<Any,Error>) -> ()) {
         var commentRef : DocumentReference!
         commentRef = firestoreCollection.document(documetID)
         
@@ -110,12 +161,14 @@ class FirebaseManager {
                 
                 return nil
             }) {(object, error) in
-                completion(object,error)
+                if let error = error {
+                    completion(.failure(error))
+                } else if let object = object {
+                    completion(.success(object))
+                }
             }
-            
         }
     }
-    
 }
 
 //class FirebaseDataSource {

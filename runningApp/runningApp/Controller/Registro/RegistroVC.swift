@@ -17,27 +17,21 @@ import FirebaseFirestore
 
 class RegistroVC: UIViewController, MKMapViewDelegate, MainCoordinated, RunningManaged {
     
-    
-    
-    
-    
-    
-    
     //MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var backgroundView: UIView!
     
-    
-    
     //MARK: - Properties
-
+    
     private var runListener : ListenerRegistration!
     private var runs = [Running]()
     private var datiDaPassare : Running?
+    
     private var runCollectionRef: CollectionReference! {
         Firestore.firestore().collection(RUN_REFERENCE)
     }
+    
     private var handle : AuthStateDidChangeListenerHandle?
     private let regionMeter : Double = 1000
     private let locationManager = CLLocationManager()
@@ -47,50 +41,48 @@ class RegistroVC: UIViewController, MKMapViewDelegate, MainCoordinated, RunningM
     
     
     //MARK: - Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.register(R.nib.runningSavedCell)
         tableView.delegate = self
-        
         mapView.delegate = self
-        
-        //runCollectionRef = Firestore.firestore().collection(RUN_REFERENCE)
         setListener()
-
     }
     
     override func viewDidLayoutSubviews() {
-           super.viewDidLayoutSubviews()
+        super.viewDidLayoutSubviews()
         setListener()
         dataSource = RegistroDataSource(running: runs)
         tableView.dataSource = dataSource
         tableView.reloadData()
-       }
-
+    }
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if runListener != nil {
             runListener.remove()
         }
-        
     }
     
     //MARK: - Navigation
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         mainCoordinator?.configure(viewController: segue.destination)
     }
-
+    
     //MARK: - Actions
-
+    
     func refresh (){
         Firestore.firestore().collection(RUN_REFERENCE).getDocuments(completion: {[weak self] (snapshot, error) in
             guard let self = self else { return }
             
-            guard let snapshot = snapshot else { return debugPrint("Error fetching comments: \(error!)")}
+            guard let snapshot = snapshot else {
+                debugPrint("Error fetching comments: \(error!)")
+                return
+            }
+            
             self.runs.removeAll()
             self.runs = Running.parseData(snapshot: snapshot)
             self.tableView.reloadData()
@@ -115,7 +107,7 @@ class RegistroVC: UIViewController, MKMapViewDelegate, MainCoordinated, RunningM
                     self.dataSource.delegate = self
                     self.tableView.reloadData()
                 }
-        }
+            }
     }
     
     

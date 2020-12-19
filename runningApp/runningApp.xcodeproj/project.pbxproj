@@ -30,6 +30,7 @@
 		B4109C3822E78A8A0032DC0D /* KeyboardBoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4109C3722E78A8A0032DC0D /* KeyboardBoundView.swift */; };
 		B4109C3A22E78FEC0032DC0D /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4109C3922E78FEC0032DC0D /* Comment.swift */; };
 		B41240CC22D3465E0031ECF8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41240CB22D3465E0031ECF8 /* Extensions.swift */; };
+		B4187B85258757530081A124 /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4187B84258757530081A124 /* MapManager.swift */; };
 		B431755E22DE51D7008FC835 /* CommentsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B431755D22DE51D7008FC835 /* CommentsVC.swift */; };
 		B431756022DE5C11008FC835 /* CommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B431755F22DE5C11008FC835 /* CommentsCell.swift */; };
 		B4369006235908D10065269A /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4369005235908D10065269A /* TableViewCell.swift */; };
@@ -85,6 +86,7 @@
 		B4109C3722E78A8A0032DC0D /* KeyboardBoundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardBoundView.swift; sourceTree = "<group>"; };
 		B4109C3922E78FEC0032DC0D /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		B41240CB22D3465E0031ECF8 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		B4187B84258757530081A124 /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 		B431755D22DE51D7008FC835 /* CommentsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsVC.swift; sourceTree = "<group>"; };
 		B431755F22DE5C11008FC835 /* CommentsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCell.swift; sourceTree = "<group>"; };
 		B4369005235908D10065269A /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				702980542492083400C401D7 /* FirebaseDataSource.swift */,
 				70DE83D62493908A009ED4D7 /* MapDataSource.swift */,
 				70DE83D82493C52C009ED4D7 /* AutoLogin.swift */,
+				B4187B84258757530081A124 /* MapManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				B43D077A22EA32050051ECF5 /* CreateUserVC.swift in Sources */,
 				7066E8CF249DE07600B18C4C /* MainConsole.swift in Sources */,
 				702980552492083400C401D7 /* FirebaseDataSource.swift in Sources */,
+				B4187B85258757530081A124 /* MapManager.swift in Sources */,
 				B4109C3A22E78FEC0032DC0D /* Comment.swift in Sources */,
 				70202D72251DE5D7004F310C /* MainCoordinator.swift in Sources */,
 				B4A4C8F422D2889500B6F22B /* MainViewController.swift in Sources */,

@@ -9,7 +9,7 @@
 import UIKit
 
 
-extension Int{
+extension Int {
     func formatTimeDurationToString() -> String{
         let durationHours = self / 3600
         let durationMinutes = (self % 3600) / 60

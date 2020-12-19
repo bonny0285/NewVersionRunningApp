@@ -56,14 +56,7 @@ class LoginViewController: UIViewController, MainCoordinated {
         autoLogin = AutoLogin()
         firebaseManager = FirebaseManager()
         checkAutologin()
-        
-        
-        //Gradients.myGradients(on: self, view: backgroundView)
-        
-        //        SetupUIElement.shared.setupUIElement(element: emailTxt)
-        //        SetupUIElement.shared.setupUIElement(element: passwordTxt)
-        //        SetupUIElement.shared.setupUIElement(element: loginBtn)
-        //        SetupUIElement.shared.setupUIElement(element: createUserBtn)
+    
     }
     
     
@@ -82,29 +75,10 @@ class LoginViewController: UIViewController, MainCoordinated {
         
         hintLabel.text = R.string.localizable.dont_you_have_an_account()
         
-        
-        
-        //Gradients.myGradients(on: self, view: backgroundView)
         emailTextField.text = ""
         passwordTextField.text = ""
-        //        SetupUIElement.shared.setupUIElement(element: emailTxt)
-        //        SetupUIElement.shared.setupUIElement(element: passwordTxt)
-        //        SetupUIElement.shared.setupUIElement(element: loginBtn)
-        //        SetupUIElement.shared.setupUIElement(element: createUserBtn)
     }
-    
-    
-    
-    //    override func viewDidAppear(_ animated: Bool) {
-    //        print(#function)
-    //        Gradients.myGradients(on: self, view: backgroundView)
-    //    }
-    //
-    //    override func viewWillDisappear(_ animated: Bool) {
-    //        print(#function)
-    //        Gradients.myGradients(on: self, view: backgroundView)
-    //    }
-    
+
     //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         mainCoordinator?.configure(viewController: segue.destination)
@@ -126,36 +100,19 @@ class LoginViewController: UIViewController, MainCoordinated {
         coverView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
         coverView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         
-        firebaseManager?.loginWithMailAndPassword(username, password, completion: { [weak self] (user, error) in
+        firebaseManager?.loginWithMailAndPassword(username, password, completion: { [weak self] result in
             guard let self = self else { return }
             
-            if let error = error {
-                debugPrint(error.localizedDescription)
-            } else {
+            switch result {
+            case .success(_):
                 self.emailTextField.text = ""
                 self.passwordTextField.text = ""
                 coverView.removeFromSuperview()
                 self.mainCoordinator?.loginViewControllerDidLogin(self)
+            case .failure(let error):
+                debugPrint(error.localizedDescription)
             }
         })
-        
-        //            FirebaseDataSource.shared.loginWithMailAndPassword(withEmail: user.0, password: user.1) {[weak self] (user, error) in
-        //                guard let self = self else { return }
-        //
-        //                if let error = error {
-        //                    print(error.localizedDescription)
-        //                } else {
-        //                    self.emailTextField.text = ""
-        //                    self.passwordTextField.text = ""
-        //                    self.mainCoordinator?.loginViewControllerDidLogin(self)
-        ////                    let storyboard = R.storyboard.main()
-        ////                    let mainVC = storyboard.instantiateViewController(withIdentifier: "Principale")
-        ////                    mainVC.modalPresentationStyle = .fullScreen
-        ////                    self.present(mainVC, animated: true, completion: nil)
-        //                }
-        //            }
-        
-        
     }
     
     
@@ -193,58 +150,28 @@ class LoginViewController: UIViewController, MainCoordinated {
         
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
         
-        firebaseManager?.loginWithMailAndPassword(email, password, completion: { [weak self] (user, error) in
+        firebaseManager?.loginWithMailAndPassword(email, password, completion: { [weak self] result in
             guard let self = self else { return }
             
-            if let error = error {
-                RunningAlert.loginError(on: self)
-                debugPrint("Error signing in: \(error)")
-            } else {
-                
+            switch result {
+            case .success(_):
                 self.autoLogin?.saveUserCredential(email: email, password: password)
-                
                 self.emailTextField.textContentType = .username
                 self.passwordTextField.textContentType = .password
                 self.emailTextField.text = ""
                 self.passwordTextField.text = ""
                 self.mainCoordinator?.loginViewControllerDidLogin(self)
+            case .failure(let error):
+                RunningAlert.loginError(on: self)
+                debugPrint("Error signing in: \(error)")
             }
         })
-        //        FirebaseDataSource.shared.loginWithMailAndPassword(withEmail: email, password: password) {[weak self] (user, error) in
-        //            guard let self = self else { return }
-        //
-        //            if let error = error {
-        //                RunningAlert.loginError(on: self)
-        //                debugPrint("Error signing in: \(error)")
-        //            } else {
-        //
-        //                self.autoLogin?.saveUserCredential(email: email, password: password)
-        //
-        //                self.emailTextField.textContentType = .username
-        //                self.passwordTextField.textContentType = .password
-        //                self.emailTextField.text = ""
-        //                self.passwordTextField.text = ""
-        //                self.mainCoordinator?.loginViewControllerDidLogin(self)
-        ////                let storyboard = R.storyboard.main()
-        ////                let mainVC = storyboard.instantiateViewController(withIdentifier: "Principale")
-        ////                mainVC.modalPresentationStyle = .fullScreen
-        ////                self.present(mainVC, animated: true, completion: nil)
-        //            }
-        //        }
-        
-        
     }
     
     
     
     @IBAction func createUserBtnWasPressed(_ sender: Any) {
         mainCoordinator?.loginViewControllerDidPressedCreateUser(self)
-        //        let storyboard : UIStoryboard = R.storyboard.main()
-        //        let newVC = storyboard.instantiateViewController(withIdentifier: "createUserVC") as! CreateUserVC
-        //        newVC.modalPresentationStyle = .fullScreen
-        //        present(newVC, animated: true) {
-        //            Gradients.myGradients(on: newVC, view: newVC.backgroundView)
-        //      }
     }
     
     

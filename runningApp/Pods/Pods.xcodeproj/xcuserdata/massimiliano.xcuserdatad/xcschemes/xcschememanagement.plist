@@ -49,7 +49,7 @@
 		<key>FirebaseCoreDiagnostics.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>25</integer>
+			<integer>26</integer>
 		</dict>
 		<key>FirebaseFirestore.xcscheme</key>
 		<dict>
@@ -61,7 +61,7 @@
 		<key>FirebaseInstallations.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>26</integer>
+			<integer>20</integer>
 		</dict>
 		<key>FirebaseInstanceID.xcscheme</key>
 		<dict>
@@ -87,7 +87,7 @@
 		<key>GoogleDataTransport.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>20</integer>
+			<integer>24</integer>
 		</dict>
 		<key>GoogleUtilities.xcscheme</key>
 		<dict>
@@ -113,7 +113,7 @@
 		<key>PromisesObjC.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>19</integer>
+			<integer>22</integer>
 		</dict>
 		<key>Protobuf.xcscheme</key>
 		<dict>
@@ -130,12 +130,12 @@
 		<key>R.swift.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>23</integer>
+			<integer>25</integer>
 		</dict>
 		<key>abseil.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>24</integer>
+			<integer>19</integer>
 		</dict>
 		<key>gRPC-C++-gRPCCertificates-Cpp.xcscheme</key>
 		<dict>

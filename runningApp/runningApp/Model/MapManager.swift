@@ -1,8 +1,8 @@
 //
-//  MapDataSource.swift
+//  MapManager.swift
 //  runningApp
 //
-//  Created by Massimiliano Bonafede on 12/06/2020.
+//  Created by Massimiliano on 14/12/20.
 //  Copyright © 2020 Massimiliano Bonafede. All rights reserved.
 //
 
@@ -13,15 +13,16 @@ import Firebase
 import FirebaseFirestore
 
 
-
+/*
 protocol MapDataSourceProtocol: class {
     func addTotalKm(km: String)
     func addAvarageSpeed(speed: String)
 }
+*/
 
-
-class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
+class MapManager: NSObject {
     
+    // MARK: - PROPERTIES
     
     var delegate: MapDataSourceProtocol?
     var map: MKMapView
@@ -44,7 +45,6 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         CLLocationCoordinate2D(latitude: lat, longitude: long)
     }
     
-    
     private var speedAverage: ([Double]) -> Double = { km in
         var indice = 0
         var conta = 0.0
@@ -52,10 +52,12 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
             conta += i
             indice += 1
         }
-       // var risultato = conta / Double(indice)
+        // var risultato = conta / Double(indice)
         //risultato = risultato * 3.6
         return (conta / Double(indice)) * 3.6
     }
+    
+    // MARK: - INITIALIZER
     
     init(mapView: MKMapView, username: String) {
         self.map = mapView
@@ -63,12 +65,11 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         super.init()
         addDelegationOnMap()
     }
-    
-    func addDelegationOnMap(){
-        map.delegate = self
-        //locationManager.delegate = self
-        checkLocationServices()
-    }
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension MapManager: CLLocationManagerDelegate {
     
     func checkLocationServices() {
         guard CLLocationManager.locationServicesEnabled() else {
@@ -115,8 +116,6 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         map.setRegion(region, animated: true)
     }
     
-    
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         guard let location = locations.last, let locationFirst = locations.first else { return }
@@ -154,16 +153,20 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         lastLocation = locations.last
     }
     
-    
-    
-    
-    
-    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorizzation()
         centerViewOnUserLocation()
     }
-    
+}
+
+// MARK: - MKMapViewDelegate
+
+extension MapManager: MKMapViewDelegate {
+    func addDelegationOnMap(){
+        map.delegate = self
+        //locationManager.delegate = self
+        checkLocationServices()
+    }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
@@ -192,8 +195,6 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         return pin
     }
     
-    
-    
     func drawLine(_ startCoordinate : CLLocationCoordinate2D, _ endingRun : CLLocationCoordinate2D) {
         polylineLocation.append(startCoordinate)
         arrayGeo.append(GeoPoint(latitude: startCoordinate.latitude, longitude: startCoordinate.longitude))
@@ -201,10 +202,4 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         self.map.addOverlay(aPolyline)
         
     }
-    
 }
-
-
-
-
-
