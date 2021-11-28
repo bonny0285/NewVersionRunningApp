@@ -18,11 +18,11 @@ class AutoLogin {
     init() {
         let check = self.checkingForCredential()
         
-        if check {
-            let user = self.retriveCredential()
-            username = user.0
-            password = user.1
-        }
+        guard check else { return }
+        
+        let user = self.retriveCredential()
+        username = user.0
+        password = user.1
     }
     
     func checkingForCredential() -> Bool {

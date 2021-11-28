@@ -51,7 +51,7 @@ class Running {
     }
     
     
-    class func parseData(snapshot : QuerySnapshot?) -> [Running]{
+    class func parseData(snapshot : QuerySnapshot?) -> [Running] {
         var run = [Running]()
         
         guard let snap = snapshot else { return run }

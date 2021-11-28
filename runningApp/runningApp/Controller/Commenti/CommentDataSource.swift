@@ -32,7 +32,6 @@ extension CommentDataSource {
             self.commentsCount = comments.count
         }
         
-        
         func getComment (at index: IndexPath) -> Comment {
             comments[index.row]
         }

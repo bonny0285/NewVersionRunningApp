@@ -11,10 +11,6 @@ import UIKit
 
 class LoginViewController: UIViewController, MainCoordinated {
     
-    
-    
-    
-    
     //MARK: - Outlets
     
     @IBOutlet var emailTextField: UITextField!
@@ -52,19 +48,13 @@ class LoginViewController: UIViewController, MainCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         autoLogin = AutoLogin()
         firebaseManager = FirebaseManager()
         checkAutologin()
-    
     }
-    
-    
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         navigationController?.navigationBar.isHidden = true
         gradients = Gradients()
         gradients?.myGradients(on: self, view: backgroundView)
@@ -72,9 +62,7 @@ class LoginViewController: UIViewController, MainCoordinated {
         passwordTextField.setupRunningView()
         loginButton.setupRunningView()
         createUserButton.setupRunningView()
-        
         hintLabel.text = R.string.localizable.dont_you_have_an_account()
-        
         emailTextField.text = ""
         passwordTextField.text = ""
     }
@@ -84,11 +72,9 @@ class LoginViewController: UIViewController, MainCoordinated {
         mainCoordinator?.configure(viewController: segue.destination)
     }
     
-    
     //MARK: - Actions
-    
-    
-    func checkAutologin(){
+
+    func checkAutologin() {
         
         guard let username = autoLogin?.username, let password = autoLogin?.password else { return }
         
@@ -100,7 +86,7 @@ class LoginViewController: UIViewController, MainCoordinated {
         coverView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
         coverView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         
-        firebaseManager?.loginWithMailAndPassword(username, password, completion: { [weak self] result in
+        firebaseManager?.loginWithMailAndPassword(username, password) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -109,21 +95,20 @@ class LoginViewController: UIViewController, MainCoordinated {
                 self.passwordTextField.text = ""
                 coverView.removeFromSuperview()
                 self.mainCoordinator?.loginViewControllerDidLogin(self)
+                
             case .failure(let error):
                 debugPrint(error.localizedDescription)
             }
-        })
+        }
     }
     
     
     func createCoverView () -> UIView {
         let coverView = UIView()
         let indicator = UIActivityIndicatorView()
-        if #available(iOS 13.0, *) {
-            indicator.style = .large
-        } else {
-            // Fallback on earlier versions
-        }
+        
+        if #available(iOS 13.0, *) { indicator.style = .large }
+        
         indicator.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         coverView.addSubview(indicator)
         indicator.translatesAutoresizingMaskIntoConstraints = false
@@ -139,18 +124,17 @@ class LoginViewController: UIViewController, MainCoordinated {
     // Actions
     @IBAction func loginBtnWasPressed(_ sender: Any) {
         
-        if emailTextField.text == ""{
+        if emailTextField.text == "" {
             RunningAlert.missingMail(on: self)
-        } else if passwordTextField.text == ""{
+        } else if passwordTextField.text == "" {
             RunningAlert.missingPassword(on: self)
-        } else if emailTextField.text == "" && passwordTextField.text == ""{
+        } else if emailTextField.text == "" && passwordTextField.text == "" {
             RunningAlert.missingUsernameAndPassword(on: self)
         }
         
-        
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
         
-        firebaseManager?.loginWithMailAndPassword(email, password, completion: { [weak self] result in
+        firebaseManager?.loginWithMailAndPassword(email, password) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -161,14 +145,13 @@ class LoginViewController: UIViewController, MainCoordinated {
                 self.emailTextField.text = ""
                 self.passwordTextField.text = ""
                 self.mainCoordinator?.loginViewControllerDidLogin(self)
+                
             case .failure(let error):
                 RunningAlert.loginError(on: self)
                 debugPrint("Error signing in: \(error)")
             }
-        })
+        }
     }
-    
-    
     
     @IBAction func createUserBtnWasPressed(_ sender: Any) {
         mainCoordinator?.loginViewControllerDidPressedCreateUser(self)

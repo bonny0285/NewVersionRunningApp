@@ -53,6 +53,7 @@ class FirebaseManager {
     ///   - completion: @escaping (Result<AuthDataResult, Error>) -> Void
     func createUser(_ email: String, _ password: String, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+        
             if let error = error {
                 completion(.failure(error))
             } else if let result = result {
@@ -96,9 +97,9 @@ class FirebaseManager {
             NUMBER_OF_COMMENTS : numOfcomment,
             NUMBER_OF_LIKE : numOfLike,
             USER_LIKE : usersLikeit
-        ]) { err in
-            if let err = err {
-                print("Error adding document: \(err)")
+        ]) { error in
+            if let error = error {
+                print("Error adding document: \(error)")
             } else {
                 debugPrint("Data added")
             }

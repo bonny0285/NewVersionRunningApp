@@ -31,17 +31,29 @@ extension Int {
 
 
 extension Double{
-    func metersToMiles(places: Int) -> Double{
+    func metersToMiles(places: Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return ((self / 1000) * divisor).rounded() / divisor
     }
-}
 
-
-extension Double {
-    func twoDecimalNumbers(place: Int) -> Double{
+    func twoDecimalNumbers(place: Int) -> Double {
         let divisor = pow(10.0, Double(place))
         return (self * divisor).rounded() / divisor
+    }
+    
+
+}
+
+extension NSObject {
+    /// Transform miles speed in km/h and return a String
+    /// - Parameters:
+    ///   - mile: Miles Speed - Double
+    ///   - decimalPlace: Define how many decimal place you want on your speed result - Int
+    /// - Returns: Return a string rappresentation of your speed value - String
+    func transformMileToKmAtString(with mile: Double, decimalPlace: Int) -> String {
+        let km = mile * 3.6
+        let divisor = pow(10.0, Double(decimalPlace))
+        return "\((km * divisor).rounded() / divisor) Km/h"
     }
 }
 

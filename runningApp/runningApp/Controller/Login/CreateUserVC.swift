@@ -47,7 +47,6 @@ class CreateUserVC: UIViewController, MainCoordinated {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -56,7 +55,6 @@ class CreateUserVC: UIViewController, MainCoordinated {
         firebaseManager = FirebaseManager()
         gradients = Gradients()
         gradients?.myGradients(on: self, view: backgroundView)
-        
         usernameTextFiled.setupRunningView()
         mailTextField.setupRunningView()
         passwordTextField.setupRunningView()
@@ -91,41 +89,38 @@ class CreateUserVC: UIViewController, MainCoordinated {
             return
         }
         
-        firebaseManager?.createUser(email, password, completion: { [weak self] result in
+        firebaseManager?.createUser(email, password) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let value):
                 let changeProfile = value.user.createProfileChangeRequest()
-                
                 changeProfile.displayName = username
                 
-                changeProfile.commitChanges(completion: { (error) in
+                changeProfile.commitChanges { error in
                     if let error = error {
                         
                         debugPrint(error.localizedDescription)
                     }
-                })
+                }
                 
                 let userID = value.user.uid
                 
                 Firestore.firestore().collection(USERS_REF)
                     .document(userID)
-                    .setData([
-                                USERNAME : username,
-                                DATE_CREATED : FieldValue.serverTimestamp()]
-                             , completion: { (error) in
+                    .setData([USERNAME : username, DATE_CREATED : FieldValue.serverTimestamp()]) { error in
+                        
                                 if let error = error {
                                     debugPrint(error.localizedDescription)
                                 } else {
                                     self.mainCoordinator?.creteUserDidSuccessfullyCreated(self)
                                 }
-                             })
+                             }
+                
             case .failure(let error):
                 debugPrint(error.localizedDescription)
             }
-            
-        })
+        }
     }
     
     @IBAction func cancelBtnWasPressed(_ sender: Any) {

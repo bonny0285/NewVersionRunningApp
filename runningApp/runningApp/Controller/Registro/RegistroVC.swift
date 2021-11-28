@@ -61,9 +61,9 @@ class RegistroVC: UIViewController, MKMapViewDelegate, MainCoordinated, RunningM
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if runListener != nil {
-            runListener.remove()
-        }
+        guard runListener != nil else { return }
+        
+        runListener.remove()
     }
     
     //MARK: - Navigation
@@ -75,7 +75,7 @@ class RegistroVC: UIViewController, MKMapViewDelegate, MainCoordinated, RunningM
     //MARK: - Actions
     
     func refresh (){
-        Firestore.firestore().collection(RUN_REFERENCE).getDocuments(completion: {[weak self] (snapshot, error) in
+        Firestore.firestore().collection(RUN_REFERENCE).getDocuments { [weak self] snapshot, error in
             guard let self = self else { return }
             
             guard let snapshot = snapshot else {
@@ -86,7 +86,7 @@ class RegistroVC: UIViewController, MKMapViewDelegate, MainCoordinated, RunningM
             self.runs.removeAll()
             self.runs = Running.parseData(snapshot: snapshot)
             self.tableView.reloadData()
-        })
+        }
     }
     
     

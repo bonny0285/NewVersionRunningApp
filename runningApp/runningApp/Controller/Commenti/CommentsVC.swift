@@ -37,16 +37,17 @@ class CommentsVC: UIViewController, UITableViewDelegate, MainCoordinated, Runnin
         runningManager?.run
     }
     private var comments = [Comment]()
+    
     private var username : String! {
         Auth.auth().currentUser?.displayName
     }
+    
     var dataSource: CommentDataSource!
     var mainCoordinator: MainCoordinator?
-    
     var runningManager: RunningManager?
     
     
-    
+    //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,15 +56,12 @@ class CommentsVC: UIViewController, UITableViewDelegate, MainCoordinated, Runnin
         self.view.bindToKeyboard()
     }
     
-    
-    
     override func viewDidAppear(_ animated: Bool) {
         refreshCommentList()
     }
     
-    
     func refreshCommentList () {
-        firebaseManager?.retriveComments(documentID: run.documentID, completion: { [weak self] result in
+        firebaseManager?.retriveComments(documentID: run.documentID) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -73,10 +71,11 @@ class CommentsVC: UIViewController, UITableViewDelegate, MainCoordinated, Runnin
                 self.dataSource = CommentDataSource(comments: self.comments)
                 self.tableView.dataSource = self.dataSource
                 self.tableView.reloadData()
+                
             case .failure(let error):
                 debugPrint("\(#function): \(error)")
             }
-        })
+        }
     }
     
     @IBAction func backBtnWasPressed(_ sender: Any) {
@@ -89,9 +88,9 @@ class CommentsVC: UIViewController, UITableViewDelegate, MainCoordinated, Runnin
     }
     
     
-    func AddNewComment (){
+    func AddNewComment() {
         
-        firebaseManager?.addCommentToDataBase(documetID: run.documentID, comments: commentTxt.text, username: username, completion: { [weak self] result in
+        firebaseManager?.addCommentToDataBase(documetID: run.documentID, comments: commentTxt.text, username: username) { [weak self] result in
             
             guard let self = self else { return }
             
@@ -100,12 +99,11 @@ class CommentsVC: UIViewController, UITableViewDelegate, MainCoordinated, Runnin
                 self.commentTxt.text = ""
                 self.commentTxt.resignFirstResponder()
                 self.refreshCommentList()
+                
             case .failure(let error):
                 debugPrint(error.localizedDescription)
             }
-        })
+        }
     }
-    
-    
 }
 

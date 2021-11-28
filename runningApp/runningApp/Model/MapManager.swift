@@ -145,7 +145,12 @@ extension MapManager: CLLocationManagerDelegate {
             guard counter > 0, runDistance > 0 else { return }
             
             arrayKM.append(lastLocation.speed)
-            delegate?.addAvarageSpeed(speed: "\((lastLocation.speed * 3.6).twoDecimalNumbers(place: 1)) Km/h")
+            
+            //delegate?.addAvarageSpeed(speed: "\((lastLocation.speed * 3.6).twoDecimalNumbers(place: 1)) Km/h")
+            delegate?.addAvarageSpeed(speed: transformMileToKmAtString(
+                                        with: lastLocation.speed,
+                                        decimalPlace: 1)
+            )
             
             speedMax = speedAverage(arrayKM)
             
@@ -170,7 +175,7 @@ extension MapManager: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
-        if (overlay is MKPolyline){
+        if overlay is MKPolyline {
             let polylineRender = MKPolylineRenderer(overlay: overlay)
             polylineRender.strokeColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
             polylineRender.lineWidth = 3

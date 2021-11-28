@@ -11,27 +11,23 @@ import MapKit
 import Firebase
 import FirebaseFirestore
 
+
+
+enum State {
+    case start
+    case reset
+    case pause
+    case stop(withLogout: Bool)
+}
+
+
 class MainViewController: UIViewController, MainCoordinated {
     var mainCoordinator: MainCoordinator?
     
     
     //MARK: - Outlets
     
-    @IBOutlet var mapView: MKMapView! {
-        didSet{
-            mapDataSource = MapDataSource(mapView: mapView, username: username ?? "")
-            mapDataSource.addDelegationOnMap()
-            mapDataSource.checkLocationServices()
-            mapDataSource.delegate = self
-            mapDataSource.centerViewOnUserLocation()
-            mapDataSource.locationManager.stopUpdatingLocation()
-            mapDataSource.isEndRun = false
-            mapDataSource.polylineLocation.removeAll()
-            mapDataSource.startLocation = nil
-            mapDataSource.lastLocation = nil
-        }
-    }
-    
+    @IBOutlet var mapView: MKMapView!
     @IBOutlet var blackView: UIView!
     
     @IBOutlet weak var logoutButtonOutlet: UIButton! {
@@ -45,6 +41,7 @@ class MainViewController: UIViewController, MainCoordinated {
             newBtn.setTitle(R.string.localizable.new_run(), for: .normal)
         }
     }
+    
     @IBOutlet weak var mainConsoleView: MainConsole! {
         didSet {
             mainConsoleView.delegate = self
@@ -63,7 +60,7 @@ class MainViewController: UIViewController, MainCoordinated {
                 checkState = true
                 oraInizio = getCurrentTime
                 
-                mapDataSource.locationManager.startUpdatingLocation()
+                viewModel.locationManager.startUpdatingLocation()
                 
                 startTimer()
                 
@@ -75,20 +72,20 @@ class MainViewController: UIViewController, MainCoordinated {
                 mainConsoleView.pauseButton.isHidden = false
                 mainConsoleView.pauseButton.setImage(#imageLiteral(resourceName: "pauseButton"), for: .normal)
                 mainConsoleView.startButton.setTitle(R.string.localizable.end_running(), for: .normal)
-                mapDataSource.isEndRun = true
-                mapDataSource.arrayGeo.removeAll()
+                viewModel.isEndRun = true
+                viewModel.arrayGeo.removeAll()
                 
             case .reset:
                 debugPrint("reset")
                 newBtn.isHidden = true
                 blackView.isHidden = true
                 
-                mapDataSource.counter = 0
+                viewModel.counter = 0
                 
                 time.invalidate()
                 
-                mapDataSource.isEndRun = false
-                mapDataSource.polylineLocation.removeAll()
+                viewModel.isEndRun = false
+                viewModel.polylineLocation.removeAll()
                 mainConsoleView.total.isHidden = true
                 mainConsoleView.speed.isHidden = true
                 mainConsoleView.speedLabel.isHidden = true
@@ -101,24 +98,29 @@ class MainViewController: UIViewController, MainCoordinated {
                 
             case .pause:
                 debugPrint("pause")
-                mapDataSource.startLocation = nil
-                mapDataSource.lastLocation = nil
+                viewModel.startLocation = nil
+                viewModel.lastLocation = nil
                 time.invalidate()
                 
-                mapDataSource.locationManager.stopUpdatingLocation()
+                viewModel.locationManager.stopUpdatingLocation()
                 mainConsoleView.pauseButton.setImage(UIImage(named: "resumeButton"), for: .normal)
                 
-            case .stop:
+            case .stop(let logout):
                 debugPrint("stop")
                 time.invalidate()
                 checkState = false
-                mapDataSource.locationManager.stopUpdatingLocation()
-                mapDataSource.startLocation = nil
-                mapDataSource.lastLocation = nil
+                viewModel.locationManager.stopUpdatingLocation()
+                viewModel.startLocation = nil
+                viewModel.lastLocation = nil
                 state = .pause
-                alertExit()
                 
-                mapDataSource.polylineLocation.removeAll()
+                if logout == true {
+                    
+                } else {
+                    willFinishSessionAlert()
+                }
+        
+                viewModel.polylineLocation.removeAll()
             }
         }
     }
@@ -147,32 +149,53 @@ class MainViewController: UIViewController, MainCoordinated {
     private var time = Timer()
     private var speed = 0
     private var speedDouble = 0.0
-    private var checkState : Bool!
-    private var oraInizio : String?
-    private var oraFine : String?
+    private var checkState: Bool!
+    private var oraInizio: String?
+    private var oraFine: String?
     private var realTime = Timestamp()
     
     private var username : String? {
         Auth.auth().currentUser?.displayName
     }
     
-    private var numComments = 0
-    private var numLike = 0
-    private var userLike : [String] = []
-    private var handle : AuthStateDidChangeListenerHandle?
-    private var run : Running!
-    private var mapDataSource: MapDataSource!
+    //private var userLike : [String] = []
+    //private var handle: AuthStateDidChangeListenerHandle?
+    //private var run: Running!
+   // private var mapDataSource: MapDataSource!
     
-    //MARK: - Life Cycle
+    lazy var viewModel: MapManager = {
+        let viewModel = MapManager(mapView: mapView, username: username ?? "")
+        viewModel.addDelegationOnMap()
+        viewModel.checkLocationServices()
+        viewModel.delegate = self
+        viewModel.centerViewOnUserLocation()
+        viewModel.locationManager.stopUpdatingLocation()
+        viewModel.isEndRun = false
+        viewModel.polylineLocation.removeAll()
+        viewModel.startLocation = nil
+        viewModel.lastLocation = nil
+        return viewModel
+    }()
+    
+    //MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         navigationController?.navigationBar.isHidden = false
-        let rightButton = UIBarButtonItem(title: "Result", style: .plain, target: self, action: #selector(navigationBarRightButtonPressed(_:)))
-        navigationItem.rightBarButtonItem = rightButton
-        let leftButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(navigationBarLeftButtonPressed(_:)))
-        navigationItem.leftBarButtonItem = leftButton
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Result",
+            style: .plain,
+            target: self,
+            action: #selector(navigationBarRightButtonPressed(_:))
+        )
+       
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "Logout",
+            style: .plain,
+            target: self, action: #selector(navigationBarLeftButtonPressed(_:))
+        )
         
         firebaseManager = FirebaseManager()
         autoLogin = AutoLogin()
@@ -183,21 +206,19 @@ class MainViewController: UIViewController, MainCoordinated {
     
     override func viewWillAppear(_ animated: Bool) {
         state = .reset
-        mapDataSource.locationManager.startUpdatingLocation()
-        mapDataSource.centerViewOnUserLocation()
+        viewModel.locationManager.startUpdatingLocation()
+        viewModel.centerViewOnUserLocation()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        mapDataSource.locationManager.stopUpdatingLocation()
+        viewModel.locationManager.stopUpdatingLocation()
     }
     
     //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         mainCoordinator?.configure(viewController: segue.destination)
     }
-    
-    
     
     //MARK: - Actions
 
@@ -206,96 +227,69 @@ class MainViewController: UIViewController, MainCoordinated {
     }
     
     @objc func navigationBarLeftButtonPressed(_ sender: UIBarButtonItem) {
-        firebaseManager?.logout(completion: { [weak self] result in
+        firebaseManager?.logout { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(_):
                 self.autoLogin?.logout()
                 self.mainCoordinator?.popViewController(self)
+                
             case .failure(let error):
                 debugPrint("\(#function): \(error)")
             }
-        })
+        }
     }
     
     @IBAction func newBtnWasPressed(_ sender: Any) {
         state = .reset
-        mapDataSource.centerViewOnUserLocation()
-        let overlays = mapDataSource?.map.overlays
-        mapDataSource.map.removeOverlays(overlays!)
-        mapDataSource.polylineLocation.removeAll()
-        
+        viewModel.centerViewOnUserLocation()
+        let overlays = viewModel.map.overlays
+        viewModel.map.removeOverlays(overlays)
+        viewModel.polylineLocation.removeAll()
     }
     
-    
-    @IBAction func centerUserLocationBtnPressed(_ sender: Any) {
-    }
-    
-    
-    
+    @IBAction func centerUserLocationBtnPressed(_ sender: Any) {}
     
     @IBAction func logoutBtnWasPressed(_ sender: Any) {
         
-        firebaseManager?.logout(completion: { [weak self] result in
+        state = .stop(withLogout: true)
+        
+        firebaseManager?.logout { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(_):
                 self.autoLogin?.logout()
                 self.mainCoordinator?.popViewController(self)
+                
             case .failure(let error):
                 debugPrint(error.localizedDescription)
             }
-        })
+        }
     }
-    
-
-    // Functions
-    
-    
-    
-    //MARK: - Start Timer
 
     func startTimer() {
-        mainConsoleView.timeLabel.text = mapDataSource.counter.formatTimeDurationToString()
+        mainConsoleView.timeLabel.text = viewModel.counter.formatTimeDurationToString()
         time = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
     }
     
-    
-    //MARK: - Selector Update Counter
-
     @objc func updateCounter() {
-        mapDataSource.counter += 1
-        mainConsoleView.timeLabel.text = mapDataSource.counter.formatTimeDurationToString()
+        viewModel.counter += 1
+        mainConsoleView.timeLabel.text = viewModel.counter.formatTimeDurationToString()
     }
     
-    
-    //MARK: - Calculate Speed
-
-    func calculateSpeed(time seconds: Int, miles: Double) -> String {
-        speed = Int(Double(seconds) / miles)
-        return speed.formatTimeDurationToString()
-    }
-    
-    
-    //MARK: - Calculate Speed For Km
-
-    func calculateSpeedForKm(time : Int, Km : Double)-> Double {
-        speedDouble = Double(time) * Km
-        return speedDouble
-    }
-    
-    
-    
-    func alertExit() {
+    #warning("check logout")
+    func willLogout() {
         let alert = UIAlertController(title: R.string.localizable.alert_terminate_session_title(), message: R.string.localizable.alert_terminate_session_message(), preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.cancel_button(), style: .cancel, handler: { (UIAlertAction) in
-            
-        }))
+        alert.addAction(UIAlertAction(
+                            title: R.string.localizable.cancel_button(),
+                            style: .cancel,
+                            handler: nil)
+        )
         
-        alert.addAction(UIAlertAction(title: R.string.localizable.ok_button(), style: .default, handler: { (UIAlertAction) in
+        alert.addAction(UIAlertAction(title: R.string.localizable.ok_button(), style: .default) { _ in
             
             self.checkState = false
             self.oraFine = self.getCurrentTime
@@ -305,32 +299,79 @@ class MainViewController: UIViewController, MainCoordinated {
             self.newBtn.isHidden = false
             self.blackView.isHidden = false
             
-            self.firebaseManager?.saveDataOnFirebase(dataRunning: self.getCurrentData, oraInizio: self.oraInizio!, oraFine: self.oraFine!, kmTotali: self.mapDataSource.runDistance.metersToMiles(places: 3), speedMax: self.mapDataSource.speedMax.twoDecimalNumbers(place: 1), tempoTotale: self.mapDataSource.counter.formatTimeDurationToString(), arrayPercorso: self.mapDataSource.arrayGeo, latitudine: self.mapDataSource.latitudine, longitudine: self.mapDataSource.longitude, realDataRunning: self.realTime, username: self.username ?? "Unknow", numOfcomment: self.numComments, numOfLike: self.numLike, usersLikeit: self.userLike)
+            self.firebaseManager?.saveDataOnFirebase(
+                dataRunning: self.getCurrentData,
+                oraInizio: self.oraInizio!,
+                oraFine: self.oraFine!,
+                kmTotali: self.viewModel.runDistance.metersToMiles(places: 3),
+                speedMax: self.viewModel.speedMax.twoDecimalNumbers(place: 1),
+                tempoTotale: self.viewModel.counter.formatTimeDurationToString(),
+                arrayPercorso: self.viewModel.arrayGeo,
+                latitudine: self.viewModel.latitudine,
+                longitudine: self.viewModel.longitude,
+                realDataRunning: self.realTime,
+                username: self.username ?? "Unknow",
+                numOfcomment: 0,
+                numOfLike: 0,
+                usersLikeit: []
+            )
             
-            self.mapDataSource.locationManager.stopUpdatingLocation()
-            self.mapDataSource.polylineLocation.removeAll()
+            self.viewModel.locationManager.stopUpdatingLocation()
+            self.viewModel.polylineLocation.removeAll()
             
-        }))
-        
-        self.present(alert,animated: true, completion: {
-            //print("completion block")
         })
-    }
-    
-
-    func calcolaMediaKM(km : [Double]) -> Double {
         
-        var indice = 0
-        var conta = 0.0
-        for i in km {
-            conta += i
-            indice += 1
+        self.present(alert,animated: true) {
+            //print("completion block")
         }
-        //var risultato = conta / Double(indice)
-        //risultato = risultato * 3.6
-        return (conta / Double(indice)) * 3.6
     }
-    
+
+ 
+    func willFinishSessionAlert() {
+        let alert = UIAlertController(title: R.string.localizable.alert_terminate_session_title(), message: R.string.localizable.alert_terminate_session_message(), preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(
+                            title: R.string.localizable.cancel_button(),
+                            style: .cancel,
+                            handler: nil)
+        )
+        
+        alert.addAction(UIAlertAction(title: R.string.localizable.ok_button(), style: .default) { _ in
+            
+            self.checkState = false
+            self.oraFine = self.getCurrentTime
+            
+            self.mainConsoleView.pauseButton.isHidden = true
+            
+            self.newBtn.isHidden = false
+            self.blackView.isHidden = false
+            
+            self.firebaseManager?.saveDataOnFirebase(
+                dataRunning: self.getCurrentData,
+                oraInizio: self.oraInizio!,
+                oraFine: self.oraFine!,
+                kmTotali: self.viewModel.runDistance.metersToMiles(places: 3),
+                speedMax: self.viewModel.speedMax.twoDecimalNumbers(place: 1),
+                tempoTotale: self.viewModel.counter.formatTimeDurationToString(),
+                arrayPercorso: self.viewModel.arrayGeo,
+                latitudine: self.viewModel.latitudine,
+                longitudine: self.viewModel.longitude,
+                realDataRunning: self.realTime,
+                username: self.username ?? "Unknow",
+                numOfcomment: 0,
+                numOfLike: 0,
+                usersLikeit: []
+            )
+            
+            self.viewModel.locationManager.stopUpdatingLocation()
+            self.viewModel.polylineLocation.removeAll()
+            
+        })
+        
+        self.present(alert,animated: true) {
+            //print("completion block")
+        }
+    }
 }
 
 //MARK: - MapDataSourceProtocol
@@ -356,11 +397,12 @@ extension MainViewController: MainConsoleDelegate {
         let startRunning = R.string.localizable.start_running()
         
         if mainConsoleView.startButton.titleLabel?.text == startRunning {
-            mapDataSource.isEndRun = false
+            viewModel.isEndRun = false
             state = .start
+            
         } else {
             checkState = false
-            state = .stop
+            state = .stop(withLogout: false)
         }
     }
     
@@ -370,28 +412,41 @@ extension MainViewController: MainConsoleDelegate {
         
         let endRun = R.string.localizable.end_running()
         let startRunning = R.string.localizable.start_running()
-        
+    
         if mainConsoleView.startButton.titleLabel?.text == endRun && time.isValid {
-            mapDataSource.isEndRun = true
+            viewModel.isEndRun = true
             state = .pause
+            
         } else if mainConsoleView.startButton.titleLabel?.text == startRunning && time.isValid == false {
-            mapDataSource.isEndRun = false
+            viewModel.isEndRun = false
             print("nulla da fare")
+            
         } else {
-            mapDataSource.isEndRun = false
+            viewModel.isEndRun = false
             state = .start
         }
     }
-
 }
 
 
-extension MainViewController {
-    
-    enum State {
-        case start
-        case reset
-        case pause
-        case stop
+
+/*
+    func calcolaMediaKM(km : [Double]) -> Double {
+        var totalKM = 0.0
+        km.forEach { totalKM += $0 }
+        return (totalKM / Double(km.count)) * 3.6
     }
+*/
+
+
+/*
+func calculateSpeed(time seconds: Int, miles: Double) -> String {
+    speed = Int(Double(seconds) / miles)
+    return speed.formatTimeDurationToString()
 }
+
+func calculateSpeedForKm(time : Int, Km : Double) -> Double {
+    speedDouble = Double(time) * Km
+    return speedDouble
+}
+*/

@@ -130,9 +130,15 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         latitudine = locationFirst.coordinate.latitude
         longitude = locationFirst.coordinate.longitude
         
-        let inizio = getCoordinateCLLocationCoordinate2D(locationFirst.coordinate.latitude,locationFirst.coordinate.longitude)
+        let inizio = getCoordinateCLLocationCoordinate2D(
+            locationFirst.coordinate.latitude,
+            locationFirst.coordinate.longitude
+        )
         
-        let fine = getCoordinateCLLocationCoordinate2D(location.coordinate.latitude, location.coordinate.latitude)
+        let fine = getCoordinateCLLocationCoordinate2D(
+            location.coordinate.latitude,
+            location.coordinate.latitude
+        )
         
         drawLine(inizio,fine)
         
@@ -154,11 +160,6 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         lastLocation = locations.last
     }
     
-    
-    
-    
-    
-    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorizzation()
         centerViewOnUserLocation()
@@ -167,7 +168,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
-        if (overlay is MKPolyline){
+        if overlay is MKPolyline {
             let polylineRender = MKPolylineRenderer(overlay: overlay)
             polylineRender.strokeColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
             polylineRender.lineWidth = 3
@@ -191,9 +192,7 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         label.centerXAnchor.constraint(equalTo: pin.centerXAnchor).isActive = true
         return pin
     }
-    
-    
-    
+
     func drawLine(_ startCoordinate : CLLocationCoordinate2D, _ endingRun : CLLocationCoordinate2D) {
         polylineLocation.append(startCoordinate)
         arrayGeo.append(GeoPoint(latitude: startCoordinate.latitude, longitude: startCoordinate.longitude))
@@ -201,7 +200,6 @@ class MapDataSource: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         self.map.addOverlay(aPolyline)
         
     }
-    
 }
 
 

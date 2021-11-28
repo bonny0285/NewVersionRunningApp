@@ -18,7 +18,6 @@ class Comment {
     
     
     init(username : String, timeStamp : Date, commentTxt : String) {
-        
         self.username = username
         self.timeStamp = timeStamp
         self.commentTxt = commentTxt
@@ -28,10 +27,11 @@ class Comment {
     
     
     
-    class func parseData(snapshot : QuerySnapshot?) -> [Comment]{
+    class func parseData(snapshot : QuerySnapshot?) -> [Comment] {
         var comments = [Comment]()
         guard let snap = snapshot else { return comments }
-        for document in snap.documents{
+        
+        for document in snap.documents {
             let data = document.data()
             let username = data[USERNAME] as? String ?? "Anonymous"
             let time = data[TIME_STAMP] as? Timestamp ?? Timestamp()
